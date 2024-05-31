@@ -1,18 +1,20 @@
 //
 //  Project.swift
-//  Packages
+//  ProjectDescriptionHelpers
 //
-//  Created by kimchansoo on 5/22/24.
+//  Created by kimchansoo on 6/1/24.
 //
+
+import Foundation
 
 import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project(
-    name: "DesignSystem",
+    name: "PPACNetwork",
     targets: [
         .configure(
-            name: "DesignSystem",
+            name: "PPACNetwork",
             product: .framework,
             sources: "Sources/**",
             resources: "Resources/**"

@@ -16,6 +16,7 @@ extension Target {
         name: String,
         product: Product,
 //        productName: String? = nil,
+        bundleId: String? = nil,
         infoPlist: InfoPlist? = .default,
         sources: SourceFilesList,
         resources: ResourceFileElements? = nil,
@@ -24,14 +25,14 @@ extension Target {
         environmentVariables: [String: EnvironmentVariable] = [:],
         buildRules: [BuildRule] = [],
         mergedBinaryType: MergedBinaryType = .automatic,
-        mergeable: Bool = true
+        mergeable: Bool = false
     ) -> Target {
         return .target(
             name: name,
             destinations: [.iPhone],
             product: product,
 //            productName: productName,
-            bundleId: "\(organizationName).name",
+            bundleId: bundleId ?? "\(organizationName).\(name)",
             deploymentTargets: .iOS("17.5"),
             infoPlist: infoPlist,
             sources: sources,

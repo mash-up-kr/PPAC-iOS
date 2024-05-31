@@ -38,11 +38,16 @@ extension Project {
             ),
             packages: packages,
             settings: .settings(
+                base: [
+                    "ONLY_ACTIVE_ARCH": "YES"
+                ],
 //                configurations: [
-//                    .debug(name: "Debug", xcconfig: .relativeToRoot("Config/Debug.xcconfig")),
-//                    .release(name: "Release", xcconfig: .relativeToRoot("Config/Release.xcconfig")),
+//                    .debug(name: "debug"),
+//                    .release(name: "release")
 //                ],
-                defaultSettings: .recommended
+                defaultSettings: .recommended(
+                    excluding: []
+                )
             ),
             targets: targets,
             schemes: schemes,

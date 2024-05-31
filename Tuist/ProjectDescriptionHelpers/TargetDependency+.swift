@@ -16,11 +16,12 @@ extension TargetDependency {
     
     public struct Core {
         public static let DesignSystem = project(moduleName: "DesignSystem")
+        public static let PPACModels = project(moduleName: "PPACModels")
     }
     
     public struct ThirdParty {
         public static let Lottie = TargetDependency.external(name: "Lottie")
-        public static let Dependency = TargetDependency.external(name: "Dependency")
+        public static let Dependency = TargetDependency.external(name: "Dependencies")
     }
     
     public static let ResourceKit = TargetDependency.project(

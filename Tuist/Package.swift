@@ -6,8 +6,13 @@ import PackageDescription
 
     let packageSettings = PackageSettings(
         productTypes: [
-            "Dependencies": .framework,
-            "Lottie": .framework
+            "swift-dependencies": .framework,
+            "Lottie": .framework,
+//            "xctest-dynamic-overlay": .framework,
+//            "swift-syntax": .framework,
+//            "swift-concurrency-extras": .framework,
+//            "swift-clocks": .framework,
+//            "combine-schedulers": .framework,
         ]
     )
 #endif
