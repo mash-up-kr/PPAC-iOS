@@ -1,0 +1,26 @@
+//
+//  Project.swift
+//  {{name}}
+//
+//  Created by {{author}} on {{current-date}}
+//
+
+import ProjectDescription
+import ProjectDescriptionHelpers
+
+let project = Project(
+    name: "{{name}}",
+    targets: [
+        .configure(
+            name: "{{name}}",
+            product: .framework,
+            infoPlist: .default,
+            sources: "Sources/**",
+            resources: "Resources/**",
+            dependencies: [
+
+            ]
+        )
+    ]
+)
+
