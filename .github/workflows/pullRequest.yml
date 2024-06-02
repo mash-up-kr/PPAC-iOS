@@ -24,6 +24,10 @@ jobs:
     - name: Install Setup Script and Fetch Dependencies
       run: ./Scripts/onboarding.sh
   
+
+    - name: Install tuist
+      run: mise install
+
     - name: Install dependencies
       run: mise exec tuist install
 
