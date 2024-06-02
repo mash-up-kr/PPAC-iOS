@@ -3,11 +3,14 @@ CURRENT_DATE = $(shell pipenv run python Scripts/current_date.py)
 
 bootstrap:
 	@curl https://mise.run | sh
-	// TODO: - mise 활성화 설정
+	@echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+	@echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> ~/.zprofile
+	@source ~/.zshrc
 	@arch -arm64 brew install pipenv
 	@arch -arm64 brew install fastlane
 	@fastlane match development --readonly
 	@fastlane match appstore --readonly
+	@mise install
 	@tuist install
 	@tuist generate
 
