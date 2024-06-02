@@ -25,6 +25,9 @@ jobs:
       run: ./Scripts/onboarding.sh
   
 
+    - name: check mise
+      run: mise doctor
+
     - name: Install tuist
       run: mise install
 
