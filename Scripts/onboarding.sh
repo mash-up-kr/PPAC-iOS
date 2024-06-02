@@ -8,7 +8,7 @@ if ! command -v mise &> /dev/null; then
   curl https://mise.run | sh
 fi
 
-if ! grep -q 'eval "$(~/.local/bin/mise activate zsh)"' ~/.zshrc; then
-  echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
-fi
+# if ! grep -q 'eval "$(~/.local/bin/mise activate zsh)"' ~/.zshrc; then
+#   echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+# fi
 
