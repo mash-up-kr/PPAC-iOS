@@ -1,14 +1,26 @@
+#!/bin/bash
 
+# Install mise
 curl https://mise.run | sh
- ~/.local/bin/mise --version
+
+# Check mise version
+~/.local/bin/mise --version
+
+# Set up mise environment for bash
 echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-# note that bash will read from ~/.profile or ~/.bash_profile if the latter exists
-# ergo, you may want to check to see which is defined on your system and only append to the existing file
+
+# Ensure the mise environment is set up for the current session
+eval "$(~/.local/bin/mise activate bash)"
+
+# Set up PATH for mise
 echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> ~/.bash_profile
 
+# Ensure PATH is set up for the current session
+export PATH="$HOME/.local/share/mise/shims:$PATH"
+
+# Uncomment and set up for zsh if needed
 # echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 # echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> ~/.zprofile
 # if ! grep -q 'eval "$(~/.local/bin/mise activate zsh)"' ~/.zshrc; then
 #   echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
 # fi
-

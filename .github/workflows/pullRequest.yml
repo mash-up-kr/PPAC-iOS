@@ -23,7 +23,9 @@ jobs:
     
     - name: Install Setup Script and Fetch Dependencies
       run: ./Scripts/onboarding.sh
-  
+
+    - name: Source mise environment
+      run: source ~/.bashrc
 
     - name: check mise
       run: mise doctor
@@ -36,4 +38,3 @@ jobs:
 
     - name: Build and Test
       run: tuist test PPACIOS-Workspace
-
