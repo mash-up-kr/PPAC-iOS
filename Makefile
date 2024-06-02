@@ -1,13 +1,16 @@
 USER_NAME = $(shell python3 Scripts/author_name.py)
 CURRENT_DATE = $(shell pipenv run python Scripts/current_date.py)
 
-Bootstrap:
+bootstrap:
 	@arch -arm64 brew install pipenv
+	@arch -arm64 brew install fastlane
+	@fastlane match development --readonly
+	@fastlane match appstore --readonly
 	@tuist install
 	@tuist generate
 
-# e.g. make Core name=모듈이름
-Core:
+# e.g. make core name=모듈이름
+core:
 	@echo "User Name: $(USER_NAME)"
 	@echo "Current Date: $(CURRENT_DATE)"
 	@tuist scaffold Core \
@@ -18,7 +21,7 @@ Core:
 	@tuist edit
 
 # e.g. make Feature name=모듈이름
-Feature:
+feature:
 	@echo "User Name: $(USER_NAME)"
 	@echo "Current Date: $(CURRENT_DATE)"
 	@tuist scaffold Feature \
