@@ -2,6 +2,8 @@ USER_NAME = $(shell python3 Scripts/author_name.py)
 CURRENT_DATE = $(shell pipenv run python Scripts/current_date.py)
 
 bootstrap:
+	@curl https://mise.run | sh
+	// TODO: - mise 활성화 설정
 	@arch -arm64 brew install pipenv
 	@arch -arm64 brew install fastlane
 	@fastlane match development --readonly

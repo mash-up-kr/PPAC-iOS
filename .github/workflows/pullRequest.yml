@@ -1,0 +1,32 @@
+# .github/workflows/my-project.yml
+name: PPAC
+
+on:
+  push: 
+    branches: [ feature/테스트-workflow-구현 ]
+  pull_request: 
+    branches: [ feature/테스트-workflow-구현 ]
+
+jobs:
+  build:
+    name: test action
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4'
+
+    - name: Access Available
+      run: chmod +x Scripts/onboarding.sh
+    
+    - name: Install Setup Script and Fetch Dependencies
+      run: ./Scripts/onboarding.sh
+  
+    - name: Install dependencies
+      run: tuist install
+
+    - name: Build and Test
+      run: tuist test PPACIOS-Workspace
+
