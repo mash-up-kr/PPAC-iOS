@@ -34,8 +34,8 @@ jobs:
 
     - name: Install dependencies
       shell: bash -l {0}
-      run: mise exec tuist install
+      run: mise exec -- tuist install
 
     - name: Build and Test
       shell: bash -l {0}
-      run: tuist test PPACIOS-Workspace
+      run: mise exec -- tuist test PPACIOS-Workspace
