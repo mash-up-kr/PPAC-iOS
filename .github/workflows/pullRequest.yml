@@ -25,7 +25,7 @@ jobs:
       run: ./Scripts/onboarding.sh
   
     - name: Install dependencies
-      run: tuist install
+      run: mise exec tuist install
 
     - name: Build and Test
       run: tuist test PPACIOS-Workspace
