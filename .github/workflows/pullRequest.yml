@@ -2,10 +2,8 @@
 name: PPAC
 
 on:
-  push: 
-    branches: [ feature/테스트-workflow-구현 ]
   pull_request: 
-    branches: [ feature/테스트-workflow-구현 ]
+    branches: [ develop ]
 
 jobs:
   build:
