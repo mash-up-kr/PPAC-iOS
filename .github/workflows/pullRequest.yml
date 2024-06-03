@@ -1,0 +1,39 @@
+# .github/workflows/my-project.yml
+name: PPAC
+
+on:
+  pull_request: 
+    branches: [ develop ]
+
+jobs:
+  build:
+    name: test action
+    runs-on: macos-13
+    steps:
+    - uses: actions/checkout@v3
+    
+    # - uses: maxim-lobanov/setup-xcode@v1
+    #   with:
+    #     xcode-version: '15.4'
+
+    - name: Access Available
+      run: chmod +x Scripts/onboarding.sh
+    
+    - name: Install Setup Script and Fetch Dependencies
+      run: ./Scripts/onboarding.sh
+
+    - name: Source bashrc
+      shell: bash -l {0}
+      run: source ~/.bashrc && mise doctor
+
+    - name: Install tuist
+      shell: bash -l {0}
+      run: mise install
+
+    - name: Install dependencies
+      shell: bash -l {0}
+      run: mise exec -- tuist install
+
+    - name: Build and Test
+      shell: bash -l {0}
+      run: mise exec -- tuist test PPACIOS-Workspace
