@@ -4,6 +4,8 @@ name: PPAC
 on:
   pull_request: 
     branches: [ develop ]
+  push:
+    branches: [ infra/discord-webhook-설정 ]
 
 jobs:
   build:
@@ -11,10 +13,6 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
-    
-    # - uses: maxim-lobanov/setup-xcode@v1
-    #   with:
-    #     xcode-version: '15.4'
 
     - name: Access Available
       run: chmod +x Scripts/onboarding.sh
@@ -35,5 +33,20 @@ jobs:
       run: mise exec -- tuist install
 
     - name: Build and Test
+      id: build_and_test
       shell: bash -l {0}
       run: mise exec -- tuist test PPACIOS-Workspace
+
+    - name: Notify Discord on Success
+      if: ${{ success() }}
+      uses: ilovepotatoes/actions-for-discord@v1
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        message: "✅ Tests passed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+
+    - name: Notify Discord on Failure
+      if: ${{ failure() }}
+      uses: ilovepotatoes/actions-for-discord@v1
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        message: "❌ Tests failed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
