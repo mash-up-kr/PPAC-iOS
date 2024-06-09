@@ -38,15 +38,17 @@ jobs:
       run: mise exec -- tuist test PPACIOS-Workspace
 
     - name: Notify Discord on Success
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
       if: ${{ success() }}
-      uses: ilovepotatoes/actions-for-discord@v1
+      uses: Ilshidur/action-discord@master
       with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        message: "✅ Tests passed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+        args: "✅ Tests passed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
 
     - name: Notify Discord on Failure
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
       if: ${{ failure() }}
-      uses: ilovepotatoes/actions-for-discord@v1
+      uses: Ilshidur/action-discord@master
       with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        message: "❌ Tests failed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+        args: "❌ Tests failed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
