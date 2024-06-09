@@ -63,7 +63,7 @@ jobs:
     name: Notify Discord on Failure
     runs-on: ubuntu-latest
     needs: build
-    if: always()
+    if: failure()
     steps:
     - name: Notify Discord
       env:
