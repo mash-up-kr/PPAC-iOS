@@ -35,17 +35,6 @@ jobs:
       shell: bash -l {0}
       run: mise exec -- tuist test PPACIOS-Workspace
 
-    - name: Set build status to success
-      if: ${{ success() }}
-      run: echo "BUILD_STATUS=success" >> $GITHUB_ENV
-
-    - name: Set build status to failure
-      if: ${{ failure() }}
-      run: echo "BUILD_STATUS=failure" >> $GITHUB_ENV
-
-    outputs:
-      build_status: ${{ steps.build_and_test.outcome }}
-
   notify-success:
     name: Notify Discord on Success
     runs-on: ubuntu-latest
