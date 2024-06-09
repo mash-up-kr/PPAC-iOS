@@ -8,7 +8,6 @@
 import Foundation
 import PPACNetwork
 
-// 각각의 endPoint가 Requestable를 받게하는게 좋을지
 enum ExampleServiceEndpoints {
   case fetchExample
   case postExmple(id: Int)
@@ -60,7 +59,4 @@ enum ExampleServiceEndpoints {
                           body: requestBody)
   }
 }
-
-
-// 아니면 대부분 들어가는 값들이 비슷하니까 Endpoint를 request 객체로 만드는게 좋을지
 
