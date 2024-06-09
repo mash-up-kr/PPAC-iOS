@@ -57,7 +57,7 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
       uses: Ilshidur/action-discord@master
       with:
-        args: "✅ Tests passed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+        args: "✅ Tests passed for \nPR: ${{ github.event.pull_request.title }}. \nPR URL: ${{ github.event.pull_request.html_url }}"
 
   notify-failure:
     name: Notify Discord on Failure
@@ -70,5 +70,5 @@ jobs:
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
       uses: Ilshidur/action-discord@master
       with:
-        args: "❌ Tests failed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+        args: "❌ Tests failed for \nPR: ${{ github.event.pull_request.title }}.\nPR URL: ${{ github.event.pull_request.html_url }}"
 
