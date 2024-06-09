@@ -24,6 +24,7 @@ let project = Project.configure(
                 .Feature.Home,
                 .ResourceKit,
                 .Core.DesignSystem,
+                .Core.PPACNetwork,
                 .ThirdParty.Lottie,
                 .ThirdParty.Dependency,
             ],
@@ -48,6 +49,7 @@ let project = Project.configure(
                 .Feature.Home,
                 .ResourceKit,
                 .Core.DesignSystem,
+                .Core.PPACNetwork,
                 .ThirdParty.Dependency,
             ],
             settings: .settings(
