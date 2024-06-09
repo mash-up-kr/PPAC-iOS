@@ -4,8 +4,6 @@ name: PPAC
 on:
   pull_request: 
     branches: [ develop ]
-  push:
-    branches: [ infra/discord-webhook-설정 ]
 
 jobs:
   build:
