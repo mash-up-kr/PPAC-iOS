@@ -17,6 +17,7 @@ extension TargetDependency {
     public struct Core {
         public static let DesignSystem = project(moduleName: "DesignSystem")
         public static let PPACModels = project(moduleName: "PPACModels")
+        public static let PPACNetwork = project(moduleName: "PPACNetwork")
     }
     
     public struct ThirdParty {
