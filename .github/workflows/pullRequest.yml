@@ -11,10 +11,6 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
-    
-    # - uses: maxim-lobanov/setup-xcode@v1
-    #   with:
-    #     xcode-version: '15.4'
 
     - name: Access Available
       run: chmod +x Scripts/onboarding.sh
