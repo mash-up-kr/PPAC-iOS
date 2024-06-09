@@ -37,18 +37,22 @@ jobs:
       shell: bash -l {0}
       run: mise exec -- tuist test PPACIOS-Workspace
 
-    - name: Set build status
+    - name: Set build status to success
       if: ${{ success() }}
       run: echo "BUILD_STATUS=success" >> $GITHUB_ENV
-    - name: Set build status
+
+    - name: Set build status to failure
       if: ${{ failure() }}
       run: echo "BUILD_STATUS=failure" >> $GITHUB_ENV
+
+    outputs:
+      build_status: ${{ steps.build_and_test.outcome }}
 
   notify-success:
     name: Notify Discord on Success
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ needs.build.outputs.BUILD_STATUS == 'success' }}
+    if: success()
     steps:
     - name: Notify Discord
       env:
@@ -61,7 +65,7 @@ jobs:
     name: Notify Discord on Failure
     runs-on: ubuntu-latest
     needs: build
-    if: ${{ needs.build.outputs.BUILD_STATUS == 'failure' }}
+    if: always()
     steps:
     - name: Notify Discord
       env:
@@ -69,3 +73,4 @@ jobs:
       uses: Ilshidur/action-discord@master
       with:
         args: "❌ Tests failed for PR: ${{ github.event.pull_request.title }}. PR URL: ${{ github.event.pull_request.html_url }}"
+
