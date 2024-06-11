@@ -11,10 +11,6 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v3
-    
-    # - uses: maxim-lobanov/setup-xcode@v1
-    #   with:
-    #     xcode-version: '15.4'
 
     - name: Access Available
       run: chmod +x Scripts/onboarding.sh
@@ -35,5 +31,33 @@ jobs:
       run: mise exec -- tuist install
 
     - name: Build and Test
+      id: build_and_test
       shell: bash -l {0}
       run: mise exec -- tuist test PPACIOS-Workspace
+
+  notify-success:
+    name: Notify Discord on Success
+    runs-on: ubuntu-latest
+    needs: build
+    if: success()
+    steps:
+    - name: Notify Discord
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
+      uses: Ilshidur/action-discord@master
+      with:
+        args: "✅ PR Build Tests passed for \nPR: ${{ github.event.pull_request.title }}. \nPR URL: ${{ github.event.pull_request.html_url }}"
+
+  notify-failure:
+    name: Notify Discord on Failure
+    runs-on: ubuntu-latest
+    needs: build
+    if: failure()
+    steps:
+    - name: Notify Discord
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }} 
+      uses: Ilshidur/action-discord@master
+      with:
+        args: "❌ PR Build Tests failed for \nPR: ${{ github.event.pull_request.title }}.\nPR URL: ${{ github.event.pull_request.html_url }}"
+
