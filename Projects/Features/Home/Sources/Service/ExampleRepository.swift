@@ -7,24 +7,31 @@
 
 import Foundation
 import PPACModels
+import PPACNetwork
 
 protocol ExampleRepository {
-  func getExample() -> ExampleVO
+  func fetchExample() async -> ExampleVO?
+  func postExample(id: Int) async -> ExampleVO?
 }
 
 class ExampleRepositoryImpl: ExampleRepository {
   
-  let apiClient: ExampleServiceable
-  
-  init(apiClient: ExampleServiceable) {
-    self.apiClient = apiClient
+  let apiService: NetworkServiceable
+  init(apiService: NetworkServiceable) {
+    self.apiService = apiService
   }
   
-  func getExample() -> ExampleVO {
-    Task {
-      let exampleDTO = await apiClient.fetchExample()
-      let exampleVO = ExampleVO(exampleString: "")
-      return exampleVO
-    }
+  func fetchExample() async -> ExampleVO? {
+    let request = ExampleServiceEndpoints.getExample
+    let (data: ExampleDTO, error) = await self.apiService.request(request)
+    guard let data, error == nil else { return nil }
+    return ExampleVO(exampleString: response.exampleString ?? "")
+  }
+  
+  func postExample(id: Int) async -> ExampleVO? {
+    let request = ExampleServiceEndpoints.postExmple(id: id)
+    let (data: ExampleDTO, error) = await self.apiService.request(request)
+    guard let data, error == nil else { return nil }
+    return ExampleVO(exampleString: response.exampleString ?? "")
   }
 }

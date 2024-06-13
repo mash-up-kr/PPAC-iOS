@@ -8,7 +8,7 @@
 import Foundation
 import PPACNetwork
 
-enum ExampleServiceEndpoints {
+enum ExampleServiceEndpoints: Requestable {
   case fetchExample
   case postExmple(id: Int)
   
@@ -25,7 +25,7 @@ enum ExampleServiceEndpoints {
     }
   }
   
-  var requestBody: [String: String]? {
+  var body: [String: Any]? {
     switch self {
     case .postExmple(let id):
       return ["id": id]
@@ -36,7 +36,6 @@ enum ExampleServiceEndpoints {
   
   var url: String {
     let baseUrl = ""
-    
     switch self {
     case .fetchExample:
       return "\(baseUrl)/example"
@@ -45,18 +44,11 @@ enum ExampleServiceEndpoints {
     }
   }
   
-  var headers: [String: String] {
+  var headers: [String: String]? {
     var headers: [String: String] = [:]
     headers["Authorization"] = "token"
     headers["Content-Type"] = "application/json"
     return headers
-  }
-  
-  func createRequest() -> NetworkRequest {
-    return NetworkRequest(url: url,
-                          httpMethod: httpMethod,
-                          headers: headers,
-                          body: requestBody)
   }
 }
 

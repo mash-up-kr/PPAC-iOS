@@ -9,7 +9,7 @@ import Foundation
 import PPACModels
 
 protocol ExampleUseCase {
-  func getExample() -> ExampleVO
+  func getExample()
 }
 
 class ExampleUseCaseImpl: ExampleUseCase {
@@ -19,7 +19,9 @@ class ExampleUseCaseImpl: ExampleUseCase {
     self.repository = repository
   }
   
-  func getExample() -> ExampleVO {
-    return self.repository.getExample()
+  func getExample() {
+    Task {
+      let exempleVO = self.repository.fetchExample()
+    }
   }
 }

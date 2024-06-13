@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol NetworkServiceable {
-  func request<T: Decodable>(_ request: Requestable) async throws -> T?
+  func request<T: Decodable>(_ request: Requestable) async -> (data: T?, error: Error?)
 }

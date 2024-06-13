@@ -18,7 +18,7 @@ public protocol Requestable {
   var url: String { get }
   var httpMethod: HTTPMethod { get }
   var headers: [String: String]? { get }
-  var body: Data? { get }
+  var body: [String: Any]? { get }
   
   func buildURLRequest(with url: URL) -> URLRequest
 }
@@ -28,9 +28,8 @@ extension Requestable {
     var urlRequest = URLRequest(url: url)
     urlRequest.httpMethod = httpMethod.rawValue.uppercased()
     urlRequest.allHTTPHeaderFields = headers ?? [:]
-    urlRequest.httpBody = body
+    urlRequest.httpBody = body?.toJsonString()?.data(using: .utf8)
     return urlRequest
   }
 }
-
 
