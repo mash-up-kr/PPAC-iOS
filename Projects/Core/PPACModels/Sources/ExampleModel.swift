@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct ExampleDTO: Decodable {
+struct ExampleResponseModel: Decodable {
   let exampleString: String?
   let exampleString2: String?
 }
 
-struct ExampleVO: Decodable {
+struct ExampleEntity: Decodable {
   let exampleString: String?
 }

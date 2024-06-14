@@ -10,8 +10,8 @@ import PPACModels
 import PPACNetwork
 
 protocol ExampleRepository {
-  func fetchExample() async -> ExampleVO?
-  func postExample(id: Int) async -> ExampleVO?
+  func fetchExample() async -> ExampleEntity?
+  func postExample(id: Int) async -> ExampleEntity?
 }
 
 class ExampleRepositoryImpl: ExampleRepository {
@@ -21,17 +21,17 @@ class ExampleRepositoryImpl: ExampleRepository {
     self.apiService = apiService
   }
   
-  func fetchExample() async -> ExampleVO? {
+  func fetchExample() async -> ExampleEntity? {
     let request = ExampleServiceEndpoints.getExample
-    let (data: ExampleDTO, error) = await self.apiService.request(request)
+    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
     guard let data, error == nil else { return nil }
-    return ExampleVO(exampleString: response.exampleString ?? "")
+    return ExampleEntity(exampleString: data.exampleString ?? "")
   }
   
-  func postExample(id: Int) async -> ExampleVO? {
+  func postExample(id: Int) async -> ExampleEntity? {
     let request = ExampleServiceEndpoints.postExmple(id: id)
-    let (data: ExampleDTO, error) = await self.apiService.request(request)
+    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
     guard let data, error == nil else { return nil }
-    return ExampleVO(exampleString: response.exampleString ?? "")
+    return ExampleEntity(exampleString: data.exampleString ?? "")
   }
 }
