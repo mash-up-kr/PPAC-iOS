@@ -7,11 +7,15 @@
 
 import Foundation
 
-struct ExampleResponseModel: Decodable {
-  let exampleString: String?
-  let exampleString2: String?
+public struct ExampleResponseModel: Decodable {
+  public var exampleString: String?
+  public var exampleString2: String?
 }
 
-struct ExampleEntity: Decodable {
-  let exampleString: String?
+public struct ExampleEntity: Decodable {
+  public var exampleString: String?
+    
+    init(exampleString: String?) {
+        self.exampleString = exampleString
+    }
 }

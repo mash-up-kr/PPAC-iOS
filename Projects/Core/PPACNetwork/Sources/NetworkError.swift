@@ -7,9 +7,11 @@
 
 import Foundation
 
-enum NetworkError: Error {
-  /// encoding Error
+public enum NetworkError: Error {
+  /// url encoding Error
   case urlEncodingError
+  /// data Decoding Error
+  case dataDecodingError
   /// response Error
   case invalidResponse
   /// statucCode 400 ~ 499 error

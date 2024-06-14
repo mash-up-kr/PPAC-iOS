@@ -22,16 +22,20 @@ class ExampleRepositoryImpl: ExampleRepository {
   }
   
   func fetchExample() async -> ExampleEntity? {
-    let request = ExampleServiceEndpoints.getExample
-    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
-    guard let data, error == nil else { return nil }
-    return ExampleEntity(exampleString: data.exampleString ?? "")
+    let request = ExampleServiceEndpoints.fetchExample
+      let result = await self.apiService.request(request, dataType: ExampleResponseModel.self)
+    switch result {
+    case .success(let data):
+        return ExampleEntity(exampleString: data.exampleString)
+    case .failure(let error):
+        return nil
+    }
   }
   
   func postExample(id: Int) async -> ExampleEntity? {
-    let request = ExampleServiceEndpoints.postExmple(id: id)
-    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
-    guard let data, error == nil else { return nil }
-    return ExampleEntity(exampleString: data.exampleString ?? "")
+//    let request = ExampleServiceEndpoints.postExmple(id: id)
+//    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
+//    guard let data, error == nil else { return nil }
+    return ExampleEntity(exampleString: "")
   }
 }

@@ -21,7 +21,7 @@ class ExampleUseCaseImpl: ExampleUseCase {
   
   func getExample() {
     Task {
-      let exempleVO = self.repository.fetchExample()
+      let exempleVO = await self.repository.fetchExample()
     }
   }
 }
