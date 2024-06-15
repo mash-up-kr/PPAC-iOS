@@ -22,7 +22,7 @@ final public class NetworkService: NetworkServiceable {
     let (data, response): (Data, URLResponse)
     
     do {
-      (data, response) = try await URLSession.shared.data(for: urlRequest)
+      (data, response) = try? await URLSession.shared.data(for: urlRequest)
     } catch {
       NetworkLogger.logError(.invalidResponse)
       return .failure(.invalidResponse)

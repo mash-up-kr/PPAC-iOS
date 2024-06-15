@@ -32,7 +32,8 @@ public protocol Requestable {
 extension Requestable {
 
   public func makeURL() -> URL? {
-    return URL(string: url)?.append(queries: parameter)
+    guard let url = URL(string: url) else { return nil }
+    return url.append(queries: parameter)
   }
   
   public func buildURLRequest(with url: URL) -> URLRequest {

@@ -12,7 +12,7 @@ public struct ExampleResponseModel: Decodable {
   public var exampleString2: String?
 }
 
-public struct ExampleEntity: Decodable {
+public struct Example: Decodable {
   public var exampleString: String?
   
   enum CodingKeys: String, CodingKey {
