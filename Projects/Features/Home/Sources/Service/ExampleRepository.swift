@@ -26,16 +26,21 @@ class ExampleRepositoryImpl: ExampleRepository {
       let result = await self.apiService.request(request, dataType: ExampleResponseModel.self)
     switch result {
     case .success(let data):
-        return ExampleEntity(exampleString: data.exampleString)
+      return ExampleEntity(exampleString: data.exampleString)
     case .failure(let error):
         return nil
     }
   }
   
   func postExample(id: Int) async -> ExampleEntity? {
-//    let request = ExampleServiceEndpoints.postExmple(id: id)
-//    let (data: ExampleResponseModel, error) = await self.apiService.request(request)
-//    guard let data, error == nil else { return nil }
+    let request = ExampleServiceEndpoints.postExmple(id: id)
+      let result = await self.apiService.request(request, dataType: ExampleResponseModel.self)
+    switch result {
+    case .success(let data):
+      return ExampleEntity(exampleString: data.exampleString)
+    case .failure(let error):
+        return nil
+    }
     return ExampleEntity(exampleString: "")
   }
 }

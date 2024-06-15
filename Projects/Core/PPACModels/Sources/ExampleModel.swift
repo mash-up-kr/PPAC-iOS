@@ -14,8 +14,16 @@ public struct ExampleResponseModel: Decodable {
 
 public struct ExampleEntity: Decodable {
   public var exampleString: String?
-    
-    init(exampleString: String?) {
-        self.exampleString = exampleString
-    }
+  
+  enum CodingKeys: String, CodingKey {
+    case exampleString
+  }
+  public init(exampleString: String? = nil) {
+    self.exampleString = exampleString
+  }
+  
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    exampleString = try container.decodeIfPresent(String.self, forKey: .exampleString)
+  }
 }

@@ -25,10 +25,10 @@ enum ExampleServiceEndpoints: Requestable {
     }
   }
   
-  var body: [String: Any]? {
+  var parameter: HTTPRequestParameter? {
     switch self {
     case .postExmple(let id):
-      return ["id": id]
+      return .query(["id": "\(id)"])
     default:
       return nil
     }
