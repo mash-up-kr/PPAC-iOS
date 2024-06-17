@@ -50,7 +50,12 @@ struct CustomTabBar: View {
       }
       .frame(maxWidth: .infinity, maxHeight: 98)
       .background(Color.white)
-      .cornerRadius(30, corners: [.topLeft, .topRight])
+      .clipShape(
+        .rect(
+          topLeadingRadius: 30,
+          topTrailingRadius: 30
+        )
+      )
     }
   }
 }
