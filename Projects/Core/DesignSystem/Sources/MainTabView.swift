@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum Tab: String, CaseIterable, Identifiable {
+enum MainTab: String, CaseIterable, Identifiable {
   case recommend
   case search
   case mypage
@@ -22,6 +22,17 @@ enum Tab: String, CaseIterable, Identifiable {
       return "2.square.fill"
     case .mypage:
       return "3.square.fill"
+    }
+  }
+  
+  var selectedImage: String {
+    switch self {
+    case .recommend:
+      return "1.square"
+    case .search:
+      return "2.square"
+    case .mypage:
+      return "3.square"
     }
   }
   
@@ -49,7 +60,7 @@ enum Tab: String, CaseIterable, Identifiable {
 }
 
 public struct MainTabView: View {
-  @State private var selectedTab: Tab = .recommend
+  @State private var selectedTab: MainTab = .recommend
   
   public init() {}
   
@@ -57,7 +68,7 @@ public struct MainTabView: View {
     ZStack {
       VStack {
         TabView(selection: $selectedTab) {
-          ForEach(Tab.allCases) { tab in
+          ForEach(MainTab.allCases) { tab in
             VStack {
               tab.tabView
             }
@@ -73,17 +84,15 @@ public struct MainTabView: View {
 
 
 struct CustomTabBar: View {
-  @Binding var selectedTab: Tab
+  @Binding var selectedTab: MainTab
   
   var body: some View {
     VStack {
       Spacer()
       VStack {
         HStack {
-          ForEach(Tab.allCases) { tab in
-            TabItemView(image: tab.image,
-                        selectedImage: tab.image,
-                        tabTitle: tab.title)
+          ForEach(MainTab.allCases) { tab in
+            TabItemView(tab: tab, isSelected: selectedTab == tab)
             .onTapGesture {
               selectedTab = tab
             }
@@ -92,7 +101,7 @@ struct CustomTabBar: View {
         Spacer(minLength: 20)
       }
       .frame(maxWidth: .infinity, maxHeight: 98)
-      .background(Color.gray.opacity(0.3))
+      .background(Color.white)
       .cornerRadius(30, corners: [.topLeft, .topRight])
     }
   }
@@ -100,21 +109,19 @@ struct CustomTabBar: View {
 
 struct TabItemView: View {
   
-  let image: String
-  let selectedImage: String
-  let tabTitle: String
+  let tab: MainTab
+  let isSelected: Bool
   
   var body: some View {
     VStack {
-      Image(systemName: image)
+      Image(systemName: isSelected ? tab.selectedImage : tab.image)
         .frame(width: 20, height: 20)
-      Text(tabTitle)
+      Text(tab.title)
         .font(.system(size: 11))
     }
     .padding(40)
   }
 }
-
 
 
 #Preview {

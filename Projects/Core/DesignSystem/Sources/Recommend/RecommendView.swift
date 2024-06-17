@@ -16,8 +16,7 @@ public struct RecommendView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(Color.yellow)
-    
-    
+
   }
 }
 
