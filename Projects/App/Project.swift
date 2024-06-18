@@ -22,6 +22,9 @@ let project = Project.configure(
             resources: "Resources/**",
             dependencies: [
                 .Feature.Home,
+                .Feature.Recommend,
+                .Feature.Search,
+                .Feature.MyPage,
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
@@ -47,6 +50,9 @@ let project = Project.configure(
             resources: "Resources/**",
             dependencies: [
                 .Feature.Home,
+                .Feature.Recommend,
+                .Feature.Search,
+                .Feature.MyPage,
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACNetwork,

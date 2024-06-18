@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import Recommend
+import Search
+import MyPage
 
 public struct MainTabView: View {
   @State private var selectedTab: MainTab = .recommend

@@ -7,7 +7,7 @@
 //
 
 import SwiftUI
-import DesignSystem
+import Home
 
 @main
 struct FarmemeApp: App {

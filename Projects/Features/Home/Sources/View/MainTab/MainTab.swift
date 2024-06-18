@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import Recommend
+import Search
+import MyPage
 
 enum MainTab: String, CaseIterable, Identifiable {
   case recommend

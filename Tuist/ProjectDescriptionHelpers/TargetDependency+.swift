@@ -12,6 +12,9 @@ extension TargetDependency {
     
     public struct Feature {
         public static let Home = project(moduleName: "Home")
+        public static let Recommend = project(moduleName: "Recommend")
+        public static let Search = project(moduleName: "Search")
+        public static let MyPage = project(moduleName: "MyPage")
     }
     
     public struct Core {
