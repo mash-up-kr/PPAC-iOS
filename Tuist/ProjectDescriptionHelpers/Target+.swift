@@ -33,7 +33,7 @@ extension Target {
             product: product,
 //            productName: productName,
             bundleId: bundleId ?? "\(organizationName).\(name)",
-            deploymentTargets: .iOS("17.5"),
+            deploymentTargets: .iOS("17.0"),
             infoPlist: infoPlist,
             sources: sources,
             resources: resources,
