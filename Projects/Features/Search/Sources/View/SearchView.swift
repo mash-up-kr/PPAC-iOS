@@ -13,7 +13,7 @@ public struct SearchView: View {
   public var body: some View {
     Text("검색 화면")
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(Color.pink)
+      .background(.pink)
   }
 }
 

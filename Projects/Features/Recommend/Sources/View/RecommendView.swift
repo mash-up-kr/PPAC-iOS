@@ -15,8 +15,7 @@ public struct RecommendView: View {
       Text("추천 화면")
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Color.yellow)
-
+    .background(.yellow)
   }
 }
 

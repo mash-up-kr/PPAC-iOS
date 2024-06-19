@@ -13,7 +13,7 @@ public struct MyPageView: View {
   public var body: some View {
     Text("마이페이지 화면")
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(Color.blue)
+      .background(.blue)
   }
 }
 

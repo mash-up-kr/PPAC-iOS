@@ -44,15 +44,15 @@ struct CustomTabBar: View {
         HStack {
           ForEach(MainTab.allCases) { tab in
             TabItemView(tab: tab, isSelected: selectedTab == tab)
-            .onTapGesture {
-              selectedTab = tab
-            }
+              .onTapGesture {
+                selectedTab = tab
+              }
           }
         }
         Spacer(minLength: 20)
       }
       .frame(maxWidth: .infinity, maxHeight: 98)
-      .background(Color.white)
+      .background(.white)
       .clipShape(
         .rect(
           topLeadingRadius: 30,
