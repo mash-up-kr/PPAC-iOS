@@ -11,9 +11,10 @@ import Home
 
 @main
 struct FarmemeApp: App {
+	@State var homeCoordinator = HomeCoordinator()
 	var body: some Scene {
 		WindowGroup {
-			MainTabView()
+			HomeCoordinatorView(coordinator: homeCoordinator)
 		}
 	}
 }

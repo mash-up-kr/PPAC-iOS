@@ -10,12 +10,12 @@ import Recommend
 import Search
 import MyPage
 
-enum MainTab: String, CaseIterable, Identifiable {
+public enum MainTab: String, CaseIterable, Identifiable {
   case recommend
   case search
   case mypage
   
-  var id: String { rawValue }
+  public var id: String { rawValue }
   
   var image: String {
     switch self {

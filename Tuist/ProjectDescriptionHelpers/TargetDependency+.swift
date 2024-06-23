@@ -22,6 +22,7 @@ extension TargetDependency {
         public static let PPACModels = project(moduleName: "PPACModels")
         public static let PPACNetwork = project(moduleName: "PPACNetwork")
         public static let PPACUtil = project(moduleName: "PPACUtil")
+        public static let Coordinator = project(moduleName: "Coordinator")
     }
     
     public struct ThirdParty {
