@@ -11,18 +11,27 @@ import Recommend
 import Search
 import SwiftUI
 
-
 public class HomeCoordinator: Coordinator, ObservableObject {
-    @Published public var path: NavigationPath? = NavigationPath()
-    public var childCoordinator: [Coordinator] = [] // 여기에 미리 다 채워?
-    
+    @Published public var path: NavigationPath
     @Published var mainTab: MainTab = .recommend
-    public init() { }
+    public var childCoordinator: [any Coordinator] // 여기에 미리 다 채워?
     
-    init(path: NavigationPath? = nil, childCoordinator: [Coordinator] = [], mainTab: MainTab = .recommend) {
-        self.path = path
-        self.childCoordinator = childCoordinator
-        self.mainTab = mainTab
+    //public var recommendCoordinator: RecommendCoordinator
+    
+    public init() { 
+        self.path = NavigationPath()
+        self.childCoordinator = []
+        self.mainTab = .recommend
+         
+        //var recommendCoordinator = RecommendCoordinator(path: self.path, childCoordinator: [])
+    }
+    
+    @ViewBuilder
+    func buildRecoomendView() -> some View {
+//        let recommendCoordinator = RecommendCoordinator(path: NavigationPath(), childCoordinator: [])
+//        return RecommendCoordinatorView(coordinator: recommendCoordinator)
+        RecommendView()
+        //return RecommendView(coordinator: self.recommendCoordinator)
     }
 }
 
@@ -51,6 +60,8 @@ public struct HomeCoordinatorView: View {
 
     }
 }
+
+
 //        NavigationStack(path: $coordinator.path) {
 //            // 처음 시작할 화면
 //            coordinator.build(page: .apple)
