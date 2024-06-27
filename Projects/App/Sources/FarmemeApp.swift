@@ -7,12 +7,13 @@
 //
 
 import SwiftUI
+import Home
 
 @main
 struct FarmemeApp: App {
-		var body: some Scene {
-				WindowGroup {
-						ContentView()
-				}
+	var body: some Scene {
+		WindowGroup {
+			MainTabView()
 		}
+	}
 }
