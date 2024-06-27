@@ -50,14 +50,4 @@ enum MainTab: String, CaseIterable, Identifiable {
     }
   }
   
-  var tabView: AnyView {
-    switch self {
-    case .recommend:
-      return AnyView(RecommendView())
-    case .search:
-      return AnyView(SearchView())
-    case .mypage:
-      return AnyView(MyPageView())
-    }
-  }
 }
