@@ -8,44 +8,44 @@
 import Foundation
 
 public struct Color {
-    public struct Text {
-        static let primary = DesignSystemAsset.neutral90.swiftUIColor
-        static let secondary = DesignSystemAsset.neutral70.swiftUIColor
-        static let tertiary = DesignSystemAsset.neutral60.swiftUIColor
-        static let assistive = DesignSystemAsset.neutral40.swiftUIColor
-        static let disabled = DesignSystemAsset.neutral30.swiftUIColor
-        static let inverse = DesignSystemAsset.common100.swiftUIColor
-        static let brand = DesignSystemAsset.orange100.swiftUIColor
-    }
-    
-    public struct Icon {
-        static let primary = DesignSystemAsset.neutral90.swiftUIColor
-        static let secondary = DesignSystemAsset.neutral70.swiftUIColor
-        static let tertiary = DesignSystemAsset.neutral60.swiftUIColor
-        static let assistive = DesignSystemAsset.neutral40.swiftUIColor
-        static let disabled = DesignSystemAsset.neutral30.swiftUIColor
-        static let inverse = DesignSystemAsset.common100.swiftUIColor
-        static let brand = DesignSystemAsset.orange100.swiftUIColor
-    }
-    
-    public struct Border {
-        static let primary = DesignSystemAsset.neutral90.swiftUIColor
-        static let secondary = DesignSystemAsset.neutral20.swiftUIColor
-        static let assistive = DesignSystemAsset.neutral10.swiftUIColor
-    }
-    
-    public struct Background {
-        static let primary = DesignSystemAsset.neutral90.swiftUIColor
-        static let assistive = DesignSystemAsset.neutral10.swiftUIColor
-        static let dimmer = Color.Text.primary.opacity(40)
-        static let brand = DesignSystemAsset.orange100.swiftUIColor
-        static let brandassistive = DesignSystemAsset.orange10.swiftUIColor
-        static let white = DesignSystemAsset.common100.swiftUIColor
-    }
-    
-    public struct Skeleton {
-        static let primary = DesignSystemAsset.neutral10.swiftUIColor
-        static let secondary = DesignSystemAsset.neutral20.swiftUIColor
-    }
-
+	public struct Text {
+		public static let primary = ResourceKitAsset.neutral90.swiftUIColor
+		public static let secondary = ResourceKitAsset.neutral70.swiftUIColor
+		public static let tertiary = ResourceKitAsset.neutral60.swiftUIColor
+		public static let assistive = ResourceKitAsset.neutral40.swiftUIColor
+		public static let disabled = ResourceKitAsset.neutral30.swiftUIColor
+		public static let inverse = ResourceKitAsset.common100.swiftUIColor
+		public static let brand = ResourceKitAsset.orange100.swiftUIColor
+	}
+	
+	public struct Icon {
+		public static let primary = ResourceKitAsset.neutral90.swiftUIColor
+		public static let secondary = ResourceKitAsset.neutral70.swiftUIColor
+		public static let tertiary = ResourceKitAsset.neutral60.swiftUIColor
+		public static let assistive = ResourceKitAsset.neutral40.swiftUIColor
+		public static let disabled = ResourceKitAsset.neutral30.swiftUIColor
+		public static let inverse = ResourceKitAsset.common100.swiftUIColor
+		public static let brand = ResourceKitAsset.orange100.swiftUIColor
+	}
+	
+	public struct Border {
+		public static let primary = ResourceKitAsset.neutral90.swiftUIColor
+		public static let secondary = ResourceKitAsset.neutral20.swiftUIColor
+		public static let assistive = ResourceKitAsset.neutral10.swiftUIColor
+	}
+	
+	public struct Background {
+		public static let primary = ResourceKitAsset.neutral90.swiftUIColor
+		public static let assistive = ResourceKitAsset.neutral10.swiftUIColor
+		public static let dimmer = Color.Text.primary.opacity(40)
+		public static let brand = ResourceKitAsset.orange100.swiftUIColor
+		public static let brandassistive = ResourceKitAsset.orange10.swiftUIColor
+		public static let white = ResourceKitAsset.common100.swiftUIColor
+	}
+	
+	public struct Skeleton {
+		public static let primary = ResourceKitAsset.neutral10.swiftUIColor
+		public static let secondary = ResourceKitAsset.neutral20.swiftUIColor
+	}
+	
 }
