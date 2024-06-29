@@ -27,6 +27,7 @@ extension TargetDependency {
     public struct ThirdParty {
         public static let Lottie = TargetDependency.external(name: "Lottie")
         public static let Dependency = TargetDependency.external(name: "Dependencies")
+        public static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     }
     
     public static let ResourceKit = TargetDependency.project(
