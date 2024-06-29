@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-
 import Kingfisher
 
-struct MemeImageView: View {
+public struct MemeImageView: View {
   
   // MARK: - Properties
   
@@ -17,13 +16,13 @@ struct MemeImageView: View {
   
   // MARK: - Initializers
   
-  init(imageUrlString: String) {
+  public init(imageUrlString: String) {
     self.imageUrlString = imageUrlString
   }
   
   // MARK: - UI
   
-  var body: some View {
+  public var body: some View {
     KFImage(URL(string: imageUrlString))
       .resizable()
       .loadDiskFileSynchronously()

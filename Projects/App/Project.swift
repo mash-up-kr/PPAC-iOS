@@ -18,11 +18,8 @@ let project = Project.configure(
             product: .app,
             bundleId: "ppac.farmeme.App",
             infoPlist: .extendingDefault(with: [
-              "CFBundleShortVersionString": "1.0",
-              "CFBundleVersion": "1",
-              "UIMainStoryboardFile": "",
-              "UILaunchStoryboardName": "LaunchScreen"
-            ]),
+              "UILaunchStoryboardName": "launch"
+          ]),
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
@@ -50,7 +47,9 @@ let project = Project.configure(
             name: "Develop-Farmeme",
             product: .app,
             bundleId: "ppac.farmeme.App",
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+              "UILaunchStoryboardName": "launch"
+          ]),
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
