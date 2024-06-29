@@ -37,9 +37,11 @@ public struct Color {
 	public struct Background {
 		public static let primary = ResourceKitAsset.PrimaryColor.neutral90.swiftUIColor
 		public static let assistive = ResourceKitAsset.PrimaryColor.neutral10.swiftUIColor
-		public static let dimmer = Color.Text.primary.opacity(40)
+		public static let dimmer = Color.Background.primary.opacity(0.4)
 		public static let brand = ResourceKitAsset.PrimaryColor.orange100.swiftUIColor
+		public static let brandsub = ResourceKitAsset.PrimaryColor.lemon100.swiftUIColor
 		public static let brandassistive = ResourceKitAsset.PrimaryColor.orange10.swiftUIColor
+		public static let brandsubassistive = ResourceKitAsset.PrimaryColor.lemon10.swiftUIColor
 		public static let white = ResourceKitAsset.PrimaryColor.common100.swiftUIColor
 	}
 	
