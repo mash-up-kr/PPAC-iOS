@@ -53,7 +53,7 @@ struct MemeDetailCardView: View {
   
   var titleLabel: some View {
     Text(meme.title)
-      .font(Font.Heading.large.weight(.semibold))
+      .font(Font.Heading.Large.semiBold)
       .multilineTextAlignment(.center)
       .foregroundColor(Color.Text.primary)
       .frame(maxWidth: .infinity, alignment: .center)
@@ -61,7 +61,7 @@ struct MemeDetailCardView: View {
   
   var subtitleLabel: some View {
     Text("출처: \(self.meme.source)")
-      .font(Font.Body.xsmall)
+      .font(Font.Body.Xsmall.medium)
       .multilineTextAlignment(.center)
       .foregroundColor(Color.Icon.assistive)
   }

@@ -18,7 +18,11 @@ let project = Project(
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
-
+              .ResourceKit,
+              .Core.DesignSystem,
+              .Core.PPACModels,
+              .ThirdParty.Dependency,
+              .ThirdParty.Kingfisher,
             ]
         )
     ]
