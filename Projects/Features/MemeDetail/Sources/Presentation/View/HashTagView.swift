@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import ResourceKit
+
 public struct HashTagView: View {
   
   // MARK: - Properties
@@ -21,7 +23,7 @@ public struct HashTagView: View {
   
   // MARK: - UI
   
-  var body: some View {
+  public var body: some View {
     HStack(alignment: .center, spacing: 6) {
       ForEach(keywords, id: \.self) { title in
         hashTag(title: title)
@@ -33,7 +35,7 @@ public struct HashTagView: View {
   
   func hashTag(title: String) -> some View {
     Text("#\(title)")
-      .font(Font.Body.large)
+      .font(Font.Body.Large.medium)
       .foregroundColor(Color.Text.tertiary)
   }
   

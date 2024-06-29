@@ -10,7 +10,7 @@ import SwiftUI
 import ResourceKit
 
 public struct LikeButton: View {
-  var body: some View {
+  public var body: some View {
     HStack(alignment: .center, spacing: 6) {
       ResourceKitAsset.Icon.ㅋ.swiftUIImage
       ResourceKitAsset.Icon.개웃겨.swiftUIImage

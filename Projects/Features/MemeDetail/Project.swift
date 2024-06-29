@@ -23,6 +23,7 @@ let project = Project(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACModels,
+                .Core.PPACUtil,
             ]
         )
     ]
