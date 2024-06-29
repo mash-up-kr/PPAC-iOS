@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+import ResourceKit
+
 public struct HashTagView: View {
   
   // MARK: - Properties
@@ -21,7 +23,7 @@ public struct HashTagView: View {
   
   // MARK: - UI
   
-  var body: some View {
+  public var body: some View {
     HStack(alignment: .center, spacing: 6) {
       ForEach(keywords, id: \.self) { title in
         hashTag(title: title)
