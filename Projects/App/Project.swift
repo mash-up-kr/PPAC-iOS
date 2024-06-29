@@ -17,7 +17,9 @@ let project = Project.configure(
             name: "Release-Farmeme",
             product: .app,
             bundleId: "ppac.farmeme.App",
-//            infoPlist: .extendingDefault(with: <#T##[String : Plist.Value]#>),
+            infoPlist: .extendingDefault(with: [
+              "UILaunchStoryboardName": "launch"
+          ]),
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
@@ -45,7 +47,9 @@ let project = Project.configure(
             name: "Develop-Farmeme",
             product: .app,
             bundleId: "ppac.farmeme.App",
-            infoPlist: .default,
+            infoPlist: .extendingDefault(with: [
+              "UILaunchStoryboardName": "launch"
+          ]),
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
