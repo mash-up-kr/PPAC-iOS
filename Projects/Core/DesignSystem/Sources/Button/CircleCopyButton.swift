@@ -9,6 +9,7 @@ import SwiftUI
 import ResourceKit
 
 public struct CircleCopyButton: View {
+  public init() { }
   public var body: some View {
     Circle()
       .foregroundStyle(.white)
