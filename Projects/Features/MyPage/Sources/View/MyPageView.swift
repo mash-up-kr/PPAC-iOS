@@ -17,7 +17,11 @@ public struct MyPageView: View {
   
   public var body: some View {
     ScrollView {
+      MyPageSettingHeaderView()
+      
+      MyPageCharacterView(description: "폼 미쳤따아아아아아ㅏ")
       LevelProgressView(level: 20)
+      MemeLevelConditionView(currentLevelConditionCount: 10)
       //recentlyMemeListView
       myFarmemeListView
     }
