@@ -11,32 +11,24 @@ import PPACModels
 
 public struct MemeItemView: View {
   private let memeDetail: MemeDetail
-  //private let imageUrl: String
-//  private let memeName: String
-//  private let reaction: Int
+  
   public init(memeDetail: MemeDetail) {
     self.memeDetail = memeDetail
   }
-//  public init(memeName: String, reaction: Int) {
-//    self.memeName = memeName
-//    self.reaction = reaction
-//  }
-  
   public var body: some View {
     VStack {
-      MemeItemViewWithButton()
+      MemeItemViewWithButton(imageUrlString: memeDetail.imageUrlString)
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
   }
 }
 
 struct MemeItemViewWithButton: View {
+  let imageUrlString: String
   var body: some View {
     ZStack(alignment: .bottomLeading) {
       VStack {
-        Rectangle() // memeImageView가 와야함
-          .foregroundStyle(.red)
-          .frame(width: .infinity, height: 200, alignment: .center)
+        MemeImageView(imageUrlString: imageUrlString)
       }
       HStack {
         Spacer()

@@ -25,7 +25,6 @@ public struct MemeListView: View {
         ForEach(0..<memeList.count, id: \.self) { index in
           let memeDetail = memeList[index]
           MemeItemView(memeDetail: memeDetail)
-          //MemeItemView(memeName: memeDetail.title, reaction: memeDetail.reaction)
             .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
         }
       }
