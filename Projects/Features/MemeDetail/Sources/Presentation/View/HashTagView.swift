@@ -35,7 +35,7 @@ public struct HashTagView: View {
   
   func hashTag(title: String) -> some View {
     Text("#\(title)")
-      .font(Font.Body.large)
+      .font(Font.Body.Large.medium)
       .foregroundColor(Color.Text.tertiary)
   }
   
