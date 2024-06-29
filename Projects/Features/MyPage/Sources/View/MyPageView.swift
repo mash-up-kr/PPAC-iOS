@@ -11,17 +11,19 @@ import ResourceKit
 import PPACModels
 
 public struct MyPageView: View {
+  private let memeLevel: MemeLevelType
   private let memeList: [MemeDetail] = Array(repeating: MemeDetail.mock, count: 10)
   
-  public init() { }
+  public init(memeLevel: MemeLevelType) {
+    self.memeLevel = memeLevel
+  }
   
   public var body: some View {
     ScrollView {
       MyPageSettingHeaderView()
-      
-      MyPageCharacterView(description: "폼 미쳤따아아아아아ㅏ")
-      LevelProgressView(level: 20)
-      MemeLevelConditionView(currentLevelConditionCount: 10)
+      MyPageCharacterView(description: memeLevel.speechBalloonText)
+      LevelProgressView(level: 15)
+      MemeLevelConditionView(conditionCount: 10)
       //recentlyMemeListView
       myFarmemeListView
     }
@@ -48,5 +50,5 @@ public struct MyPageView: View {
 
 
 #Preview {
-  MyPageView()
+  MyPageView(memeLevel: .level1)
 }
