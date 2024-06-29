@@ -7,19 +7,25 @@
 
 import SwiftUI
 import ResourceKit
+import PPACModels
+
 public struct MemeItemView: View {
+  private let memeDetail: MemeDetail
   //private let imageUrl: String
-  private let memeName: String
-  private let reaction: Int
-  public init(memeName: String, reaction: Int) {
-    self.memeName = memeName
-    self.reaction = reaction
+//  private let memeName: String
+//  private let reaction: Int
+  public init(memeDetail: MemeDetail) {
+    self.memeDetail = memeDetail
   }
+//  public init(memeName: String, reaction: Int) {
+//    self.memeName = memeName
+//    self.reaction = reaction
+//  }
   
   public var body: some View {
     VStack {
       MemeItemViewWithButton()
-      MemeItemInfoView(memeName: memeName, reaction: reaction)
+      MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
   }
 }
@@ -30,6 +36,7 @@ struct MemeItemViewWithButton: View {
       VStack {
         Rectangle() // memeImageView가 와야함
           .foregroundStyle(.red)
+          .frame(width: .infinity, height: 200, alignment: .center)
       }
       HStack {
         Spacer()
@@ -71,5 +78,5 @@ struct MemeItemInfoView: View {
 
 
 #Preview {
-  MemeItemView(memeName: "재성이의 소중한 제보 재성이의 소중한 제보 재성이의 소중한 제보 재성이의 소중한 제보 재성이의 소중한 제보 재성이의 소중한 제보 재성이의 소중한 제보 ",reaction: 10)
+  MemeItemView(memeDetail: MemeDetail.mock)
 }
