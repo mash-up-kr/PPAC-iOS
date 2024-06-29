@@ -28,14 +28,13 @@ struct MemeDetailCardView: View {
       titleLabel
         .padding(.bottom, 5)
       
-      hashTagView
-      
+      HashTagView(keywords: meme.keywords)
         .padding(.bottom, 11)
       
       subtitleLabel
         .padding(.bottom, 20)
       
-      likeButton
+      LikeButton()
         .padding(.bottom, 20)
     }
     .padding(10)
@@ -59,39 +58,11 @@ struct MemeDetailCardView: View {
       .frame(maxWidth: .infinity, alignment: .center)
   }
   
-  var hashTagView: some View {
-    HStack(alignment: .center, spacing: 6) {
-      ForEach(self.meme.keywords, id: \.self) { title in
-        hashTag(title: title)
-      }
-    }
-    .frame(maxWidth: .infinity, alignment: .center)
-    .cornerRadius(40)
-  }
-  
   var subtitleLabel: some View {
     Text("출처: \(self.meme.source)")
       .font(Font.Body.xsmall)
       .multilineTextAlignment(.center)
       .foregroundColor(Color.Icon.assistive)
-    
-  }
-  
-  var likeButton: some View {
-    HStack(alignment: .center, spacing: 6) {
-      ResourceKitAsset.Icon.ㅋ.swiftUIImage
-      ResourceKitAsset.Icon.개웃겨.swiftUIImage
-    }
-    .frame(maxWidth: .infinity)
-    .frame(height: 46, alignment: .center)
-    .background(Color.Skeleton.primary)
-    .cornerRadius(10)
-  }
-  
-  func hashTag(title: String) -> some View {
-    Text("#\(title)")
-      .font(Font.Body.large)
-      .foregroundColor(Color.Text.tertiary)
   }
 }
 
