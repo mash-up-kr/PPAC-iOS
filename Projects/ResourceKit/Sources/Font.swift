@@ -6,7 +6,7 @@
 //  Copyright © 2024 ppac.farmeme. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
 
 public struct Font {
 	public struct Weight {
