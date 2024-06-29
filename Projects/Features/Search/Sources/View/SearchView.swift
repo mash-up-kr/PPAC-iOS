@@ -22,12 +22,7 @@ public struct SearchView: View {
   
   public var body: some View {
     VStack(spacing: 0) {
-      Button {
-        isPresenting = true
-      } label: {
-        FakeSearchBar(placeHolder: "🚧 검색은 오픈 준비 중!")
-      }
-      .buttonStyle(PlainButtonStyle())
+      fakeSearchBar
       
       ScrollView {
         VStack(spacing: 0) {
@@ -45,6 +40,15 @@ public struct SearchView: View {
         SearchPreparingAlert(dismiss: { isPresenting = false })
       }
     )
+  }
+  
+  private var fakeSearchBar: some View {
+    Button {
+      isPresenting = true
+    } label: {
+      FakeSearchBar(placeHolder: "🚧 검색은 오픈 준비 중!")
+    }
+    .buttonStyle(PlainButtonStyle())
   }
   
   private var currentHotKeywords: some View {

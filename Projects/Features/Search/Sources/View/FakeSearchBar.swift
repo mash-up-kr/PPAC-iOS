@@ -16,6 +16,16 @@ struct FakeSearchBar: View {
   }
   
   var body: some View {
+    fakeTextField
+      .frame(maxWidth: .infinity)
+      .frame(height: 44)
+      .background(Color.Background.assistive)
+      .clipShape(RoundedRectangle(cornerRadius: 10))
+      .padding(.horizontal, 20)
+      .padding(.vertical, 16)
+  }
+  
+  private var fakeTextField: some View {
     HStack(spacing: 12) {
       ResourceKitAsset.Icon.search.swiftUIImage
       
@@ -26,11 +36,5 @@ struct FakeSearchBar: View {
       Spacer()
     }
     .padding(.horizontal, 16)
-    .frame(maxWidth: .infinity)
-    .frame(height: 44)
-    .background(Color.Background.assistive)
-    .clipShape(RoundedRectangle(cornerRadius: 10))
-    .padding(.horizontal, 20)
-    .padding(.vertical, 16)
   }
 }

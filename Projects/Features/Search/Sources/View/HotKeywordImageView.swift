@@ -22,22 +22,11 @@ struct HotKeywordImageView: View, HorizontalMimItemViewProtocol {
   
   var body: some View {
     ZStack {
-      KFImage(URL(string: hotKeyword.imageUrlString))
-        .resizable()
-        .loadDiskFileSynchronously()
-        .cacheMemoryOnly()
-        .frame(width: 90, height: 90)
-        .aspectRatio(contentMode: .fit)
+      imageView
       
       Color.black.opacity(0.4)
       
-      Text(hotKeyword.title)
-        .font(Font.Body.Large.semiBold)
-        .foregroundColor(Color.Text.inverse)
-        .lineLimit(2)
-        .multilineTextAlignment(.center)
-        .padding(.horizontal, 16)
-        .frame(width: 90, height: 90)
+      keywordView
     }
     .overlay(
       RoundedRectangle(cornerRadius: 10)
@@ -45,5 +34,24 @@ struct HotKeywordImageView: View, HorizontalMimItemViewProtocol {
         .stroke(Color.Border.primary, lineWidth: 2)
     )
     .clipShape(RoundedRectangle(cornerRadius: 10))
+  }
+  
+  private var imageView: some View {
+    KFImage(URL(string: hotKeyword.imageUrlString))
+      .resizable()
+      .loadDiskFileSynchronously()
+      .cacheMemoryOnly()
+      .frame(width: 90, height: 90)
+      .aspectRatio(contentMode: .fit)
+  }
+  
+  private var keywordView: some View {
+    Text(hotKeyword.title)
+      .font(Font.Body.Large.semiBold)
+      .foregroundColor(Color.Text.inverse)
+      .lineLimit(2)
+      .multilineTextAlignment(.center)
+      .padding(.horizontal, 16)
+      .frame(width: 90, height: 90)
   }
 }
