@@ -31,11 +31,7 @@ final class MemeDetailRouter: Router {
       self.meme = meme
       self.navigationController = navigationController
   }
-  
-  // MARK: - UI
-  
-  // MARK: - Override
-  
+
   // MARK: - Methods
   
   func start() {
