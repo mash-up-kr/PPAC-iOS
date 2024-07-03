@@ -10,10 +10,10 @@ import Foundation
 public enum MemeLevelType: Int, CaseIterable, Identifiable {
   public var id: Int { rawValue }
   
-  case level1
-  case level2
-  case level3
-  case level4
+  case level1 = 1
+  case level2 = 2
+  case level3 = 3
+  case level4 = 4
   
   public var speechBalloonText: String {
     let speechBalloonList = [
