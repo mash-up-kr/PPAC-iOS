@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import SwiftUI
+import ResourceKit
 
 public enum MemeLevelType: Int, CaseIterable, Identifiable {
   public var id: Int { rawValue }
@@ -41,6 +43,32 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable {
       return "밈 공유"
     case .level4:
       return "밈 저장"
+    }
+  }
+  
+  public var levelTitleText: String {
+    switch self {
+    case .level1:
+      return "LV.1 호기심 많은 밈린이"
+    case .level2:
+      return "LV.2 은은하게 밈친자"
+    case .level3:
+      return "LV.3 입담 좋은 밈수저"
+    case .level4:
+      return "LV.4 독보적인 밈천재"
+    }
+  }
+  
+  public var levelCharacterImage: Image {
+    switch self {
+    case .level1:
+      return ResourceKitAsset.Icon.level1Character.swiftUIImage
+    case .level2:
+      return ResourceKitAsset.Icon.level2Character.swiftUIImage
+    case .level3:
+      return ResourceKitAsset.Icon.level3Character.swiftUIImage
+    case .level4:
+      return ResourceKitAsset.Icon.level4Character.swiftUIImage
     }
   }
 }

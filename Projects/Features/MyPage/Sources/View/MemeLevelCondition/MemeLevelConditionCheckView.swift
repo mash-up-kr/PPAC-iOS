@@ -18,7 +18,7 @@ struct MemeLevelConditionCheckView: View {
     return CGFloat(stepLevel)
   }
   
-  private let horizantalPadding: CGFloat = 50.0
+  private let horizantalPadding: CGFloat = 40.0
   private let checkImageSize: CGSize = CGSize(width: 24, height: 24)
   
   var highlightWidth: CGFloat {

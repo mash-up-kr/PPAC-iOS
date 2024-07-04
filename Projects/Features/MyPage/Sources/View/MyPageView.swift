@@ -21,13 +21,13 @@ public struct MyPageView: View {
   public var body: some View {
     ScrollView {
       settingHeaderView
-      MyPageCharacterView(description: memeLevel.speechBalloonText)
+      MyPageCharacterView(level: memeLevel, description: memeLevel.speechBalloonText)
+      levelTitleTextView
       LevelProgressView(level: 15)
       MemeLevelConditionView(conditionCount: 10)
       RecentlyMemeListView(memeDetailList: memeDetailList)
       myFarmemeListView
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
   }
   
   var settingHeaderView: some View {
@@ -35,8 +35,15 @@ public struct MyPageView: View {
       Spacer()
       ResourceKitAsset.Icon.setting.swiftUIImage
         .frame(width: 20, height: 20, alignment: .center)
-        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 20))
+        .padding(.vertical, 15)
+        .padding(.trailing, 20)
     }
+  }
+  
+  var levelTitleTextView: some View {
+    Text(memeLevel.levelTitleText)
+      .font(Font.Heading.Large.bold)
+      .padding(20)
   }
   
   var myFarmemeListView: some View {

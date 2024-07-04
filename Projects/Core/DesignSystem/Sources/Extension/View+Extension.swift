@@ -8,7 +8,10 @@
 import SwiftUI
 
 public extension View {
-  func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+  func cornerRadius(
+    _ radius: CGFloat,
+    corners: UIRectCorner
+  ) -> some View {
     clipShape(RoundedCorners(radius: radius, corners: corners))
   }
 }

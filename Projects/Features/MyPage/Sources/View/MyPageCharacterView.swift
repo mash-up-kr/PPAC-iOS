@@ -9,10 +9,11 @@ import SwiftUI
 import ResourceKit
 
 struct MyPageCharacterView: View {
+  let level: MemeLevelType
   let description: String
   var body: some View {
     SpeechBalloonView(description: description)
-    ResourceKitAsset.Icon.level1.swiftUIImage // TODO: 캐릭터 이미지 나오면 변경 필요
+    level.levelCharacterImage
       .resizable()
       .frame(width: 190, height: 190, alignment: .center)
   }
@@ -47,5 +48,5 @@ struct SpeechBalloonView: View {
 }
 
 #Preview {
-  MyPageCharacterView(description: "폼 미쳤따아아아아아아ㅏㅏ")
+  MyPageCharacterView(level: .level3, description: "폼 미쳤따아아아아아아ㅏㅏ")
 }
