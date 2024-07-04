@@ -21,7 +21,7 @@ public struct ListHeaderView: View {
     HStack {
       icon
         .frame(width: 20, height: 20, alignment: .center)
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 8))
+        .padding(.leading, 20)
       Text(title)
         .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 20))
       Spacer()
@@ -30,5 +30,5 @@ public struct ListHeaderView: View {
 }
 
 #Preview {
-  ListHeaderView(icon: Image(systemName: "bookmark"), title: "나의 파밈")
+  ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage, title: "나의 파밈")
 }

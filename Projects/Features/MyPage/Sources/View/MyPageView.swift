@@ -12,7 +12,7 @@ import PPACModels
 
 public struct MyPageView: View {
   private let memeLevel: MemeLevelType
-  private let memeList: [MemeDetail] = Array(repeating: MemeDetail.mock, count: 10)
+  private let memeDetailList: [MemeDetail] = Array(repeating: MemeDetail.mock, count: 10)
   
   public init(memeLevel: MemeLevelType) {
     self.memeLevel = memeLevel
@@ -20,30 +20,31 @@ public struct MyPageView: View {
   
   public var body: some View {
     ScrollView {
-      MyPageSettingHeaderView()
+      settingHeaderView
       MyPageCharacterView(description: memeLevel.speechBalloonText)
       LevelProgressView(level: 15)
       MemeLevelConditionView(conditionCount: 10)
-      //recentlyMemeListView
+      RecentlyMemeListView(memeDetailList: memeDetailList)
       myFarmemeListView
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+  }
+  
+  var settingHeaderView: some View {
+    HStack {
+      Spacer()
+      ResourceKitAsset.Icon.setting.swiftUIImage
+        .frame(width: 20, height: 20, alignment: .center)
+        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 20))
+    }
   }
   
   var myFarmemeListView: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
                      title: "나의 파밈함")
-      MemeListView(memeList: memeList)
-    }
-    .padding(.horizontal, 20)
-  }
-  
-  var recentlyMemeListView: some View {
-    VStack {
-      ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
-                     title: "최근 본 밈")
-      MemeListView(memeList: memeList)
+      MemeListView(memeDetailList: memeDetailList)
+        .padding(.horizontal, 20)
     }
   }
 }
