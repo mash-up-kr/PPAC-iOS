@@ -32,17 +32,13 @@ struct MemeLevelConditionCheckView: View {
       stepCheckView
         .offset(x: 0, y: -20)
     }
-//    .background {
-//      Rectangle()
-//        .stroke(Color.Border.primary, lineWidth: 1, fill: Color.Background.white)
-//        .frame(width: .infinity, height: 200)
-//        .clipShape(
-//          .rect(
-//            topLeadingRadius: 30,
-//            topTrailingRadius: 30
-//          )
-//        )
-//    }
+    .padding(.top, 40)
+    .padding(.horizontal, 20)
+    .padding(.bottom, 30)
+    .background {
+      RoundedCorner(radius: 20, corners: [.bottomLeft, .bottomRight])
+        .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.white)
+    }
   }
   
   var progressStepCheckView: some View {
@@ -78,33 +74,6 @@ struct MemeLevelConditionCheckView: View {
       }
     }
     .frame(width: .infinity)
-    .padding(.horizontal, 20)
-  }
-  
-  var stepCheckImageView: some View {
-    ZStack {
-      ResourceKitAsset.Icon.levelcheck.swiftUIImage
-        .frame(width: 20, height: 20, alignment: .center)
-      Circle()
-        .foregroundStyle(Color.Background.assistive)
-        .frame(width: 20, height: 20, alignment: .center)
-      Circle()
-        .foregroundStyle(Color.Text.assistive)
-        .frame(width: 8, height: 8, alignment: .center)
-    }
-    .frame(width: 24, height: 24, alignment: .center)
-  }
-  
-  var stepDescriptionChip: some View {
-    Text(memeLevel.levelStepText)
-      .foregroundStyle(Color.Text.secondary)
-      .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
-      .padding(.vertical, 5)
-      .padding(.horizontal, 10)
-      .background {
-        RoundedRectangle(cornerRadius: 25, style: .continuous)
-          .foregroundStyle(Color.Background.assistive)
-      }
   }
 }
 
@@ -135,7 +104,7 @@ struct levelStepView: View {
   var stepDescriptionChip: some View {
     Text(type.levelStepText)
       .foregroundStyle(Color.Text.secondary)
-      .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
+      .font(Font.Body.Small.semiBold)
       .padding(.vertical, 5)
       .padding(.horizontal, 10)
       .background {

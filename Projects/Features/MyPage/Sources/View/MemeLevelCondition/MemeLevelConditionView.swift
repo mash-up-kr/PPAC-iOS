@@ -14,18 +14,8 @@ struct MemeLevelConditionView: View {
   var body: some View {
     VStack {
       MemeLevelConditionInfoView(conditionCount: conditionCount)
-        .frame(width: .infinity, height: 87)
-        .foregroundStyle(Color.red)
-      divider
-        .foregroundStyle(Color.Background.white)
-        .frame(width: .infinity, height: 1)
-        .offset(x: 0, y: -5)
       MemeLevelConditionCheckView(memeLevel: .level3)
-    }
-    .background {
-      RoundedRectangle(cornerRadius: 25, style: .circular)
-        .stroke(Color.Border.secondary, lineWidth: 1, fill: Color.Background.assistive)
-        .frame(width: .infinity, height: 200)
+        .offset(x: 0, y: -10)
     }
     .padding(EdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20))
     

@@ -30,7 +30,7 @@ struct LevelProgressView: View {
       ResourceKitAsset.Icon.level1.swiftUIImage
         .padding(EdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 0))
       Text("LV.1")
-        .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 20))
+        .font(Font.Body.Xlarge.semiBold)
         .foregroundStyle(Color.Text.inverse)
       Spacer()
     }

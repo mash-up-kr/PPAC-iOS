@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ResourceKit
+import PPACUtil
 
 struct MemeLevelConditionInfoView: View {
   let conditionCount: Int
@@ -17,7 +18,13 @@ struct MemeLevelConditionInfoView: View {
       Spacer()
       countChipView
     }
-    .padding(EdgeInsets(top: 30, leading: 20, bottom: 20, trailing: 0))
+    .padding(.horizontal, 20)
+    .padding(.top, 16)
+    .padding(.bottom, 20)
+    .background {
+      RoundedCorner(radius: 20, corners: [.topLeft, .topRight])
+        .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.assistive)
+    }
   }
   
   var confitionInfoView: some View {
@@ -46,17 +53,16 @@ struct MemeLevelConditionInfoView: View {
   var titleLabel: some View {
     Text("다음 레벨 달성 조건")
       .foregroundStyle(Color.Text.tertiary)
-      .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 17))
+      .font(Font.Body.Medium.semiBold)
   }
   
   var descriptionLabel: some View {
     Text("밈 20번 공유하기")
       .foregroundStyle(Color.Text.primary)
-      .font(ResourceKitFontFamily.Pretendard.bold.swiftUIFont(size: 24))
+      .font(Font.Heading.Small.semiBold)
   }
 }
 
 #Preview {
   MemeLevelConditionInfoView(conditionCount: 15)
-    .background(Color.Background.assistive)
 }
