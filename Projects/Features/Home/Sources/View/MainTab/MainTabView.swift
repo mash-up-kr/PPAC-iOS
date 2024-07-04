@@ -51,7 +51,7 @@ struct CustomTabBarView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: 98)
     .background(.white)
-    .clipShape(
+    .clipShape( 
       .rect(
         topLeadingRadius: 30,
         topTrailingRadius: 30

@@ -29,7 +29,7 @@ public struct MemeListView: View {
 //        }
         ForEach(memeDetailList) { memeDetail in
           MemeItemView(memeDetail: memeDetail)
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 20, trailing: 0))
+            .padding(.bottom, 20)
         }
       }
     }

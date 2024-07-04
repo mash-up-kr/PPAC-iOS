@@ -1,5 +1,5 @@
 //
-//  Extension+UIScreen.swift
+//  UIScreen+Extension.swift
 //  PPACUtil
 //
 //  Created by 장혜령 on 2024/06/29.

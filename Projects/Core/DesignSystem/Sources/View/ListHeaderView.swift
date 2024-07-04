@@ -23,7 +23,7 @@ public struct ListHeaderView: View {
         .frame(width: 20, height: 20, alignment: .center)
         .padding(.leading, 20)
       Text(title)
-        .font(ResourceKitFontFamily.Pretendard.semiBold.swiftUIFont(size: 20))
+        .font(Font.Heading.Small.semiBold)
       Spacer()
     }
   }
