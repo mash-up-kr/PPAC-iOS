@@ -22,7 +22,7 @@ struct MemeLevelConditionCheckView: View {
   private let checkImageSize: CGSize = CGSize(width: 24, height: 24)
   
   var highlightWidth: CGFloat {
-    let levelOneStepWidth = (UIScreen.screenWidth - horizantalPadding * 2.0) / 3.0
+    let levelOneStepWidth = (UIScreen.screenWidth - checkImageSize.width - horizantalPadding * 2.0) / 3.0
     return levelOneStepWidth * pregressStepLevel
   }
   

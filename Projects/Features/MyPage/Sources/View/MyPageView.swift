@@ -25,6 +25,7 @@ public struct MyPageView: View {
       levelTitleTextView
       LevelProgressView(level: 15)
       MemeLevelConditionView(conditionCount: 10)
+      divider
       RecentlyMemeListView(memeDetailList: memeDetailList)
       myFarmemeListView
     }
@@ -42,8 +43,15 @@ public struct MyPageView: View {
   
   var levelTitleTextView: some View {
     Text(memeLevel.levelTitleText)
-      .font(Font.Heading.Large.bold)
+      .font(Font.Family2.outLine)
       .padding(20)
+  }
+  
+  var divider: some View {
+    Rectangle()
+      .frame(height: 10)
+      .foregroundStyle(Color.Skeleton.secondary)
+      .padding(.bottom, 20)
   }
   
   var myFarmemeListView: some View {

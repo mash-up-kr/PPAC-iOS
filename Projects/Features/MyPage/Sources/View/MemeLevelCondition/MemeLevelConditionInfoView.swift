@@ -38,15 +38,17 @@ struct MemeLevelConditionInfoView: View {
     HStack {
       Text("\(conditionCount)")
         .foregroundStyle(Color.Text.brand)
-        .padding(.leading, 5)
+        .padding(.leading, 8)
       Text("/20")
         .foregroundStyle(Color.Text.tertiary)
         .offset(x: -8, y: 0)
-    }.background {
+    }
+    .background {
       RoundedRectangle(cornerRadius: 30, style: .continuous)
         .foregroundStyle(Color.Background.white)
         .frame(width: 56, height: 30)
     }
+    .font(Font.Body.Large.semiBold)
     .padding(.vertical, 5)
     .padding(.horizontal, 10)
   }
