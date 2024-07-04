@@ -53,7 +53,7 @@ struct MemeItemInfoView: View {
         }
         
       }
-      .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 0))
+      .padding(.bottom, 4)
       Spacer()
     }
   }

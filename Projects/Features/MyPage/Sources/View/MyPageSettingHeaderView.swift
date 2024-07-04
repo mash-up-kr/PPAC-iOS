@@ -14,7 +14,8 @@ struct MyPageSettingHeaderView: View {
       Spacer()
       ResourceKitAsset.Icon.setting.swiftUIImage
         .frame(width: 20, height: 20, alignment: .center)
-        .padding(EdgeInsets(top: 15, leading: 0, bottom: 15, trailing: 20))
+        .padding(.vertical, 15)
+        .padding(.trailing, 20)
     }
   }
 }

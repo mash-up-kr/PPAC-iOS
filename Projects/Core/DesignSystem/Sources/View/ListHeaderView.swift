@@ -21,7 +21,8 @@ public struct ListHeaderView: View {
     HStack {
       icon
         .frame(width: 20, height: 20, alignment: .center)
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 8))
+        .padding(.leading, 20)
+        .padding(.trailing, 8)
       Text(title)
         .font(Font.Heading.Small.semiBold)
       Spacer()

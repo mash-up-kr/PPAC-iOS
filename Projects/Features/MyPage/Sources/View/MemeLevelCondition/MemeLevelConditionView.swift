@@ -17,8 +17,9 @@ struct MemeLevelConditionView: View {
       MemeLevelConditionCheckView(memeLevel: .level3)
         .offset(x: 0, y: -10)
     }
-    .padding(EdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20))
-    
+    .padding(.horizontal, 20)
+    .padding(.top, 16)
+    .padding(.bottom, 40)
   }
   
   var divider: some View {

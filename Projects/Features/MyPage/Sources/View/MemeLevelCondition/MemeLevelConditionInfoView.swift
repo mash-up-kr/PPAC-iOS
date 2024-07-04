@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ResourceKit
-import PPACUtil
+import DesignSystem
 
 struct MemeLevelConditionInfoView: View {
   let conditionCount: Int
@@ -22,7 +22,7 @@ struct MemeLevelConditionInfoView: View {
     .padding(.top, 16)
     .padding(.bottom, 20)
     .background {
-      RoundedCorner(radius: 20, corners: [.topLeft, .topRight])
+      RoundedCorners(radius: 20, corners: [.topLeft, .topRight])
         .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.assistive)
     }
   }
@@ -47,7 +47,8 @@ struct MemeLevelConditionInfoView: View {
         .foregroundStyle(Color.Background.white)
         .frame(width: 56, height: 30)
     }
-    .padding(EdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10))
+    .padding(.vertical, 5)
+    .padding(.horizontal, 10)
   }
   
   var titleLabel: some View {

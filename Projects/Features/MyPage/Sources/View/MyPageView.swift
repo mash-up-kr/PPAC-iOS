@@ -24,7 +24,6 @@ public struct MyPageView: View {
       MyPageCharacterView(description: memeLevel.speechBalloonText)
       LevelProgressView(level: 15)
       MemeLevelConditionView(conditionCount: 10)
-      //recentlyMemeListView
       myFarmemeListView
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -35,8 +34,8 @@ public struct MyPageView: View {
       ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
                      title: "나의 파밈함")
       MemeListView(memeList: memeList)
+        .padding(.horizontal, 20)
     }
-    .padding(.horizontal, 20)
   }
   
   var recentlyMemeListView: some View {

@@ -7,7 +7,7 @@
 
 import SwiftUI
 import ResourceKit
-import PPACUtil
+import DesignSystem
 
 struct MemeLevelConditionCheckView: View {
   let memeLevel: MemeLevelType
@@ -36,7 +36,7 @@ struct MemeLevelConditionCheckView: View {
     .padding(.horizontal, 20)
     .padding(.bottom, 30)
     .background {
-      RoundedCorner(radius: 20, corners: [.bottomLeft, .bottomRight])
+      RoundedCorners(radius: 20, corners: [.bottomLeft, .bottomRight])
         .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.white)
     }
   }
