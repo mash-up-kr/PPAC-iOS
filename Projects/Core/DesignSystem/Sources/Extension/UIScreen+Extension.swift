@@ -5,9 +5,15 @@
 //  Created by 장혜령 on 2024/06/29.
 //
 
-import UIKit
+import SwiftUI
 
-public extension UIScreen {
-  static let screenWidth = UIScreen.main.bounds.width
-  static let screenHeight = UIScreen.main.bounds.width
+public struct ScreenSizeKey: EnvironmentKey {
+  public static let defaultValue: CGSize = UIScreen.main.bounds.size
+}
+
+public extension EnvironmentValues {
+  var screenSize: CGSize {
+    get { self[ScreenSizeKey.self] }
+    set { self[ScreenSizeKey.self] = newValue }
+  }
 }
