@@ -38,14 +38,13 @@ struct MemeDetailCardView: View {
         .padding(.bottom, 20)
     }
     .padding(10)
-    .background(.white)
+    .background(Color.Background.white)
     .cornerRadius(20)
     .overlay(
       RoundedRectangle(cornerRadius: 20)
         .inset(by: 1)
         .stroke(.black, lineWidth: 2)
     )
-    .padding(.horizontal, 24)
   }
   
   // MARK: - Methods
@@ -61,11 +60,14 @@ struct MemeDetailCardView: View {
   var subtitleLabel: some View {
     Text("출처: \(self.meme.source)")
       .font(Font.Body.Xsmall.medium)
-      .multilineTextAlignment(.center)
+      .lineLimit(1)
       .foregroundColor(Color.Icon.assistive)
   }
 }
 
 #Preview {
-  MemeDetailCardView(meme: .mock)
+  VStack {
+    MemeDetailCardView(meme: .mock)
+  }
+  .background(.red)
 }

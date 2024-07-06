@@ -20,6 +20,8 @@ public final class PostLikeUseCaseImpl: PostLikeUseCase {
   
   // MARK: - Initializers
   
+  public init() {}
+  
   // MARK: - Methods
   
   public func execute(id: String) async -> Bool {

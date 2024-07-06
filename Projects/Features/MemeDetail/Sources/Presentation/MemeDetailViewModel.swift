@@ -5,22 +5,22 @@
 //  Created by kimchansoo on 6/29/24.
 //
 
-import Foundation
+import UIKit
 
 import Dependencies
 
 import PPACUtil
 import PPACModels
-import UIKit
 
-protocol MemeDetailRouting: AnyObject {
+
+public protocol MemeDetailRouting: AnyObject {
   func popView()
-  func showShareView()
+  func showShareView(items: [Any])
 }
 
-final class MemeDetailViewModel: ViewModelType, ObservableObject {
+public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   
-  enum Action {
+  public enum Action {
     case likeButtonTapped
     case copyButtonTapped
     case shreButtonTapped
@@ -28,43 +28,43 @@ final class MemeDetailViewModel: ViewModelType, ObservableObject {
     case naviBackButtonTapped
   }
   
-  struct State {
+  public struct State {
     var meme: MemeDetail
   }
   
   // MARK: - Properties
   
   weak var router: MemeDetailRouting?
-  @Published var state: State
+  @Published public var state: State
   
-  private let copyImageUseCase: CopyImageUseCase
   private let postLikeUseCase: PostLikeUseCase
-  
+  // watchmemeusecase
+  // savememeusecase
+  // sharememeusecase
+  // postreactionusecase
   
   // MARK: - Initializers
   
-  init(
+  public init(
     meme: MemeDetail,
     router: MemeDetailRouting?,
-    copyImageUseCase: CopyImageUseCase,
     postLikeUseCase: PostLikeUseCase
   ) {
     self.router = router
     self.state = State(meme: meme)
-    self.copyImageUseCase = copyImageUseCase
     self.postLikeUseCase = postLikeUseCase
   }
   
   // MARK: - Methods
   
-  func dispatch(type: Action) {
+  public func dispatch(type: Action) {
     switch type {
     case .likeButtonTapped:
       postLike()
     case .copyButtonTapped:
       copyImage()
     case .shreButtonTapped:
-      router?.showShareView()
+      showShareSheet()
     case .farmemeButtonTapped:
       postSavedFarmeme()
     case .naviBackButtonTapped:
@@ -79,12 +79,26 @@ private extension MemeDetailViewModel {
   }
   
   func copyImage() {
-    // TODO: - 이미지 viewmodel이 알지 못하도록 수정
-    let imageData: Data = try! Data(contentsOf: URL(string: state.meme.imageUrlString)!)
-    copyImageUseCase.execute(data: imageData)
+    DispatchQueue.main.async { [weak self] in
+      guard let self,
+            let url = URL(string: state.meme.imageUrlString),
+            let imageData = try? Data(contentsOf: url) else {
+        return
+      }
+      UIPasteboard.general.image = UIImage(data: imageData)
+    }
   }
   
   func postSavedFarmeme() {
     
+  }
+  
+  func showShareSheet() {
+    guard let url = URL(string: state.meme.imageUrlString),
+          let data = try? Data(contentsOf: url),
+          let image = UIImage(data: data) else {
+      return
+    }
+    router?.showShareView(items: [image])
   }
 }
