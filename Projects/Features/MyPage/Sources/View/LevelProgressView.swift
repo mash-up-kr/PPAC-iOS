@@ -17,10 +17,6 @@ struct LevelProgressView: View {
   
   private let minimumWidth: CGFloat = 95.0
   private let horizontalPadding: CGFloat = 20.0
-  private var currentLevelWidth: CGFloat {
-    let width = (UIScreen.screenWidth - horizontalPadding * 2) / 20.0 * CGFloat(conditionCount)
-    return width < minimumWidth ? minimumWidth : width
-  }
   
   var body: some View {
     ZStack(alignment: .leading) {
@@ -48,16 +44,24 @@ struct LevelProgressView: View {
   
   var foregroundProgressView: some View {
     HStack {
-      RoundedRectangle(cornerRadius: 25, style: .circular)
-        .stroke(Color.Border.primary, lineWidth: 2, fill: Color.Background.brand)
-        .frame(width: isAnimation ? currentLevelWidth : minimumWidth)
-        .animation(.easeInOut(duration: 1), value: isAnimation)
+      GeometryReader { geometry in
+        let currnetlevelWidth = getCurrentLevelWidth(geometry.size.width)
+        RoundedRectangle(cornerRadius: 25, style: .circular)
+          .stroke(Color.Border.primary, lineWidth: 2, fill: Color.Background.brand)
+          .frame(width: isAnimation ? currnetlevelWidth : minimumWidth)
+          .animation(.easeInOut(duration: 1), value: isAnimation)
+      }
     }
   }
   
   var backgroundProgressView: some View {
     RoundedRectangle(cornerRadius: 25, style: .circular)
       .stroke(Color.Border.secondary, lineWidth: 1, fill: Color.Background.assistive)
+  }
+  
+  private func getCurrentLevelWidth(_ wiewWidth: CGFloat) -> CGFloat {
+    let width = wiewWidth / 20.0 * CGFloat(conditionCount)
+    return width < minimumWidth ? minimumWidth : width
   }
 }
 

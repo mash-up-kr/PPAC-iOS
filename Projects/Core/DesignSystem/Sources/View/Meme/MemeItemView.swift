@@ -27,7 +27,6 @@ public struct MemeItemView: View {
 struct MemeItemViewWithButton: View {
   let imageUrlString: String
   @State private var imageHeight: CGFloat = .zero
-  @State private var ratio: CGFloat = .zero
   var body: some View {
     ZStack(alignment: .bottomLeading) {
       VStack {

@@ -19,16 +19,11 @@ struct MemeLevelConditionCheckView: View {
   private let horizantalPadding: CGFloat = 36.0
   private let checkImageSize: CGSize = CGSize(width: 24, height: 24)
   
-  var highlightWidth: CGFloat {
-    let levelOneStepWidth = (UIScreen.screenWidth - (checkImageSize.width + horizantalPadding) * 2.0) / 3.0
-    return levelOneStepWidth * pregressStepLevel
-  }
-  
   var body: some View {
     VStack {
       progressDottedLine
       stepCheckView
-        .offset(x: 0, y: -20)
+        .offset(x: 0, y: -22)
     }
     .padding(.top, 40)
     .padding(.horizontal, 20)
@@ -50,16 +45,20 @@ struct MemeLevelConditionCheckView: View {
   
   var progressDottedLine: some View {
     ZStack(alignment: .leading) {
-      DottedLine()
-        .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
-        .frame(height: 1)
-        .foregroundColor(Color.gray)
+      GeometryReader { geometry in
+        let highlightWidth = getHighlightWidth(geometry.size.width)
+        DottedLine()
+          .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
+          .frame(height: 1)
+          .foregroundColor(Color.gray)
         
-      DottedLine()
-        .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
-        .frame(width: highlightWidth, height: 1)
-        .foregroundColor(Color.Background.brand)
+        DottedLine()
+          .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
+          .frame(width: highlightWidth, height: 1)
+          .foregroundColor(Color.Background.brand)
+      }
     }
+    .frame(height: 2)
     .padding(.horizontal, horizantalPadding)
   }
   
@@ -73,6 +72,12 @@ struct MemeLevelConditionCheckView: View {
       }
     }
   }
+  
+  private func getHighlightWidth(_ viewWidth: CGFloat) -> CGFloat {
+    let levelOneStepWidth = viewWidth / 3.0
+    return levelOneStepWidth * pregressStepLevel
+  }
+  
 }
 
 struct levelStepView: View {
@@ -131,6 +136,6 @@ struct DottedLine: Shape {
 }
 
 #Preview {
-  MemeLevelConditionCheckView(memeLevel: .level1)
+  MemeLevelConditionCheckView(memeLevel: .level3)
 }
 
