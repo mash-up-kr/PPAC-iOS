@@ -8,6 +8,7 @@
 import SwiftUI
 import ResourceKit
 import PPACModels
+import Kingfisher
 
 public struct MemeItemView: View {
   private let memeDetail: MemeDetail
@@ -25,11 +26,15 @@ public struct MemeItemView: View {
 
 struct MemeItemViewWithButton: View {
   let imageUrlString: String
+  @State private var imageHeight: CGFloat = .zero
+  @State private var ratio: CGFloat = .zero
   var body: some View {
     ZStack(alignment: .bottomLeading) {
       VStack {
-        MemeImageView(imageUrlString: imageUrlString)
+        ResizableMemeImageView(imageUrlString: imageUrlString, imageHeight: $imageHeight)
       }
+      .background(Color.red)
+      .frame(height: imageHeight)
       HStack {
         Spacer()
         CircleCopyButton()
@@ -38,6 +43,30 @@ struct MemeItemViewWithButton: View {
     }
   }
 }
+
+struct ResizableMemeImageView: View {
+  let imageUrlString: String
+  @Binding var imageHeight: CGFloat
+  
+  var body: some View {
+    GeometryReader { geometry in
+      VStack {
+        let _ = print("geometry = \(geometry.size.width)")
+        KFImage(URL(string: imageUrlString))
+          .resizable()
+          .loadDiskFileSynchronously()
+          .cacheMemoryOnly()
+          .onSuccess { result in
+            let ratio = geometry.size.width / result.image.size.width
+            imageHeight = result.image.size.height * ratio
+            print("result.image = \(result.image.size), ratio = \(ratio), imageHeight = \(imageHeight)")
+          }
+          .frame(height: imageHeight)
+      }
+    }
+  }
+}
+
 
 struct MemeItemInfoView: View {
   let memeName: String
@@ -60,8 +89,8 @@ struct MemeItemInfoView: View {
   
   var memeReactionView: some View {
     HStack {
-      ResourceKitAsset.Icon.ㅋㅋ.swiftUIImage
-        .renderingMode(.template)
+      Text("ㅋㅋ")
+        .font(Font.Family2.outLine)
       Text("\(reaction)")
     }
     .foregroundStyle(Color.Text.tertiary)

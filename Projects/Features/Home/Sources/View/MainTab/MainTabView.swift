@@ -22,7 +22,7 @@ public struct MainTabView: View {
           .tag(MainTab.recommend)
         SearchView()
           .tag(MainTab.search)
-        MyPageView(memeLevel: .level1)
+        MyPageView(memeLevel: .level1, memeDetailList: [])
           .tag(MainTab.mypage)
       }
       VStack {
