@@ -19,37 +19,8 @@ public struct MemeListView: View {
     self.memeDetailList = memeDetailList
   }
   
-  var oddIndexedItems: [MemeDetail] {
-    memeDetailList.enumerated().compactMap { index, element in
-      return index % 2 == 0 ? element : nil
-    }
-  }
-  
-  var evenIndexedItems: [MemeDetail] {
-    memeDetailList.enumerated().compactMap { index, element in
-      return index % 2 != 0 ? element : nil
-    }
-  }
-  
   public var body: some View {
     ScrollView {
-      LazyHStack {
-        LazyVStack {
-          ForEach(oddIndexedItems) { memeDetail in
-            MemeItemView(memeDetail: memeDetail)
-              .padding(.bottom, 20)
-          }
-        }
-        LazyVStack {
-          ForEach(evenIndexedItems) { memeDetail in
-            MemeItemView(memeDetail: memeDetail)
-              .padding(.bottom, 20)
-          }
-        }
-      }
-      .background(Color.red)
-     
-     
       LazyVGrid(columns: columns) {
         ForEach(memeDetailList) { memeDetail in
           MemeItemView(memeDetail: memeDetail)
@@ -57,10 +28,6 @@ public struct MemeListView: View {
         }
       }
     }
-    .frame(maxWidth: .infinity)
-    
-    .scrollTargetBehavior(.viewAligned)
-   
   }
 }
 

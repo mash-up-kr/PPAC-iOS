@@ -51,7 +51,6 @@ struct ResizableMemeImageView: View {
   var body: some View {
     GeometryReader { geometry in
       VStack {
-        let _ = print("geometry = \(geometry.size.width)")
         KFImage(URL(string: imageUrlString))
           .resizable()
           .loadDiskFileSynchronously()
@@ -59,7 +58,6 @@ struct ResizableMemeImageView: View {
           .onSuccess { result in
             let ratio = geometry.size.width / result.image.size.width
             imageHeight = result.image.size.height * ratio
-            print("result.image = \(result.image.size), ratio = \(ratio), imageHeight = \(imageHeight)")
           }
           .frame(height: imageHeight)
       }
