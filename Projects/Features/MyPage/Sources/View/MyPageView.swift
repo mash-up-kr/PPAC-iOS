@@ -21,15 +21,17 @@ public struct MyPageView: View {
   
   public var body: some View {
     ScrollView {
-      settingHeaderView
-      MyPageCharacterView(level: memeLevel, description: memeLevel.speechBalloonText)
-      levelTitleTextView
-      LevelProgressView(level: .level1, conditionCount: 18)
-      MemeLevelConditionView(conditionCount: 10)
+      levelView
       divider
       RecentlyMemeListView(memeDetailList: memeDetailList)
       myFarmemeListView
     }
+    .background {
+      LinearGradient(gradient: Gradient(colors: [Color.Background.brandassistive, Color.Background.white]),
+                                  startPoint: .top, endPoint: .bottom)
+      
+    }
+    .edgesIgnoringSafeArea(.all)
   }
   
   var settingHeaderView: some View {
@@ -39,6 +41,17 @@ public struct MyPageView: View {
         .frame(width: 20, height: 20, alignment: .center)
         .padding(.vertical, 15)
         .padding(.trailing, 20)
+    }
+    .padding(.top, 30)
+  }
+  
+  var levelView: some View {
+    VStack {
+      settingHeaderView
+      MyPageCharacterView(level: memeLevel, description: memeLevel.speechBalloonText)
+      levelTitleTextView
+      LevelProgressView(level: .level1, conditionCount: 15)
+      MemeLevelConditionView(conditionCount: 10)
     }
   }
   
