@@ -13,16 +13,14 @@ struct MemeLevelConditionCheckView: View {
   let memeLevel: MemeLevelType
   
   private var pregressStepLevel: CGFloat {
-    let level = memeLevel.rawValue
-    let stepLevel = level > 1 ? level - 1 : 0
-    return CGFloat(stepLevel)
+    return CGFloat(memeLevel.rawValue - 1)
   }
   
-  private let horizantalPadding: CGFloat = 40.0
+  private let horizantalPadding: CGFloat = 36.0
   private let checkImageSize: CGSize = CGSize(width: 24, height: 24)
   
   var highlightWidth: CGFloat {
-    let levelOneStepWidth = (UIScreen.screenWidth - checkImageSize.width - horizantalPadding * 2.0) / 3.0
+    let levelOneStepWidth = (UIScreen.screenWidth - (checkImageSize.width + horizantalPadding) * 2.0) / 3.0
     return levelOneStepWidth * pregressStepLevel
   }
   
@@ -39,6 +37,7 @@ struct MemeLevelConditionCheckView: View {
       RoundedCorners(radius: 20, corners: [.bottomLeft, .bottomRight])
         .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.white)
     }
+    .padding(.horizontal, 20)
   }
   
   var progressStepCheckView: some View {
@@ -73,7 +72,6 @@ struct MemeLevelConditionCheckView: View {
         }
       }
     }
-    .frame(width: .infinity)
   }
 }
 
@@ -133,6 +131,6 @@ struct DottedLine: Shape {
 }
 
 #Preview {
-  MemeLevelConditionCheckView(memeLevel: .level3)
+  MemeLevelConditionCheckView(memeLevel: .level1)
 }
 

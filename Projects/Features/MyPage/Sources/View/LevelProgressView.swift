@@ -10,28 +10,36 @@ import ResourceKit
 import DesignSystem
 
 struct LevelProgressView: View {
-  let level: Int
+  let level: MemeLevelType
+  let conditionCount: Int
+  
+  @State private var isAnimation = false
+  
   private let minimumWidth: CGFloat = 95.0
+  private let horizontalPadding: CGFloat = 20.0
   private var currentLevelWidth: CGFloat {
-    let width = (UIScreen.screenWidth - 40) / 20.0 * CGFloat(level)
+    let width = (UIScreen.screenWidth - horizontalPadding * 2) / 20.0 * CGFloat(conditionCount)
     return width < minimumWidth ? minimumWidth : width
   }
   
   var body: some View {
-    ZStack {
+    ZStack(alignment: .leading) {
       backgroundProgressView
       foregroundProgressView
       levelView
     }
     .frame(height: 44)
-    .padding(.horizontal, 20)
+    .padding(.horizontal, horizontalPadding)
+    .onAppear {
+      isAnimation = true
+    }
   }
   
   var levelView: some View {
     HStack {
       ResourceKitAsset.Icon.level1.swiftUIImage
         .padding(.leading, 12)
-      Text("LV.1")
+      Text("LV.\(level.rawValue)")
         .font(Font.Body.Xlarge.semiBold)
         .foregroundStyle(Color.Text.inverse)
       Spacer()
@@ -42,8 +50,8 @@ struct LevelProgressView: View {
     HStack {
       RoundedRectangle(cornerRadius: 25, style: .circular)
         .stroke(Color.Border.primary, lineWidth: 2, fill: Color.Background.brand)
-        .frame(width: currentLevelWidth)
-      Spacer()
+        .frame(width: isAnimation ? currentLevelWidth : minimumWidth)
+        .animation(.easeInOut(duration: 1), value: isAnimation)
     }
   }
   
@@ -55,5 +63,5 @@ struct LevelProgressView: View {
 
 
 #Preview {
-  LevelProgressView(level: 10)
+  LevelProgressView(level: .level1, conditionCount: 10)
 }

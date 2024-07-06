@@ -25,6 +25,7 @@ struct MemeLevelConditionInfoView: View {
       RoundedCorners(radius: 20, corners: [.topLeft, .topRight])
         .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.assistive)
     }
+    .padding(.horizontal, 20)
   }
   
   var confitionInfoView: some View {

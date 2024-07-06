@@ -23,7 +23,7 @@ public struct MyPageView: View {
       settingHeaderView
       MyPageCharacterView(level: memeLevel, description: memeLevel.speechBalloonText)
       levelTitleTextView
-      LevelProgressView(level: 15)
+      LevelProgressView(level: .level1, conditionCount: 18)
       MemeLevelConditionView(conditionCount: 10)
       divider
       RecentlyMemeListView(memeDetailList: memeDetailList)
