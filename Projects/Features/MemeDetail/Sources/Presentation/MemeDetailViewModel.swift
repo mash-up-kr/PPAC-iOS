@@ -38,6 +38,10 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   @Published public var state: State
   
   private let postLikeUseCase: PostLikeUseCase
+  // watchmemeusecase
+  // savememeusecase
+  // sharememeusecase
+  // postreactionusecase
   
   // MARK: - Initializers
   
