@@ -21,6 +21,7 @@ public struct MemeItemView: View {
       MemeItemViewWithButton(imageUrlString: memeDetail.imageUrlString)
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
+    .padding(.bottom, 20)
   }
 }
 
@@ -32,7 +33,6 @@ struct MemeItemViewWithButton: View {
       VStack {
         ResizableMemeImageView(imageUrlString: imageUrlString, imageHeight: $imageHeight)
       }
-      .background(Color.red)
       .frame(height: imageHeight)
       HStack {
         Spacer()
@@ -58,6 +58,7 @@ struct ResizableMemeImageView: View {
             let ratio = geometry.size.width / result.image.size.width
             imageHeight = result.image.size.height * ratio
           }
+          .cornerRadius(12)
           .frame(height: imageHeight)
       }
     }
