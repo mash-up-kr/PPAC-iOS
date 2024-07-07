@@ -7,8 +7,10 @@
 
 import Foundation
 
+import PPACModels
+
 struct MemeResponseDTO: Decodable {
-  let id: String
+  let _id: String
   let title: String
   let keywordIds: [String]
   let image: String
@@ -19,21 +21,8 @@ struct MemeResponseDTO: Decodable {
   let createdAt: String
   let updatedAt: String
   
-  enum CodingKeys: String, CodingKey {
-    case id = "_id"
-    case title
-    case keywordIds
-    case image
-    case reaction
-    case source
-    case isTodayMeme
-    case isDeleted
-    case createdAt
-    case updatedAt
-  }
-  
   public init(
-    id: String,
+    _id: String,
     title: String,
     keywordIds: [String],
     image: String,
@@ -44,7 +33,7 @@ struct MemeResponseDTO: Decodable {
     createdAt: String,
     updatedAt: String
   ) {
-    self.id = id
+    self._id = _id
     self.title = title
     self.keywordIds = keywordIds
     self.image = image
@@ -54,5 +43,20 @@ struct MemeResponseDTO: Decodable {
     self.isDeleted = isDeleted
     self.createdAt = createdAt
     self.updatedAt = updatedAt
+  }
+}
+
+extension MemeResponseDTO {
+  
+  func toModel() -> MemeDetail {
+    return MemeDetail(
+      id: self._id,
+      title: self.title,
+      keywords: self.keywordIds,
+      imageUrlString: self.image,
+      source: self.source,
+      isTodayMeme: self.isTodayMeme,
+      reaction: self.reaction
+    )
   }
 }
