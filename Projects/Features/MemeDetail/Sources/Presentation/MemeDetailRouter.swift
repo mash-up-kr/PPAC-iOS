@@ -11,21 +11,21 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 
-final class MemeDetailRouter: Router, MemeDetailRouting {
+public final class MemeDetailRouter: Router, MemeDetailRouting {
   
   // MARK: - Properties
   
-  var delegate: (any RouterDelegate)?
+  public var delegate: (any RouterDelegate)?
   
-  var navigationController: UINavigationController
+  public var navigationController: UINavigationController
   
-  var childRouters: [any Router] = []
+  public var childRouters: [any Router] = []
   
   let meme: MemeDetail
   
   // MARK: - Initializers
   
-  init(_ navigationController: UINavigationController, meme: MemeDetail) {
+  public init(_ navigationController: UINavigationController, meme: MemeDetail) {
       navigationController.isNavigationBarHidden = true
       self.meme = meme
       self.navigationController = navigationController
@@ -33,7 +33,7 @@ final class MemeDetailRouter: Router, MemeDetailRouting {
 
   // MARK: - Methods
   
-  func start() {
+  public func start() {
     self.pushView(
       MemeDetailView(
         viewModel: MemeDetailViewModel(
@@ -45,7 +45,7 @@ final class MemeDetailRouter: Router, MemeDetailRouting {
     )
   }
   
-  func showShareView(items: [Any]) {
+  public func showShareView(items: [Any]) {
     let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
     self.navigationController.present(vc, animated: true)
   }

@@ -53,6 +53,7 @@ public struct MemeDetailView: View {
       )
   }
   
+  @MainActor 
   private func tabBarTap(_ type: MemeDetailTab) {
     switch type {
     case .copy:

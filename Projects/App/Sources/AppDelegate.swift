@@ -9,17 +9,19 @@
 import UIKit
 import Home
 import MemeDetail
+import PPACUtil
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 	var navigationController = UINavigationController()
+	var appRouter: Router?
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		
 		let router = MemeDetailRouter(navigationController, meme: .mock)
-		
+		self.appRouter = router
 		self.window?.rootViewController = navigationController
 		self.window?.makeKeyAndVisible()
 		
