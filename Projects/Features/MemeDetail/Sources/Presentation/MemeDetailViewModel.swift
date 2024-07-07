@@ -102,11 +102,19 @@ private extension MemeDetailViewModel {
   }
   
   func showShareSheet() {
-    guard let url = URL(string: state.meme.imageUrlString),
-          let data = try? Data(contentsOf: url),
-          let image = UIImage(data: data) else {
-      return
+    Task {
+      guard let url = URL(string: self.state.meme.imageUrlString) else {
+        return
+      }
+      do {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let image = UIImage(data: data) else {
+          return
+        }
+        await self.router?.showShareView(items: [image])
+      } catch {
+        print("Failed to load image data: \(error)")
+      }
     }
-    router?.showShareView(items: [image])
   }
 }
