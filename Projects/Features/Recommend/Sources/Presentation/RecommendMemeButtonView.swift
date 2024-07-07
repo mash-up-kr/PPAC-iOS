@@ -41,7 +41,7 @@ var likeButton: some View {
       .overlay {
         HStack {
           ResourceKitAsset.Icon.ㅋ.swiftUIImage
-          ResourceKitAsset.Icon.개웃겨.swiftUIImage
+          ResourceKitAsset.Icon.개웃겨.swiftUIImage
         }
       }
   }

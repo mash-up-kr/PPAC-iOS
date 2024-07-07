@@ -13,7 +13,7 @@ public struct LikeButton: View {
   public var body: some View {
     HStack(alignment: .center, spacing: 6) {
       ResourceKitAsset.Icon.ㅋ.swiftUIImage
-      ResourceKitAsset.Icon.개웃겨.swiftUIImage
+      ResourceKitAsset.Icon.개웃겨.swiftUIImage
     }
     .frame(maxWidth: .infinity)
     .frame(height: 46, alignment: .center)

@@ -26,7 +26,7 @@ struct RecommendHeaderView: View {
 
 var recommendTitle : some View {
   Text("이번주 이 밈 어때!")
-    .font(Font.Heading.large)
+    .font(Font.Heading.Large.semiBold)
     .padding(.bottom, 8)
 }
 
@@ -44,7 +44,7 @@ func recommendProgressBar(
       .padding(.horizontal, 8)
     
     Text("\(numOfSaw)개 봤어요")
-      .font(Font.Body.small)
+      .font(Font.Body.Small.semiBold)
       .foregroundColor(Color.Text.brand)
   }
 }
