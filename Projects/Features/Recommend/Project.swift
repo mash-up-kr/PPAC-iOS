@@ -9,18 +9,23 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project(
-    name: "Recommend",
-    targets: [
-        .configure(
-            name: "Recommend",
-            product: .framework,
-            infoPlist: .default,
-            sources: "Sources/**",
-            resources: "Resources/**",
-            dependencies: [
-                .ResourceKit
-            ]
-        )
-    ]
+  name: "Recommend",
+  targets: [
+    .configure(
+      name: "Recommend",
+      product: .framework,
+      infoPlist: .default,
+      sources: "Sources/**",
+      resources: "Resources/**",
+      dependencies: [
+        .ThirdParty.Dependency,
+        .ThirdParty.Kingfisher,
+        .ResourceKit,
+        .Core.DesignSystem,
+        .Core.PPACModels,
+        .Core.PPACUtil,
+      ]
+    )
+  ]
 )
 
