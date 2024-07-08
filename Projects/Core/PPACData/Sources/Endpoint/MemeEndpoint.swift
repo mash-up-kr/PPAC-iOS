@@ -1,8 +1,13 @@
+////
+////  MemeEndpoint.swift
+////  PPACData
+////
+////  Created by kimchansoo on 7/6/24.
+////
 //
-//  MemeEndpoint.swift
-//  PPACData
+//import Foundation
 //
-//  Created by kimchansoo on 7/6/24.
+//import PPACNetwork
 //
 
 import Foundation

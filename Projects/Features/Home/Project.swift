@@ -23,6 +23,7 @@ let project = Project(
                 .Core.DesignSystem,
                 .Core.PPACModels,
                 .Core.PPACNetwork,
+				.Core.PPACData,
                 .Feature.MemeDetail,
                 .Feature.Recommend,
                 .Feature.MyPage,

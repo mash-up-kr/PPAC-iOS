@@ -1,8 +1,15 @@
+////
+////  MemeRepositoryImpl.swift
+////  PPACData
+////
+////  Created by kimchansoo on 7/6/24.
+////
 //
-//  MemeRepositoryImpl.swift
-//  PPACData
+//import Foundation
 //
-//  Created by kimchansoo on 7/6/24.
+//import PPACDomain
+//import PPACNetwork
+//import PPACModels
 //
 
 import Foundation

@@ -20,7 +20,6 @@ final public class NetworkService: NetworkServiceable {
     
     let urlRequest = request.buildURLRequest(with: url)
     let (data, response): (Data, URLResponse)
-    
     do {
         (data, response) = try await URLSession.shared.data(for: urlRequest)
     } catch {
@@ -37,7 +36,7 @@ final public class NetworkService: NetworkServiceable {
     switch httpResponse.statusCode {
     case 200..<300:
       let decoder = JSONDecoder()
-      if let decodedData = try? decoder.decode(T.self, from: data) {
+        if let decodedData = try? decoder.decode(T.self, from: data) {
         return .success(decodedData)
       } else {
         error = .dataDecodingError

@@ -9,9 +9,14 @@ import SwiftUI
 import Recommend
 import Search
 import MyPage
+import PPACData
+import PPACModels
+import PPACNetwork
 
 public struct MainTabView: View {
   @State private var selectedTab: MainTab = .recommend
+  @State private var hotKeywords: [HotKeyword] = []
+  @State public var mimCategories: [MimCategory] = []
   
   public init() {}
   
@@ -20,7 +25,7 @@ public struct MainTabView: View {
       TabView(selection: $selectedTab) {
         RecommendView()
           .tag(MainTab.recommend)
-        SearchView()
+        SearchView(hotKeywords: hotKeywords, mimCategories: mimCategories)
           .tag(MainTab.search)
         MyPageView(memeLevel: .level1, memeDetailList: [])
           .tag(MainTab.mypage)
@@ -31,6 +36,19 @@ public struct MainTabView: View {
       }
     }
     .edgesIgnoringSafeArea(.bottom)
+    .onAppear {
+      Task {
+        let repository = KeywordRepositoryImpl(networkService: NetworkService())
+        do {
+          hotKeywords = try await repository.getHotKeywords()
+          mimCategories = try await repository.getMimCategorys()
+          print("hotKeywords = \(hotKeywords)")
+          print("mimCategories = \(mimCategories)")
+        } catch(let error) {
+          print("error = \(error )")
+        }
+      }
+    }
   }
 }
 
