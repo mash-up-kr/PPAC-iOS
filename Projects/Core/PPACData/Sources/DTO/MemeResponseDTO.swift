@@ -8,6 +8,7 @@
 import Foundation
 
 struct MemeResponseDTO: Decodable {
+  
   let id: String
   let title: String
   let keywordIds: [String]

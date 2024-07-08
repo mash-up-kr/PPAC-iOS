@@ -8,6 +8,7 @@
 import Foundation
 
 struct BaseDTO<T: Codable>: Codable {
+  
   let status: String
   let code: Int
   let message: String
