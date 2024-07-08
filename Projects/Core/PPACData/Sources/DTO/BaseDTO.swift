@@ -25,7 +25,7 @@ struct BaseDTO<T: Codable>: Codable {
     status: String,
     code: Int,
     message: String,
-    data: Codable?
+    data: T?
   ) {
     self.status = status
     self.code = code

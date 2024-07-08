@@ -25,7 +25,9 @@ public enum MemeEndpoint: Requestable {
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
     case .todayMemes:
-        return .get
+      return .get
+    case .meme(_):
+      return .get
     case .bookmark:
       return .post
     case .share:
@@ -36,7 +38,6 @@ public enum MemeEndpoint: Requestable {
       return .post
     }
   }
-  
   public var headers: [String : String]? {
     switch self {
     case .todayMemes, .meme:
@@ -64,7 +65,7 @@ public enum MemeEndpoint: Requestable {
       return "/meme/\(memeId)/share"
     case .watch(let memeId, let type, _):
       return "/meme/\(memeId)/watch/\(type)"
-    case .reaction(let memeId, let deviceId):
+    case .reaction(let memeId, _):
       return "/meme/\(memeId)/reaction"
     }
   }
@@ -73,16 +74,17 @@ public enum MemeEndpoint: Requestable {
     switch self {
     case .todayMemes:
       return nil
-    case .bookmark(let memeId, let deviceId):
+    case .bookmark(_, _):
       return nil
-    case .share(let memeId, let deviceId):
+    case .share(_, _):
       return nil
-    case .watch(let memeId, let type, let deviceId):
+    case .watch(_, _, _):
       return nil
-    case .reaction(let memeId, let deviceId):
+    case .reaction(_, _):
+      return nil
+    case .meme(memeId: _):
       return nil
     }
   }
-  
   
 }

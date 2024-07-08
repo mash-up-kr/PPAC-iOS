@@ -9,6 +9,7 @@ import Foundation
 
 import PPACDomain
 import PPACNetwork
+import PPACModels
 
 public final class MemeRepositoryImpl: MemeRepository {
   
@@ -24,7 +25,7 @@ public final class MemeRepositoryImpl: MemeRepository {
   
   // MARK: - Methods
   
-  public func getTodayMemes() -> [PPACModels.MemeDetail] {
-    
+  public func getTodayMemes() -> [MemeDetail] {
+    return []
   }
 }
