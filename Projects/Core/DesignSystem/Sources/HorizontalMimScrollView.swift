@@ -33,6 +33,5 @@ public struct HorizontalMimScrollView<Item: HorizontalMimItemProtocol, ItemView:
     }
     .contentMargins(20)
     .scrollIndicators(.hidden)
-    .frame(height: 90)
   }
 }

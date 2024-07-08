@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct MemeDetail {
+public struct MemeDetail: Identifiable, Hashable {
   
   // MARK: - Properties
   public let id: String

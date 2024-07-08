@@ -30,7 +30,8 @@ public struct Color {
 	
 	public struct Border {
 		public static let primary = ResourceKitAsset.PrimaryColor.neutral90.swiftUIColor
-		public static let secondary = ResourceKitAsset.PrimaryColor.neutral20.swiftUIColor
+		public static let secondary = ResourceKitAsset.PrimaryColor.neutral30.swiftUIColor
+		public static let tertiary = ResourceKitAsset.PrimaryColor.neutral20.swiftUIColor
 		public static let assistive = ResourceKitAsset.PrimaryColor.neutral10.swiftUIColor
 	}
 	

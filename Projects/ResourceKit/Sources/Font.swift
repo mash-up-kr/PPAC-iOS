@@ -67,4 +67,8 @@ public struct Font {
 			public static let medium = ResourceKitFontFamily.Pretendard.medium.swiftUIFont(size: 12)
 		}		
 	}
+	
+	public struct Family2 {
+		public static let outLine = ResourceKitFontFamily.SandollSamliphopangche.outline.swiftUIFont(size: 24)
+	}
 }

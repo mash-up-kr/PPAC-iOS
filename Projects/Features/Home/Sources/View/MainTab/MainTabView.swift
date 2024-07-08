@@ -22,7 +22,7 @@ public struct MainTabView: View {
           .tag(MainTab.recommend)
         SearchView()
           .tag(MainTab.search)
-        MyPageView()
+        MyPageView(memeLevel: .level1, memeDetailList: [])
           .tag(MainTab.mypage)
       }
       VStack {
@@ -51,7 +51,7 @@ struct CustomTabBarView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: 98)
     .background(.white)
-    .clipShape(
+    .clipShape( 
       .rect(
         topLeadingRadius: 30,
         topTrailingRadius: 30
