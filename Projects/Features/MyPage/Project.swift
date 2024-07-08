@@ -18,7 +18,11 @@ let project = Project(
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
-
+              .ThirdParty.Dependency,
+              .ResourceKit,
+              .Core.DesignSystem,
+              .Core.PPACModels,
+              .Feature.MemeDetail,
             ]
         )
     ]

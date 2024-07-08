@@ -15,7 +15,11 @@ let project = Project(
             name: "DesignSystem",
             product: .framework,
             sources: "Sources/**",
-            resources: "Resources/**"
+            resources: "Resources/**",
+            dependencies: [
+                .ResourceKit,
+                .Core.PPACModels
+            ]
         )
     ]
 )

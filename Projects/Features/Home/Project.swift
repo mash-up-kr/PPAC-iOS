@@ -22,7 +22,11 @@ let project = Project(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACModels,
+                .Core.PPACNetwork,
                 .Feature.MemeDetail,
+                .Feature.Recommend,
+                .Feature.MyPage,
+                .Feature.Search
             ]
         )
     ]
