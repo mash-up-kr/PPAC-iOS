@@ -36,8 +36,15 @@ struct MemeItemViewWithButton: View {
       .frame(height: imageHeight)
       HStack {
         Spacer()
-        CircleCopyButton()
-          .padding(20)
+        CircleButton(
+          width: 42,
+          height: 42,
+          image: ResourceKitAsset.Icon.copy.swiftUIImage,
+          action: {
+            print("Copy~~")
+          }
+        )
+        .padding(20)
       }
     }
   }

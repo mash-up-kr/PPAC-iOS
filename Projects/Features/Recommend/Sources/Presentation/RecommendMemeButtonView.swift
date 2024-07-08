@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import ResourceKit
+import DesignSystem
 
 struct RecommendMemeButtonView : View {
   public var body: some View  {
@@ -50,34 +52,35 @@ var likeButton: some View {
 }
 
 var copyButton: some View {
-  Button(action: {
-    print("Copy~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.copy.swiftUIImage)
-  })
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.copy.swiftUIImage
+  ) {
+    print("Copy~~")
+  }
 }
 
 var shareButton: some View {
-  Button(action: {
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.share.swiftUIImage
+  ) {
     print("Share~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.share.swiftUIImage)
-  })
+  }
 }
 
 var saveButton: some View {
-  Button(action: {
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.stroke.swiftUIImage
+  ) {
     print("Save~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.stroke.swiftUIImage)
-  })
+  }
 }
 
-private func smallButton(image: SwiftUI.Image) -> some View {
-  Circle()
-    .foregroundStyle(.white)
-    .frame(width: 50, height: 50)
-    .overlay {
-      image
-    }
+#Preview {
+  RecommendMemeButtonView()
 }
