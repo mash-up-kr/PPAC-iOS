@@ -9,6 +9,10 @@ import Foundation
 import PPACNetwork
 
 enum ExampleServiceEndpoints: Requestable {
+  var path: String? {
+    return nil
+  }
+  
   case fetchExample
   case postExmple(id: Int)
   

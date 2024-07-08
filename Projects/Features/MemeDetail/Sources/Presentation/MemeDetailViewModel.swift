@@ -12,7 +12,7 @@ import Dependencies
 import PPACUtil
 import PPACModels
 
-
+@MainActor
 public protocol MemeDetailRouting: AnyObject {
   func popView()
   func showShareView(items: [Any])
@@ -38,6 +38,10 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   @Published public var state: State
   
   private let postLikeUseCase: PostLikeUseCase
+  // watchmemeusecase
+  // savememeusecase
+  // sharememeusecase
+  // postreactionusecase
   
   // MARK: - Initializers
   
@@ -53,6 +57,7 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   
   // MARK: - Methods
   
+  @MainActor
   public func dispatch(type: Action) {
     switch type {
     case .likeButtonTapped:
@@ -74,14 +79,21 @@ private extension MemeDetailViewModel {
     
   }
   
+  @MainActor
   func copyImage() {
-    DispatchQueue.main.async { [weak self] in
-      guard let self,
-            let url = URL(string: state.meme.imageUrlString),
-            let imageData = try? Data(contentsOf: url) else {
+    Task {
+      guard let url = URL(string: self.state.meme.imageUrlString) else {
         return
       }
-      UIPasteboard.general.image = UIImage(data: imageData)
+      do {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let image = UIImage(data: data) else {
+          return
+        }
+        UIPasteboard.general.image = image
+      } catch {
+        print("Failed to load image data: \(error)")
+      }
     }
   }
   
@@ -90,11 +102,19 @@ private extension MemeDetailViewModel {
   }
   
   func showShareSheet() {
-    guard let url = URL(string: state.meme.imageUrlString),
-          let data = try? Data(contentsOf: url),
-          let image = UIImage(data: data) else {
-      return
+    Task {
+      guard let url = URL(string: self.state.meme.imageUrlString) else {
+        return
+      }
+      do {
+        let (data, _) = try await URLSession.shared.data(from: url)
+        guard let image = UIImage(data: data) else {
+          return
+        }
+        await self.router?.showShareView(items: [image])
+      } catch {
+        print("Failed to load image data: \(error)")
+      }
     }
-    router?.showShareView(items: [image])
   }
 }
