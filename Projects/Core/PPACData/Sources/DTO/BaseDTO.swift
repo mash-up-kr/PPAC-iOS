@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BaseDTO<T: Codable>: Codable {
+struct BaseDTO<T: Decodable>: Decodable {
   let status: String
   let code: Int
   let message: String
@@ -24,7 +24,7 @@ struct BaseDTO<T: Codable>: Codable {
     status: String,
     code: Int,
     message: String,
-    data: Codable?
+    data: T?
   ) {
     self.status = status
     self.code = code

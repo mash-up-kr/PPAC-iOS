@@ -17,7 +17,10 @@ let project = Project(
             name: "PPACNetwork",
             product: .framework,
             sources: "Sources/**",
-            resources: "Resources/**"
+            resources: "Resources/**",
+            dependencies: [
+                //.Core.PPACData
+            ]
         )
     ]
 )

@@ -1,30 +1,31 @@
+////
+////  MemeRepositoryImpl.swift
+////  PPACData
+////
+////  Created by kimchansoo on 7/6/24.
+////
 //
-//  MemeRepositoryImpl.swift
-//  PPACData
+//import Foundation
 //
-//  Created by kimchansoo on 7/6/24.
+//import PPACDomain
+//import PPACNetwork
+//import PPACModels
 //
-
-import Foundation
-
-import PPACDomain
-import PPACNetwork
-
-public final class MemeRepositoryImpl: MemeRepository {
-  
-  // MARK: - Properties
-  
-  private let networkservice: NetworkServiceable
-  
-  // MARK: - Initializers
-  
-  public init(networkservice: NetworkServiceable) {
-    self.networkservice = networkservice
-  }
-  
-  // MARK: - Methods
-  
-  public func getTodayMemes() -> [PPACModels.MemeDetail] {
-    
-  }
-}
+//public final class MemeRepositoryImpl: MemeRepository {
+//  
+//  // MARK: - Properties
+//  
+//  private let networkservice: NetworkServiceable
+//  
+//  // MARK: - Initializers
+//  
+//  public init(networkservice: NetworkServiceable) {
+//    self.networkservice = networkservice
+//  }
+//  
+//  // MARK: - Methods
+//  
+//  public func getTodayMemes() -> [MemeDetail] {
+//    return []
+//  }
+//}

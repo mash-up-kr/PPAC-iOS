@@ -7,7 +7,8 @@
 
 import Foundation
 
-public struct MimCategory: Hashable {
+public struct MimCategory: Hashable, Identifiable {
+  public let id = UUID()
   public let title: String
   public let categories: [String]
   
