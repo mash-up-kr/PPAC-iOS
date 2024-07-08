@@ -11,21 +11,28 @@
 //import PPACNetwork
 //import PPACModels
 //
-//public final class MemeRepositoryImpl: MemeRepository {
-//  
-//  // MARK: - Properties
-//  
-//  private let networkservice: NetworkServiceable
-//  
-//  // MARK: - Initializers
-//  
-//  public init(networkservice: NetworkServiceable) {
-//    self.networkservice = networkservice
-//  }
-//  
-//  // MARK: - Methods
-//  
-//  public func getTodayMemes() -> [MemeDetail] {
-//    return []
-//  }
-//}
+
+import Foundation
+
+import PPACDomain
+import PPACNetwork
+import PPACModels
+
+public final class MemeRepositoryImpl: MemeRepository {
+  
+  // MARK: - Properties
+  
+  private let networkservice: NetworkServiceable
+  
+  // MARK: - Initializers
+  
+  public init(networkservice: NetworkServiceable) {
+    self.networkservice = networkservice
+  }
+  
+  // MARK: - Methods
+  
+  public func getTodayMemes() -> [MemeDetail] {
+    return []
+  }
+}
