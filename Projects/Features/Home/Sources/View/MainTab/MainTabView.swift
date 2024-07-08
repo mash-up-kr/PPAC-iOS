@@ -12,6 +12,7 @@ import MyPage
 import PPACData
 import PPACModels
 import PPACNetwork
+import ResourceKit
 
 public struct MainTabView: View {
   @State private var selectedTab: MainTab = .recommend
@@ -33,6 +34,7 @@ public struct MainTabView: View {
       VStack {
         Spacer()
         CustomTabBarView(selectedTab: $selectedTab)
+          .shadow(color: Color.Border.tertiary, radius: 10, x: 0, y: 0)
       }
     }
     .edgesIgnoringSafeArea(.bottom)
@@ -81,12 +83,13 @@ struct CustomTabBarView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: 98)
     .background(.white)
-    .clipShape( 
+    .clipShape(
       .rect(
         topLeadingRadius: 30,
         topTrailingRadius: 30
       )
     )
+    
   }
 }
 
@@ -96,13 +99,24 @@ struct TabItemView: View {
   let tab: MainTab
   let isSelected: Bool
   
+  var tabImage: Image {
+    return isSelected ? tab.selectedImage : tab.image
+  }
+  
+  var color: SwiftUI.Color {
+    return isSelected ? Color.Text.brand : Color.Text.assistive
+  }
+  
   var body: some View {
     VStack {
-      Image(systemName: isSelected ? tab.selectedImage : tab.image)
-        .frame(width: 20, height: 20)
+      tabImage
+        .frame(width: 24, height: 24)
+        .padding(.bottom, 2)
+      
       Text(tab.title)
-        .font(.system(size: 11))
+        .font(Font.Weight.semiBold)
     }
+    .foregroundStyle(color)
     .padding(40)
   }
 }
