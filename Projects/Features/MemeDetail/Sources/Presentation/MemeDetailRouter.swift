@@ -11,8 +11,7 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 
-final class MemeDetailRouter: Router {
-  
+final class MemeDetailRouter: Router, MemeDetailRouting {
   
   // MARK: - Properties
   
@@ -35,7 +34,19 @@ final class MemeDetailRouter: Router {
   // MARK: - Methods
   
   func start() {
-      self.pushView(MemeDetailView(meme: meme))
+    self.pushView(
+      MemeDetailView(
+        viewModel: MemeDetailViewModel(
+          meme: self.meme,
+          router: self,
+          postLikeUseCase: PostLikeUseCaseImpl()
+        )
+      )
+    )
   }
-
+  
+  func showShareView(items: [Any]) {
+    let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+    self.navigationController.present(vc, animated: true)
+  }
 }

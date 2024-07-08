@@ -6,27 +6,71 @@
 //
 
 import SwiftUI
+import UIKit
 
 import PPACModels
+import ResourceKit
+import DesignSystem
 
-struct MemeDetailView: View {
+import Kingfisher
+
+public struct MemeDetailView: View {
   
   // MARK: - Properties
-  private let meme: MemeDetail
+  
+  private let viewModel: MemeDetailViewModel
   
   // MARK: - Initializers
   
-  init(meme: MemeDetail) {
-    self.meme = meme
+  public init(viewModel: MemeDetailViewModel) {
+    self.viewModel = viewModel
   }
   
   // MARK: - UI
   
-  var body: some View {
-    MemeDetailCardView(meme: meme)
+  public var body: some View {
+    MemeDetailCardView(meme: viewModel.state.meme)
+      .padding(.horizontal, 24)
+      .memeDetailTabBar { tab in
+        tabBarTap(tab)
+      }
+      .background(
+        KFImage(URL(string: viewModel.state.meme.imageUrlString))
+          .resizable()
+          .loadDiskFileSynchronously()
+          .cacheMemoryOnly()
+          .aspectRatio(contentMode: .fill)
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+          .clipped()
+          .opacity(0.4)
+          .edgesIgnoringSafeArea(.top)
+      )
+      .plainNavigationBar(
+        backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
+        rightActionHandler: nil,
+        hasConfigureButton: false,
+        title: viewModel.state.meme.title
+      )
+  }
+  
+  private func tabBarTap(_ type: MemeDetailTab) {
+    switch type {
+    case .copy:
+      viewModel.dispatch(type: .copyButtonTapped)
+    case .farmeme:
+      viewModel.dispatch(type: .farmemeButtonTapped)
+    case .share:
+      viewModel.dispatch(type: .shreButtonTapped)
+    }
   }
 }
 
 #Preview {
-  MemeDetailView(meme: .mock)
+  MemeDetailView(
+    viewModel: MemeDetailViewModel(
+      meme: .mock,
+      router: nil,
+      postLikeUseCase: MockPostLikeUseCase()
+    )
+  )
 }
