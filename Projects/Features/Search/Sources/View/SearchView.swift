@@ -67,6 +67,7 @@ public struct SearchView: View {
       .padding(.vertical, 18)
       
       HorizontalMimScrollView<HotKeyword, HotKeywordImageView>(items: $hotKeywords)
+        .frame(height: 90)
     }
     .padding(.bottom, 40)
   }

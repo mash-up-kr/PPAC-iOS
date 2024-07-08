@@ -7,9 +7,10 @@
 
 import SwiftUI
 
+import DesignSystem
 import PPACModels
-import Kingfisher
 import ResourceKit
+
 
 struct MemeDetailCardView: View {
   

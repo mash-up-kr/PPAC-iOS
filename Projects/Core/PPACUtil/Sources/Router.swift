@@ -13,6 +13,7 @@ public protocol RouterDelegate: AnyObject {
     func didFinish(childRouter: Router)
 }
 
+@MainActor
 public protocol Router: AnyObject {
     
     var delegate: RouterDelegate? { get set }
