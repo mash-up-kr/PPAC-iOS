@@ -1,24 +1,16 @@
-////
-////  MemeRepositoryImpl.swift
-////  PPACData
-////
-////  Created by kimchansoo on 7/6/24.
-////
 //
-//import Foundation
+//  MemeRepositoryImpl.swift
+//  PPACData
 //
-//import PPACDomain
-//import PPACNetwork
-//import PPACModels
+//  Created by kimchansoo on 7/6/24.
 //
 
 import Foundation
-
 import PPACDomain
 import PPACNetwork
 import PPACModels
 
-public final class MemeRepositoryImpl: MemeRepository {
+public class MemeRepositoryImpl: MemeRepository {
   
   // MARK: - Properties
   
@@ -32,7 +24,77 @@ public final class MemeRepositoryImpl: MemeRepository {
   
   // MARK: - Methods
   
-  public func getTodayMemes() -> [MemeDetail] {
-    return []
+  public func getRecommendMemes(size: Int) async throws -> [MemeDetail] {
+    let endpoint = MemeEndpoint.recommendMeme(size: size)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<[MemeResponseDTO]>.self)
+    switch result {
+    case .success(let data):
+      guard let dto = data.data else {
+        throw NetworkError.dataDecodingError
+      }
+      return dto.map { $0.toModel() }
+    case .failure(let failure):
+      throw failure
+    }
+  }
+  
+  public func getMemeDetail(memeId: String) async throws -> MemeDetail {
+    let endpoint = MemeEndpoint.meme(memeId: memeId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeResponseDTO>.self)
+    switch result {
+    case .success(let data):
+      guard let data = data.data else {
+        throw NetworkError.dataDecodingError
+      }
+      return data.toModel()
+    case .failure(let failure):
+      throw failure
+    }
+  }
+  
+  public func bookmarkMeme(memeId: String, deviceId: String) async throws {
+      let endpoint = MemeEndpoint.bookmark(memeId: memeId, deviceId: deviceId)
+      let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+      switch result {
+      case .success:
+          return
+      case .failure(let failure):
+          throw failure
+      }
+  }
+
+  
+  public func shareMeme(memeId: String, deviceId: String) async throws {
+    let endpoint = MemeEndpoint.share(memeId: memeId, deviceId: deviceId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    switch result {
+    case .success:
+        return
+    case .failure(let failure):
+        throw failure
+    }
+  }
+  
+  public func watchMeme(memeId: String, type: String, deviceId: String) async throws {
+    let endpoint = MemeEndpoint.watch(memeId: memeId, type: type, deviceId: deviceId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    switch result {
+    case .success:
+        return
+    case .failure(let failure):
+        throw failure
+    }
+  }
+  
+  public func reactToMeme(memeId: String, deviceId: String) async throws {
+    let endpoint = MemeEndpoint.reaction(memeId: memeId, deviceId: deviceId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    switch result {
+    case .success:
+        return
+    case .failure(let failure):
+        throw failure
+    }
   }
 }
+
