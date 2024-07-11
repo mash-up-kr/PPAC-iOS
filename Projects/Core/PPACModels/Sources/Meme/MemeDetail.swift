@@ -41,10 +41,10 @@ public struct MemeDetail: Identifiable, Hashable {
 
 public extension MemeDetail {
   static let mock = MemeDetail(
-    id: "1",
+    id: "66800ac624fc9c25eaf3b937",
     title: "나는 공부를 찢어",
     keywords: ["공부", "학생", "시험기간"],
-    imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+    imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/1.JPG",
     source: "깃허브",
     isTodayMeme: true,
     reaction: 4
