@@ -53,9 +53,9 @@ public enum UserEndpoint: Requestable {
     case .userDetail(_):
       return "/user"
     case .savedMeme(_):
-      return "/user/save"
+      return "/user/saved-memes"
     case .lastSeenMeme(_):
-      return "/user/lastSeenMeme"
+      return "/user/recent-memes"
     }
   }
   

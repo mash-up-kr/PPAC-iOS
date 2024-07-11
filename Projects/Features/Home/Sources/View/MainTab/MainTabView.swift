@@ -47,6 +47,18 @@ public struct MainTabView: View {
         } catch(let error) {
           print("error = \(error )")
         }
+        
+        let userRepository = UserRepositoryImpl(networkservice: NetworkService())
+        do {
+          let userData = try await userRepository.getUserDetail(deviceId: "")
+          let savesMeme = try await userRepository.getSavedMeme(deviceId: "")
+          let lastSeenMeme = try await userRepository.getLastSeenMeme(deviceId: "")
+          print("\n userData = \(userData)\n")
+          print("savesMeme = \(savesMeme)")
+          print("lastSeenMeme = \(lastSeenMeme)")
+        } catch(let error) {
+          print("error = \(error )")
+        }
       }
     }
   }
