@@ -6,8 +6,8 @@
 //
 
 import Foundation
-
 import PPACNetwork
+import PPACModels
 
 public enum UserEndpoint: Requestable {
   
@@ -59,10 +59,11 @@ public enum UserEndpoint: Requestable {
     }
   }
   
-  public var parameter: PPACNetwork.HTTPRequestParameter? {
+  public var parameter: HTTPRequestParameter? {
     switch self {
-    case .create(_):
-      return nil
+    case .create(let deviceId):
+      let createDeviceRequest = CreateUserRequestDTO(deviceId: deviceId)
+      return .body(createDeviceRequest)
     case .userDetail(_):
       return nil
     case .savedMeme(_):

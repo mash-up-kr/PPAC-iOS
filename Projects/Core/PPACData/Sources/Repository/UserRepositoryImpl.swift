@@ -28,12 +28,13 @@ public final class UserRepositoryImpl: UserRepository {
     let result = await networkservice
       .request(
         UserEndpoint.create(deviceId: deviceId),
-        dataType: UserResponseDTO.self
+        dataType: BaseDTO<UserResponseDTO>.self
       )
     
     switch result {
-    case .success(let userResponseDTO):
-      return userResponseDTO.toModel()
+    case .success(let data):
+      guard let UserResponseDTO = data.data else { throw NetworkError.dataDecodingError }
+      return UserResponseDTO.toModel()
     case .failure(let error):
       throw error
     }

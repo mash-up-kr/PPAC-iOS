@@ -1,5 +1,5 @@
 //
-//  HomeRouter.swift
+//  MainTabRouter.swift
 //  Home
 //
 //  Created by 장혜령 on 2024/07/11.
@@ -11,9 +11,9 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 
-public protocol HomeRouting: AnyObject { }
+public protocol MainTabRouting: AnyObject { }
 
-public final class HomeRouter: Router, HomeRouting {
+public final class MainTabRouter: Router, MainTabRouting {
   
   // MARK: - Properties
   public var delegate: (any RouterDelegate)?
@@ -31,7 +31,8 @@ public final class HomeRouter: Router, HomeRouting {
   // MARK: - Methods
   public func start() {
     self.pushView(
-      MainTabView()
+      MainTabView(),
+      animated: false
     )
   }
 }

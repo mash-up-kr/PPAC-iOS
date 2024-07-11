@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PPACUtil
 
 public enum HTTPMethod: String {
   case get
@@ -32,33 +33,29 @@ public protocol Requestable {
 
 extension Requestable {
   
-  func getTestDeviceId() -> String {
-    return "1111-2222-3333-4444"
-  }
-  
   public func makeURL() -> URL? {
     guard let url = URL(string: url) else { return nil }
     return url.appending(path: path ?? "").append(queries: parameter)
   }
   
   public func buildURLRequest(with url: URL) -> URLRequest {
-      var urlRequest = URLRequest(url: url)
-      urlRequest.httpMethod = httpMethod.rawValue.uppercased()
-      let deviceId = getTestDeviceId()
-      var defaultHeaders = [
-          "accept": "application/json",
-          "Content-Type": "application/json",
-          "x-device-id": deviceId
-      ]
-      
-      if let additionalHeaders = headers {
-          for (key, value) in additionalHeaders {
-              defaultHeaders[key] = value
-          }
+    var urlRequest = URLRequest(url: url).append(body: parameter)
+    urlRequest.httpMethod = httpMethod.rawValue.uppercased()
+    
+    var defaultHeaders = [
+      "x-device-id": UserManager.uuid,
+      "accept": "application/json",
+      "Content-Type": "application/json"
+    ]
+    
+    if let additionalHeaders = headers {
+      for (key, value) in additionalHeaders {
+        defaultHeaders[key] = value
       }
-      
-      urlRequest.allHTTPHeaderFields = defaultHeaders
-      return urlRequest
+    }
+    
+    urlRequest.allHTTPHeaderFields = defaultHeaders
+    return urlRequest
   }
 }
 
