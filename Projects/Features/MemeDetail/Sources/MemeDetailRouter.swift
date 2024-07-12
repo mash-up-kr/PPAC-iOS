@@ -10,6 +10,9 @@ import SwiftUI
 
 import PPACUtil
 import PPACModels
+import PPACDomain
+import PPACData
+import PPACNetwork
 
 public final class MemeDetailRouter: Router, MemeDetailRouting {
   
@@ -34,12 +37,17 @@ public final class MemeDetailRouter: Router, MemeDetailRouting {
   // MARK: - Methods
   
   public func start() {
+    let repository = MemeRepositoryImpl(networkservice: NetworkService())
+    
     self.pushView(
       MemeDetailView(
         viewModel: MemeDetailViewModel(
-          meme: self.meme,
+          meme: meme,
           router: self,
-          postLikeUseCase: PostLikeUseCaseImpl()
+          bookmarkMemeUseCase: BookmarkMemeUseCaseImpl(repository: repository),
+          shareMemeUseCase: ShareMemeUseCaseImpl(repository: repository),
+          watchMemeUseCase: WatchMemeUseCaseImpl(repository: repository),
+          reactToMemeUseCase: ReactToMemeUseCaseImpl(repository: repository)
         )
       )
     )

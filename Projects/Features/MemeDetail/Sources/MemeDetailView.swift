@@ -65,13 +65,13 @@ public struct MemeDetailView: View {
     }
   }
 }
-
-#Preview {
-  MemeDetailView(
-    viewModel: MemeDetailViewModel(
-      meme: .mock,
-      router: nil,
-      postLikeUseCase: MockPostLikeUseCase()
-    )
-  )
-}
+//
+//#Preview {
+//  MemeDetailView(
+//    viewModel: MemeDetailViewModel(
+//      meme: .mock,
+//      router: nil,
+//      postLikeUseCase: MockPostLikeUseCase()
+//    )
+//  )
+//}

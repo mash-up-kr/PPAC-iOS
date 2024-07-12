@@ -16,7 +16,7 @@ import PPACNetwork
 
 public enum MemeEndpoint: Requestable {
   
-  case todayMemes
+  case recommendMeme(size: Int)
   case meme(memeId: String)
   case bookmark(memeId: String, deviceId: String)
   case share(memeId: String, deviceId: String)
@@ -29,9 +29,9 @@ public enum MemeEndpoint: Requestable {
   
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
-    case .todayMemes:
+    case .recommendMeme:
       return .get
-    case .meme(_):
+    case .meme:
       return .get
     case .bookmark:
       return .post
@@ -43,25 +43,26 @@ public enum MemeEndpoint: Requestable {
       return .post
     }
   }
+  
   public var headers: [String : String]? {
     switch self {
-    case .todayMemes, .meme:
+    case .recommendMeme, .meme:
       return nil
     case .bookmark(_, let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .share(_, let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .watch(_, _, let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .reaction(_, let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     }
   }
   
   public var path: String? {
     switch self {
-    case .todayMemes:
-      return "/meme/todayMeme"
+    case .recommendMeme:
+      return "/meme/recomment-memes"
     case .meme(let memeId):
       return "/meme/\(memeId)"
     case .bookmark(let memeId, _):
@@ -77,8 +78,8 @@ public enum MemeEndpoint: Requestable {
   
   public var parameter: PPACNetwork.HTTPRequestParameter? {
     switch self {
-    case .todayMemes:
-      return nil
+    case .recommendMeme(let size):
+      return .query(["size": String(size)])
     case .bookmark(_, _):
       return nil
     case .share(_, _):
