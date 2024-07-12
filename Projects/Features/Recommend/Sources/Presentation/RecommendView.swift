@@ -8,31 +8,48 @@
 import SwiftUI
 import ResourceKit
 
+import PPACModels
+
 public struct RecommendView: View {
+  
+  @ObservedObject private var viewModel: RecommendViewModel
+  
   @State private var memeImageHeight: CGFloat = 0
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
   
-  public init() { }
+  public init(
+    _ viewModel: RecommendViewModel
+  ) {
+    self.viewModel = viewModel
+  }
   
   public var body: some View {
     VStack {
       Spacer()
-      RecommendHeaderView()
+      RecommendHeaderView(
+        userLevel: $viewModel.state.userLevel,
+        seenMemeCount: $viewModel.state.memeRecommendWatchCount
+      )
       
       ZStack {
         VStack {
           let isOverlapView = memeImageHeight + buttonHeight > zstackHeight
-          RecommendMemeImageView(isTagHidden: isOverlapView)
-            .onReadSize { size in
-              memeImageHeight = size.height
-            }
+          
+          RecommendMemeImagesView(
+            memes: viewModel.state.recommendMemes,
+            isTagHidden: isOverlapView
+          ).onReadSize { size in
+            memeImageHeight = size.height
+          }
+          
           Spacer()
         }
         .zIndex(1)
         
         VStack {
           Spacer()
+          
           RecommendMemeButtonView()
             .onReadSize { size in
               buttonHeight = size.height
@@ -59,28 +76,68 @@ public struct RecommendView: View {
 }
 
 #Preview {
-  RecommendView()
-}
-
-extension View {
-  @ViewBuilder
-  func onReadSize(_ perform: @escaping (CGSize) -> Void) -> some View {
-    self.customBackground {
-      GeometryReader { geometryProxy in
-        Color.clear
-          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
-      }
-    }
-    .onPreferenceChange(SizePreferenceKey.self, perform: perform)
-  }
-  
-  @ViewBuilder
-  func customBackground<V: View>(alignment: Alignment = .center, @ViewBuilder content: () -> V) -> some View {
-    self.background(alignment: alignment, content: content)
-  }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-  static var defaultValue: CGSize = .zero
-  static func reduce(value: inout CGSize, nextValue: () -> CGSize) { }
+  RecommendView(
+    RecommendViewModel(
+      router: nil,
+      recommendMemes: [
+        MemeDetail(
+          id: "668a44950289555e368174a6",
+          title: "심란한 명수옹",
+          keywords: ["공부", "학생", "시험기간"],
+          imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+          source: "깃허브",
+          isTodayMeme: true,
+          reaction: 4
+        ),
+        MemeDetail(
+          id: "2",
+          title: "울고 싶을 뿐입니다.",
+          keywords: ["슬픔", "고양이", "동물", "눈물", "억울", "웃긴"],
+          imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+          source: "깃허브",
+          isTodayMeme: true,
+          reaction: 1
+        ),
+        MemeDetail(
+          id: "3",
+          title: "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ",
+          keywords: ["웃긴", "동물", "눈물", "룰루"],
+          imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+          source: "깃허브",
+          isTodayMeme: true,
+          reaction: 0
+        ),
+        MemeDetail(
+          id: "4",
+          title: "나는 공부를 찢어",
+          keywords: ["공부", "학생", "시험기간"],
+          imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+          source: "깃허브",
+          isTodayMeme: true,
+          reaction: 4
+        ),
+        MemeDetail(
+          id: "5",
+          title: "나는 공부를 찢어",
+          keywords: ["공부", "학생", "시험기간"],
+          imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+          source: "깃허브",
+          isTodayMeme: true,
+          reaction: 4
+        )
+      ],
+      user: UserDetail(
+        id:"userId",
+        deviceId: "deviceId",
+        lastSeenMeme:[],
+        isDeleted:false,
+        watch:3,
+        reaction:10,
+        save:10,
+        share:10,
+        memeRecommendWatchCount:2,
+        level:1
+      )
+    )
+  )
 }

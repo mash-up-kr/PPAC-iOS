@@ -10,6 +10,9 @@ import ResourceKit
 
 struct RecommendHeaderView: View {
   
+  @Binding var userLevel: Int
+  @Binding var seenMemeCount: Int
+  
   public var body: some View {
     VStack {
       ResourceKitAsset.Icon.homeLogo.swiftUIImage
@@ -17,40 +20,68 @@ struct RecommendHeaderView: View {
       
       recommendTitle
       
-      recommendProgressBar(numOfSaw: 1, total: 5)
+      recommendProgressBar(
+        seenMemeCount: self.seenMemeCount,
+        total: 5
+      )
       
-      recommendText("밈 보고 레벨 포인트를 받아요!")
+      recommendText(getRecommendText())
+    }
+  }
+  
+  private func getRecommendText() -> String {
+    return if userLevel == 0 || seenMemeCount == 0 {
+      "확인한 밈을 불러오지 못 했어요. 새로고침 해주세요"
+    } else if userLevel == 1 && (seenMemeCount >= 1 && seenMemeCount <= 4) {
+      "밈 보고 레벨 포인트 받아요!"
+    } else if userLevel == 2 && (seenMemeCount >= 1 && seenMemeCount <= 4) {
+      "추천 밈 둘러보세요!"
+    } else {
+      "완밈! 다음 주 밈도 기대해 주세요"
     }
   }
 }
 
-var recommendTitle : some View {
+private var recommendTitle : some View {
   Text("이번주 이 밈 어때!")
     .font(Font.Heading.Large.semiBold)
     .padding(.bottom, 8)
 }
 
-func recommendProgressBar(
-  numOfSaw: Int,
+private func recommendProgressBar(
+  seenMemeCount: Int,
   total: Int
 ) -> some View {
   HStack {
     ResourceKitAsset.Icon.squareCheck.swiftUIImage
     
-    ProgressView(value: Double(numOfSaw), total: Double(total))
-      .frame(width: 125, height: 8)
-      .tint(Color.Icon.brand)
-      .padding(.vertical, 4)
-      .padding(.horizontal, 8)
+    ProgressView(
+      value: Double(seenMemeCount),
+      total: Double(total)
+    )
+    .frame(width: 125, height: 8)
+    .tint(Color.Icon.brand)
+    .padding(.vertical, 4)
+    .padding(.horizontal, 8)
     
-    Text("\(numOfSaw)개 봤어요")
-      .font(Font.Body.Small.semiBold)
-      .foregroundColor(Color.Text.brand)
+    Text("\(seenMemeCount == 0 ? "?" : "\(seenMemeCount)")개 봤어요")
+    .font(Font.Body.Small.semiBold)
+    .foregroundColor(Color.Text.brand)
   }
 }
 
-func recommendText(_ text: String) -> some View {
+private func recommendText(_ text: String) -> some View {
   Text(text)
     .font(Font.Weight.semiBold)
     .foregroundStyle(Color.Text.secondary)
+}
+
+#Preview {
+  @State var userLevel: Int = 1
+  @State var seenMemeCount: Int = 5
+  
+  return RecommendHeaderView(
+    userLevel: $userLevel,
+    seenMemeCount: $seenMemeCount
+  )
 }

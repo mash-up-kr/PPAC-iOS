@@ -10,26 +10,35 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 
-final class RecommendRouter: Router {
+public final class RecommendRouter: Router, RecommendRouting {
   
   // MARK: - Properties
   
-  var delegate: (any RouterDelegate)?
+  public var delegate: (any RouterDelegate)?
   
-  var navigationController: UINavigationController
+  public var navigationController: UINavigationController
   
-  var childRouters: [any Router] = []
+  public var childRouters: [any Router] = []
+  
+  let recommendMemes: [MemeDetail]
+  let user: UserDetail
   
   // MARK: - Initializers
   
-  init(_ navigationController: UINavigationController) {
+  public init(
+    _ navigationController: UINavigationController,
+    recommendMemes: [MemeDetail],
+    user: UserDetail
+  ) {
     navigationController.isNavigationBarHidden = true
     self.navigationController = navigationController
+    self.recommendMemes = recommendMemes
+    self.user = user
   }
   
   // MARK: - Methods
   
-  func start() {
+  public func start() {
     self.pushView(EmptyView())
   }
   
