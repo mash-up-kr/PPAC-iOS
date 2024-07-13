@@ -17,7 +17,8 @@ extension Project {
         packages: [Package] = [],
 //        settings: Settings? = nil,
         targets: [Target] = [],
-        schemes: [Scheme] = []
+        schemes: [Scheme] = [],
+        resourceSynthesizers: [ResourceSynthesizer]? = nil
     ) -> Project {
         return Project(
             name: name,
@@ -51,7 +52,7 @@ extension Project {
             ),
             targets: targets,
             schemes: schemes,
-            resourceSynthesizers: .default
+            resourceSynthesizers: .default + (resourceSynthesizers ?? [])
         )
     }
 }
