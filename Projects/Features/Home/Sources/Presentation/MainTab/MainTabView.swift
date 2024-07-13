@@ -19,7 +19,11 @@ public struct MainTabView: View {
   @State private var hotKeywords: [HotKeyword] = []
   @State public var mimCategories: [MimCategory] = []
   
-  public init() {}
+  private let userDetail: UserDetail
+  
+  public init(userDetail: UserDetail) {
+    userDetail = userDetail
+  }
   
   public var body: some View {
     ZStack {

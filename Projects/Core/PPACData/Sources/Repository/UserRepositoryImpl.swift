@@ -14,7 +14,6 @@ import PPACNetwork
 public final class UserRepositoryImpl: UserRepository {
   
   // MARK: - Properties
-  
   private let networkservice: NetworkServiceable
   
   // MARK: - Initializers

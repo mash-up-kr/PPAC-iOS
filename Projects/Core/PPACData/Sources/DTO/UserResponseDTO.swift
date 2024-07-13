@@ -18,7 +18,7 @@ struct UserResponseDTO: Decodable {
   let reaction: Int
   let save: Int
   let share: Int
-  let memeRecommendWatchCount: Int
+  let memeRecommendWatchCount: Int?
   let level: Int
   
   public init(
@@ -58,7 +58,7 @@ extension UserResponseDTO {
       reaction: self.reaction,
       save: self.save,
       share: self.share,
-      memeRecommendWatchCount: self.memeRecommendWatchCount,
+      memeRecommendWatchCount: self.memeRecommendWatchCount ?? 0,
       level: self.level
     )
   }

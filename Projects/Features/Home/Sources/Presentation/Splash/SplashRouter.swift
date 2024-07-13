@@ -11,8 +11,9 @@ import SwiftUI
 import PPACUtil
 import PPACNetwork
 import PPACData
+import PPACDomain
 
-public final class SplashRouter: Router, SplachRouting {
+public final class SplashRouter: Router, SplashRouting {
   
   // MARK: - Properties
   public var delegate: (any RouterDelegate)?
@@ -30,19 +31,20 @@ public final class SplashRouter: Router, SplachRouting {
   // MARK: - Methods
   public func start() {
     let repository = UserRepositoryImpl(networkservice: NetworkService())
-    let useCase = CreateUserUseCaseImpl(userRepository: repository)
+    let useCase = CheckUserUseCaseImpl(userRepository: repository)
     self.pushView(
       SplashView(
         viewModel: SplashViewModel(
           router: self,
-          createUserUserCase: useCase
+          checkUserUseCase: useCase
         )
       )
     )
   }
   
-  public func showMainTabView() {
-    let mainTabRouter = MainTabRouter(self.navigationController)
+  public func showMainTabView(userDetail: UserDetail) {
+    let mainTabRouter = MainTabRouter(self.navigationController,
+                                      userDetail: userDetail)
     self.childRouters.append(mainTabRouter)
     mainTabRouter.start()
   }

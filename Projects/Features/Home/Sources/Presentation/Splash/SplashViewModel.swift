@@ -12,9 +12,9 @@ import PPACUtil
 import PPACModels
 
 @MainActor
-public protocol SplachRouting: AnyObject {
+public protocol SplashRouting: AnyObject {
   func popView()
-  func showMainTabView()
+  func showMainTabView(userDetail: UserDetail)
 }
 
 final class SplashViewModel: ViewModelType, ObservableObject {
@@ -25,21 +25,21 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   }
   
   public struct State {
-    public var userDetail: UserDetail?
+    var isVisible: Bool
   }
   
   // MARK: - Properties
-  weak var router: SplachRouting?
-  @Published public var state: State
+  weak var router: SplashRouting?
+  @Published var state: State
   @Published var isVisible: Bool = true
-  private let createUserUserCase: CreateUserUseCase
+  private let checkUserUseCase: CheckUserUseCase
   
   // MARK: - Initializers
-  init(router: SplachRouting? = nil,
-       createUserUserCase: CreateUserUseCase) {
+  init(router: SplashRouting? = nil,
+       checkUserUseCase: CheckUserUseCase) {
     self.router = router
-    self.state = State(userDetail: nil)
-    self.createUserUserCase = createUserUserCase
+    self.state = State(isVisible: true)
+    self.checkUserUseCase = checkUserUseCase
   }
   
   // MARK: - Methods
@@ -49,20 +49,20 @@ final class SplashViewModel: ViewModelType, ObservableObject {
     case .startSplash:
       self.fetchUserInfo()
     case .finishSplash:
-      router?.showMainTabView() // 이걸 할 때 navigation에 root를 mainTab으로 해야되지 않을까?
+      //router?.showMainTabView() // 이걸 할 때 navigation에 root를 mainTab으로 해야되지 않을까?
     }
   }
+  
   
   private func fetchUserInfo() {
     Task {
       do {
-        let userDetail = try await self.createUserUserCase.excute(id: UserManager.uuid)
+        let userDetail = try await self.checkUserUseCase.checkUserDetail()
         self.updateMemeLevel(to: userDetail.level)
-        self.state = State(userDetail: userDetail)
         self.isVisible = false
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) { [weak self] in
           self?.router?.popView()
-          self?.router?.showMainTabView()
+          self?.router?.showMainTabView(userDetail: userDetail)
         }
       } catch(let error) {
         print("fetchUserInfo error = \(error)")
@@ -71,6 +71,6 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   }
   
   private func updateMemeLevel(to level: Int) {
-    UserManager.memeLevel = level
+    UserInfo.shared.memeLevel = level
   }
 }

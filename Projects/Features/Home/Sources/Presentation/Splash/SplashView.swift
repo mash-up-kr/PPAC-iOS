@@ -13,24 +13,11 @@ struct SplashView: View {
   
   // MARK: - Properties
   @ObservedObject private var viewModel: SplashViewModel
-  @State private var cancleable = Set<AnyCancellable>()
+  
   // MARK: - Initializers
   
   public init(viewModel: SplashViewModel) {
     self.viewModel = viewModel
-    self.bindViewModel()
-  }
-  
-  private func bindViewModel() {
-    viewModel.$state
-      .receive(on: RunLoop.main)
-      .sink { _ in
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-          print("호출이 왜 안되나!!!!!!!!")
-          viewModel.dispatch(type: .finishSplash)
-        }
-      }
-      .store(in: &cancleable)
   }
   
   var body: some View {
@@ -47,10 +34,9 @@ struct SplashView: View {
       viewModel.dispatch(type: .startSplash)
     }
   }
-  
 }
 
-#Preview {
-  SplashView(viewModel: SplashViewModel(router: nil,
-                                        createUserUserCase: MockCreateUserUseCase()))
-}
+//#Preview {
+//  SplashView(viewModel: SplashViewModel(router: nil,
+//                                        checkUserUseCase: MockCreateUserUseCase()))
+//}

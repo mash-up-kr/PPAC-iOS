@@ -19,7 +19,8 @@ class NetworkLogger {
     }
 
     static func logResponse(_ response: URLResponse?, data: Data?) {
-        guard let httpResponse = response as? HTTPURLResponse else {
+      print("\n ==========================================================\n")
+      guard let httpResponse = response as? HTTPURLResponse else {
             print("❌ [RESPONSE ERROR]: Invalid response")
             return
         }
@@ -30,6 +31,7 @@ class NetworkLogger {
         if let data = data {
             print("📦 [BODY]: \(String(data: data, encoding: .utf8) ?? "N/A")")
         }
+      print("==========================================================\n")
     }
 
     static func logError(_ error: NetworkError) {

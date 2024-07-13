@@ -22,10 +22,16 @@ public final class MainTabRouter: Router, MainTabRouting {
   
   public var childRouters: [any Router] = []
   
+  public var userDetail: UserDetail
+  
   // MARK: - Initializers
   
-  public init(_ navigationController: UINavigationController) {
+  public init(
+    _ navigationController: UINavigationController,
+    userDetail: UserDetail
+  ){
     self.navigationController = navigationController
+    self.userDetail = userDetail
   }
   
   // MARK: - Methods

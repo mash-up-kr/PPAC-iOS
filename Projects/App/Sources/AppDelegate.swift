@@ -21,7 +21,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		
-		UserManager.setupUserUUID()
 		let router = SplashRouter(navigationController)
 		self.navigationController.setNavigationBarHidden(true, animated: false)
 		self.appRouter = router

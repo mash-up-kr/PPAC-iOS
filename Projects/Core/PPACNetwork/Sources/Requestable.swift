@@ -43,7 +43,7 @@ extension Requestable {
     urlRequest.httpMethod = httpMethod.rawValue.uppercased()
     
     var defaultHeaders = [
-      "x-device-id": UserManager.uuid,
+      "x-device-id": UserInfo.shared.deviceId,
       "accept": "application/json",
       "Content-Type": "application/json"
     ]

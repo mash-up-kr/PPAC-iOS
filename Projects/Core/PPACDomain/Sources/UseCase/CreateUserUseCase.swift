@@ -9,6 +9,6 @@ import Foundation
 import PPACModels
 
 public protocol CreateUserUseCase {
-  var userRepository: UserRepository { get set }
+  var userRepository: UserRepository { get }
   func excute(id: String) async throws -> UserDetail
 }
