@@ -16,7 +16,19 @@ struct MemeDetailCardView: View {
   
   // MARK: - Properties
   
-  let meme: MemeDetail
+  private let meme: MemeDetail
+  
+  private let reactionButtonTapped: (() -> Void)?
+  
+  // MARK: - Initializers
+  
+  init(
+    meme: MemeDetail,
+    reactionButtonTapped: (() -> Void)?
+  ) {
+    self.meme = meme
+    self.reactionButtonTapped = reactionButtonTapped
+  }
   
   // MARK: - UI
   
@@ -36,6 +48,9 @@ struct MemeDetailCardView: View {
         .padding(.bottom, 20)
       
       LikeButton()
+        .onTapGesture(perform: {
+          self.reactionButtonTapped?()
+        })
         .padding(.bottom, 20)
     }
     .padding(10)
@@ -68,7 +83,7 @@ struct MemeDetailCardView: View {
 
 #Preview {
   VStack {
-    MemeDetailCardView(meme: .mock)
+    MemeDetailCardView(meme: .mock, reactionButtonTapped: nil)
   }
   .background(.red)
 }

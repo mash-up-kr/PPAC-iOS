@@ -87,11 +87,11 @@ private extension MemeDetailViewModel {
   func postReaction() async {
     do {
       try await reactToMemeUseCase.execute(memeId: state.meme.id, deviceId: "")
+      print("reaction success")
     } catch {
       // TODO: - 에러처리
       print("Failed to post reaction: \(error)")
     }
-    
   }
   
   func copyImage() async {
@@ -120,11 +120,13 @@ private extension MemeDetailViewModel {
   
   func showShareSheet() async {
     guard let url = URL(string: self.state.meme.imageUrlString) else {
+      print("invalid url")
       return
     }
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
       guard let image = UIImage(data: data) else {
+        print("invalid image data")
         return
       }
       await self.router?.showShareView(items: [image])
