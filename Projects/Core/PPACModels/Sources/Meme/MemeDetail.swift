@@ -17,6 +17,7 @@ public struct MemeDetail: Identifiable, Hashable {
   public let source: String
   public let isTodayMeme: Bool
   public let reaction: Int
+  public var isFarmemed: Bool
   
   // MARK: - Initializers
   
@@ -27,7 +28,8 @@ public struct MemeDetail: Identifiable, Hashable {
     imageUrlString: String,
     source: String,
     isTodayMeme: Bool,
-    reaction: Int
+    reaction: Int,
+    isFarmemed: Bool
   ) {
     self.id = id
     self.title = title
@@ -36,6 +38,7 @@ public struct MemeDetail: Identifiable, Hashable {
     self.source = source
     self.isTodayMeme = isTodayMeme
     self.reaction = reaction
+    self.isFarmemed = isFarmemed
   }
 }
 
@@ -47,6 +50,7 @@ public extension MemeDetail {
     imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/17207029441190.png",
     source: "깃허브",
     isTodayMeme: true,
-    reaction: 4
+    reaction: 4,
+    isFarmemed: false
   )
 }
