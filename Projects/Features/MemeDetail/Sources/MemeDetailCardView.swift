@@ -11,22 +11,24 @@ import DesignSystem
 import PPACModels
 import ResourceKit
 
+import Lottie
 
 struct MemeDetailCardView: View {
   
   // MARK: - Properties
   
-  private let meme: MemeDetail
+  @Binding private var meme: MemeDetail
+  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
   
   private let reactionButtonTapped: (() -> Void)?
   
   // MARK: - Initializers
   
   init(
-    meme: MemeDetail,
+    meme: Binding<MemeDetail>,
     reactionButtonTapped: (() -> Void)?
   ) {
-    self.meme = meme
+    self._meme = meme
     self.reactionButtonTapped = reactionButtonTapped
   }
   
@@ -47,11 +49,18 @@ struct MemeDetailCardView: View {
       subtitleLabel
         .padding(.bottom, 20)
       
-      LikeButton()
-        .onTapGesture(perform: {
-          self.reactionButtonTapped?()
-        })
-        .padding(.bottom, 20)
+      LikeButton(reactionCount: $meme.reaction) {
+        self.handleReactionTapped()
+      }
+      .overlay(content: {
+        LottieView(animation: AnimationAsset.kkEffect.animation)
+          .playbackMode(playbackMode)
+          .animationDidFinish { _ in
+            playbackMode = .paused(at: .progress(100))
+          }
+          .offset(y: -50)
+      })
+      .padding(.bottom, 20)
     }
     .padding(10)
     .background(Color.Background.white)
@@ -79,11 +88,18 @@ struct MemeDetailCardView: View {
       .lineLimit(1)
       .foregroundColor(Color.Icon.assistive)
   }
+  
+  private func handleReactionTapped() {
+    playbackMode = .playing(.fromProgress(0, toProgress: 1, loopMode: .playOnce))
+    reactionButtonTapped?()
+  }
 }
 
 #Preview {
-  VStack {
-    MemeDetailCardView(meme: .mock, reactionButtonTapped: nil)
+  @State var mock: MemeDetail = .mock
+  
+  return VStack {
+    MemeDetailCardView(meme: $mock, reactionButtonTapped: nil)
   }
   .background(.red)
 }

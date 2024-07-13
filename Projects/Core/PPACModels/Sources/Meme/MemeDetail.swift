@@ -16,7 +16,7 @@ public struct MemeDetail: Identifiable, Hashable {
   public let imageUrlString: String
   public let source: String
   public let isTodayMeme: Bool
-  public let reaction: Int
+  public var reaction: Int
   public var isFarmemed: Bool
   
   // MARK: - Initializers
