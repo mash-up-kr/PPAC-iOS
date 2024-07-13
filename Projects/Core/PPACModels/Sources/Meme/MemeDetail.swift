@@ -44,7 +44,7 @@ public extension MemeDetail {
     id: "66800ac624fc9c25eaf3b937",
     title: "나는 공부를 찢어",
     keywords: ["공부", "학생", "시험기간"],
-    imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/1.JPG",
+    imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/17207029441190.png",
     source: "깃허브",
     isTodayMeme: true,
     reaction: 4
