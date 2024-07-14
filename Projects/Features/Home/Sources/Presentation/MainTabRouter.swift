@@ -37,7 +37,7 @@ public final class MainTabRouter: Router, MainTabRouting {
   // MARK: - Methods
   public func start() {
     self.pushView(
-      MainTabView(),
+      MainTabView(userDetail: userDetail),
       animated: false
     )
   }

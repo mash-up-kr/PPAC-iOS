@@ -22,7 +22,7 @@ public struct MainTabView: View {
   private let userDetail: UserDetail
   
   public init(userDetail: UserDetail) {
-    userDetail = userDetail
+    self.userDetail = userDetail
   }
   
   public var body: some View {
@@ -127,5 +127,5 @@ struct TabItemView: View {
 
 
 #Preview {
-  MainTabView()
+  MainTabView(userDetail: UserDetail.mock)
 }

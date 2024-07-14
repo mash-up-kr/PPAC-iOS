@@ -10,7 +10,6 @@ import Foundation
 import PPACModels
 
 public protocol UserRepository {
-  static var deviceId: String { get set }
   func create(deviceId: String) async throws -> UserDetail
   func getUserDetail(deviceId: String) async throws -> UserDetail
   func getSavedMeme(deviceId: String) async throws -> [MemeDetail]

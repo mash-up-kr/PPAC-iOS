@@ -18,6 +18,5 @@ public class UserInfo {
   
   @UserDefault(key:"deviceId", defaultValue: "")
   public var deviceId: String
-  
  
 }

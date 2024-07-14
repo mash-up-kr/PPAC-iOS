@@ -13,16 +13,12 @@ import PPACModels
 
 @MainActor
 public protocol SplashRouting: AnyObject {
-  func popView()
   func showMainTabView(userDetail: UserDetail)
 }
 
 final class SplashViewModel: ViewModelType, ObservableObject {
   
-  public enum Action {
-    case startSplash
-    case finishSplash
-  }
+  public enum Action { }
   
   public struct State {
     var isVisible: Bool
@@ -32,36 +28,28 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   weak var router: SplashRouting?
   @Published var state: State
   @Published var isVisible: Bool = true
-  private let checkUserUseCase: CheckUserUseCase
+  private let checkUserInfoUseCase: CheckUserInfoUseCase
   
   // MARK: - Initializers
   init(router: SplashRouting? = nil,
-       checkUserUseCase: CheckUserUseCase) {
+       checkUserInfoUseCase: CheckUserInfoUseCase) {
     self.router = router
     self.state = State(isVisible: true)
-    self.checkUserUseCase = checkUserUseCase
+    self.checkUserInfoUseCase = checkUserInfoUseCase
+    self.fetchUserInfo()
   }
   
   // MARK: - Methods
   @MainActor
-  public func dispatch(type: Action) {
-    switch type {
-    case .startSplash:
-      self.fetchUserInfo()
-    case .finishSplash:
-      //router?.showMainTabView() // 이걸 할 때 navigation에 root를 mainTab으로 해야되지 않을까?
-    }
-  }
-  
+  public func dispatch(type: Action) { }
   
   private func fetchUserInfo() {
     Task {
       do {
-        let userDetail = try await self.checkUserUseCase.checkUserDetail()
+        let userDetail = try await self.checkUserInfoUseCase.checkUserInfo()
         self.updateMemeLevel(to: userDetail.level)
-        self.isVisible = false
+        self.state = State(isVisible: false)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) { [weak self] in
-          self?.router?.popView()
           self?.router?.showMainTabView(userDetail: userDetail)
         }
       } catch(let error) {

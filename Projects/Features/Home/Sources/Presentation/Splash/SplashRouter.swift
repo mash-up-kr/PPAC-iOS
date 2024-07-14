@@ -12,6 +12,7 @@ import PPACUtil
 import PPACNetwork
 import PPACData
 import PPACDomain
+import PPACModels
 
 public final class SplashRouter: Router, SplashRouting {
   
@@ -31,12 +32,12 @@ public final class SplashRouter: Router, SplashRouting {
   // MARK: - Methods
   public func start() {
     let repository = UserRepositoryImpl(networkservice: NetworkService())
-    let useCase = CheckUserUseCaseImpl(userRepository: repository)
+    let useCase = CheckUserInfoUseCaseImpl(userRepository: repository)
     self.pushView(
       SplashView(
         viewModel: SplashViewModel(
           router: self,
-          checkUserUseCase: useCase
+          checkUserInfoUseCase: useCase
         )
       )
     )
