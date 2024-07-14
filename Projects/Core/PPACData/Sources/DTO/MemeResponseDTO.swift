@@ -20,6 +20,7 @@ struct MemeResponseDTO: Decodable {
   let isDeleted: Bool
   let createdAt: String
   let updatedAt: String
+  let isFarmemed: Bool?
   
   public init(
     _id: String,
@@ -31,7 +32,8 @@ struct MemeResponseDTO: Decodable {
     isTodayMeme: Bool,
     isDeleted: Bool,
     createdAt: String,
-    updatedAt: String
+    updatedAt: String,
+    isFarmemed: Bool?
   ) {
     self._id = _id
     self.title = title
@@ -43,6 +45,7 @@ struct MemeResponseDTO: Decodable {
     self.isDeleted = isDeleted
     self.createdAt = createdAt
     self.updatedAt = updatedAt
+    self.isFarmemed = isFarmemed
   }
 }
 
@@ -56,7 +59,8 @@ extension MemeResponseDTO {
       imageUrlString: self.image,
       source: self.source,
       isTodayMeme: self.isTodayMeme,
-      reaction: self.reaction
+      reaction: self.reaction,
+      isFarmemed: self.isFarmemed ?? false
     )
   }
 }

@@ -84,10 +84,17 @@ public struct MyPageView: View {
                        "https://plus.unsplash.com/premium_photo-1676955432796-226f504a560b?q=80&w=3333&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                        "https://images.unsplash.com/photo-1720247521923-f531207d23d8?q=80&w=2667&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ]
   let memeDetailList = (0..<20)
-    .map { MemeDetail(id: "\($0)", title: MemeDetail.mock.title,
-                      keywords: MemeDetail.mock.keywords,
-                      imageUrlString: mockImageList[$0 % 4],
-                      source: MemeDetail.mock.source,
-                      isTodayMeme: true, reaction: $0 % 4) }
+    .map {
+      MemeDetail(
+        id: "\($0)",
+        title: MemeDetail.mock.title,
+        keywords: MemeDetail.mock.keywords,
+        imageUrlString: mockImageList[$0 % 4],
+        source: MemeDetail.mock.source,
+        isTodayMeme: true,
+        reaction: $0 % 4,
+        isFarmemed: true
+      )
+    }
   return MyPageView(memeLevel: .level1, memeDetailList: memeDetailList)
 }

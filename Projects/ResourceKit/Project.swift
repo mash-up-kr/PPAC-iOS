@@ -22,5 +22,8 @@ let project = Project.configure(
             dependencies: [
             ]
         )
+    ],
+    resourceSynthesizers: [
+      .custom(name: "Lottie", parser: .json, extensions: ["lottie"]),
     ]
 )

@@ -16,7 +16,8 @@ public struct MemeDetail: Identifiable, Hashable {
   public let imageUrlString: String
   public let source: String
   public let isTodayMeme: Bool
-  public let reaction: Int
+  public var reaction: Int
+  public var isFarmemed: Bool
   
   // MARK: - Initializers
   
@@ -27,7 +28,8 @@ public struct MemeDetail: Identifiable, Hashable {
     imageUrlString: String,
     source: String,
     isTodayMeme: Bool,
-    reaction: Int
+    reaction: Int,
+    isFarmemed: Bool
   ) {
     self.id = id
     self.title = title
@@ -36,17 +38,19 @@ public struct MemeDetail: Identifiable, Hashable {
     self.source = source
     self.isTodayMeme = isTodayMeme
     self.reaction = reaction
+    self.isFarmemed = isFarmemed
   }
 }
 
 public extension MemeDetail {
   static let mock = MemeDetail(
-    id: "1",
+    id: "66800ac624fc9c25eaf3b937",
     title: "나는 공부를 찢어",
     keywords: ["공부", "학생", "시험기간"],
-    imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+    imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/17207029441190.png",
     source: "깃허브",
     isTodayMeme: true,
-    reaction: 4
+    reaction: 4,
+    isFarmemed: false
   )
 }
