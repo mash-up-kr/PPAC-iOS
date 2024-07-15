@@ -42,4 +42,17 @@ public struct UserDetail {
     self.memeRecommendWatchCount = memeRecommendWatchCount
     self.level = level
   }
+  
+  public static let mock = UserDetail(
+      id: "668fab1720cb620e974c53b3",
+      deviceId: "1111-2222-3333-4444",
+      lastSeenMeme: [],
+      isDeleted: false,
+      watch: 0,
+      reaction: 0,
+      save: 0,
+      share: 0,
+      memeRecommendWatchCount: 0,
+      level: 1
+  )
 }
