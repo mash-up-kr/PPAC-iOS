@@ -10,9 +10,9 @@ import ResourceKit
 
 struct MyPageCharacterView: View {
   let level: MemeLevelType
-  let description: String
+  
   var body: some View {
-    SpeechBalloonView(description: description)
+    SpeechBalloonView(description: level.speechBalloonText)
     level.levelCharacterImage
       .resizable()
       .frame(width: 190, height: 190, alignment: .center)
@@ -48,5 +48,5 @@ struct SpeechBalloonView: View {
 }
 
 #Preview {
-  MyPageCharacterView(level: .level3, description: "폼 미쳤따아아아아아아ㅏㅏ")
+  MyPageCharacterView(level: .level3)
 }

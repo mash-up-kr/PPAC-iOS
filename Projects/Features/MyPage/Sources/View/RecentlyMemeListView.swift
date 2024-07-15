@@ -14,6 +14,12 @@ import Kingfisher
 struct RecentlyMemeListView: View {
   @State var memeDetailList: [MemeDetail]
   var body: some View {
+    memeDetailList.count > 0
+    ? memeListView
+    : emptyView
+  }
+  
+  var memeListView: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,
                      title: "최근 본 밈")
@@ -22,6 +28,11 @@ struct RecentlyMemeListView: View {
     }
     .padding(.bottom, 50)
   }
+  
+  var emptyView: some View {
+    MemeListEmptyView(description: "최근 본 밈이 없어요")
+  }
+  
 }
 
 extension MemeDetail: HorizontalMimItemProtocol {}

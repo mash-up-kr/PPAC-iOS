@@ -27,7 +27,6 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   // MARK: - Properties
   weak var router: SplashRouting?
   @Published var state: State
-  @Published var isVisible: Bool = true
   private let checkUserInfoUseCase: CheckUserInfoUseCase
   
   // MARK: - Initializers

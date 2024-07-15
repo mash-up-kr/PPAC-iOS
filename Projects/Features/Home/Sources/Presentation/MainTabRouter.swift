@@ -41,4 +41,10 @@ public final class MainTabRouter: Router, MainTabRouting {
       animated: false
     )
   }
+  
+  private func myPageRouter() -> MyPageRouter {
+    let router = MyPageRouter(navigationController: navigationController, userDetail: userDetail)
+    childRouters.append(router)
+    return router
+  }
 }
