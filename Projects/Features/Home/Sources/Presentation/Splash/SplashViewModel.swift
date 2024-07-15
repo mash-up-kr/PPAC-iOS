@@ -46,7 +46,7 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   private func fetchUserInfo() {
     Task {
       do {
-        let userDetail = try await self.checkUserInfoUseCase.checkUserInfo()
+        let userDetail = try await self.checkUserInfoUseCase.execute()
         self.updateMemeLevel(to: userDetail.level)
         self.state = State(isVisible: false)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) { [weak self] in

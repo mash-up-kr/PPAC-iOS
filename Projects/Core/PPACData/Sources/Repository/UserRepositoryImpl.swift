@@ -39,10 +39,10 @@ public final class UserRepositoryImpl: UserRepository {
     }
   }
   
-  public func getUserDetail(deviceId: String) async throws -> UserDetail {
+  public func getUserDetail() async throws -> UserDetail {
     let result = await networkservice
       .request(
-        UserEndpoint.userDetail(deviceId: deviceId),
+        UserEndpoint.userDetail,
         dataType: BaseDTO<UserResponseDTO>.self
       )
     switch result {
@@ -54,10 +54,10 @@ public final class UserRepositoryImpl: UserRepository {
     }
   }
   
-  public func getSavedMeme(deviceId: String) async throws -> [MemeDetail] {
+  public func getSavedMeme() async throws -> [MemeDetail] {
     let result = await networkservice
       .request(
-        UserEndpoint.savedMeme(deviceId: deviceId),
+        UserEndpoint.savedMeme,
         dataType: BaseDTO<MemeWithPaginationResponseDTO>.self
       )
     
@@ -70,10 +70,10 @@ public final class UserRepositoryImpl: UserRepository {
     }
   }
   
-  public func getLastSeenMeme(deviceId: String) async throws -> [MemeDetail] {
+  public func getLastSeenMeme() async throws -> [MemeDetail] {
     let result = await networkservice
       .request(
-        UserEndpoint.lastSeenMeme(deviceId: deviceId),
+        UserEndpoint.lastSeenMeme,
         dataType: BaseDTO<[MemeResponseDTO]>.self
       )
     
