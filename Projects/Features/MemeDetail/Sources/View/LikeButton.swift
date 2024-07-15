@@ -58,6 +58,7 @@ public struct LikeButton: View {
         .animationDidFinish { _ in
           playbackMode = .paused(at: .progress(100))
         }
+        .frame(width: 44, height: 22)
     }
   }
   
