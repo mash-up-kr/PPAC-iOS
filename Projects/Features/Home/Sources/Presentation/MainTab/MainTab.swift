@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-import Recommend
-import Search
-import MyPage
+import ResourceKit
 
 enum MainTab: String, CaseIterable, Identifiable {
   case recommend
@@ -17,25 +15,25 @@ enum MainTab: String, CaseIterable, Identifiable {
   
   var id: String { rawValue }
   
-  var image: String {
+  var image: Image {
     switch self {
     case .recommend:
-      return "1.square.fill"
+      return ResourceKitAsset.Icon.recommendInactive.swiftUIImage
     case .search:
-      return "2.square.fill"
+      return ResourceKitAsset.Icon.discoverInactive.swiftUIImage
     case .mypage:
-      return "3.square.fill"
+      return ResourceKitAsset.Icon.myInactive.swiftUIImage
     }
   }
   
-  var selectedImage: String {
+  var selectedImage: Image {
     switch self {
     case .recommend:
-      return "1.square"
+      return ResourceKitAsset.Icon.recommendActive.swiftUIImage
     case .search:
-      return "2.square"
+      return ResourceKitAsset.Icon.discoverActive.swiftUIImage
     case .mypage:
-      return "3.square"
+      return ResourceKitAsset.Icon.myActive.swiftUIImage
     }
   }
   

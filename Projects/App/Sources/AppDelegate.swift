@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftUI
 import Home
 import MemeDetail
 import PPACUtil
@@ -20,11 +21,11 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		self.window = UIWindow(frame: UIScreen.main.bounds)
 		
-		let router = MemeDetailRouter(navigationController, meme: .mock)
+		let router = SplashRouter(navigationController)
+		self.navigationController.setNavigationBarHidden(true, animated: false)
 		self.appRouter = router
 		self.window?.rootViewController = navigationController
 		self.window?.makeKeyAndVisible()
-		
 		router.start() // router의 시작 메소드 호출
 		
 		return true
