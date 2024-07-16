@@ -32,12 +32,12 @@ final public class NetworkService: NetworkServiceable {
       return .failure(.invalidResponse)
     }
     
+    NetworkLogger.logResponse(httpResponse, data: data)
     let error: NetworkError
     switch httpResponse.statusCode {
     case 200..<300:
       let decoder = JSONDecoder()
         if let decodedData = try? decoder.decode(T.self, from: data) {
-          printJson(data: data)
         return .success(decodedData)
       } else {
         error = .dataDecodingError
@@ -51,13 +51,5 @@ final public class NetworkService: NetworkServiceable {
     }
     NetworkLogger.logError(error)
     return .failure(error)
-  }
-  
-  private func printJson(data: Data) {
-    if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
-       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
-       let prettyString = String(data: prettyData, encoding: .utf8) {
-        print("Response JSON:\n\(prettyString)")
-    }
   }
 }

@@ -53,12 +53,17 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
     watchMemeUseCase: WatchMemeUseCase,
     reactToMemeUseCase: ReactToMemeUseCase
   ) {
+    print("memeviewmodel init")
     self.router = router
     self.state = State(meme: meme)
     self.bookmarkMemeUseCase = bookmarkMemeUseCase
     self.shareMemeUseCase = shareMemeUseCase
     self.watchMemeUseCase = watchMemeUseCase
     self.reactToMemeUseCase = reactToMemeUseCase
+  }
+  
+  deinit {
+    print("memeviewmodel deinit")
   }
   
   // MARK: - Methods
@@ -84,14 +89,16 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
 
 private extension MemeDetailViewModel {
   
+  @MainActor
   func postReaction() async {
     do {
-      try await reactToMemeUseCase.execute(memeId: state.meme.id, deviceId: "")
+      try await reactToMemeUseCase.execute(memeId: state.meme.id, deviceId: "qwer1234")
+      self.state.meme.reaction += 1
+      print("reaction success")
     } catch {
       // TODO: - 에러처리
       print("Failed to post reaction: \(error)")
     }
-    
   }
   
   func copyImage() async {
@@ -109,9 +116,14 @@ private extension MemeDetailViewModel {
     }
   }
   
+  @MainActor
   func postSavedFarmeme() async {
+    if state.meme.isFarmemed { return }
+    
     do {
       try await bookmarkMemeUseCase.execute(memeId: state.meme.id, deviceId: "qwer1234")
+      state.meme.isFarmemed = true
+      print("isFarmemed: \(state.meme.isFarmemed)")
     } catch {
       // TODO: - 에러처리
       print(error)
@@ -120,11 +132,13 @@ private extension MemeDetailViewModel {
   
   func showShareSheet() async {
     guard let url = URL(string: self.state.meme.imageUrlString) else {
+      print("invalid url")
       return
     }
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
       guard let image = UIImage(data: data) else {
+        print("invalid image data")
         return
       }
       await self.router?.showShareView(items: [image])

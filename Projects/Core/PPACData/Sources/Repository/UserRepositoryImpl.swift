@@ -14,7 +14,6 @@ import PPACNetwork
 public final class UserRepositoryImpl: UserRepository {
   
   // MARK: - Properties
-  
   private let networkservice: NetworkServiceable
   
   // MARK: - Initializers
@@ -28,12 +27,13 @@ public final class UserRepositoryImpl: UserRepository {
     let result = await networkservice
       .request(
         UserEndpoint.create(deviceId: deviceId),
-        dataType: UserResponseDTO.self
+        dataType: BaseDTO<UserResponseDTO>.self
       )
     
     switch result {
-    case .success(let userResponseDTO):
-      return userResponseDTO.toModel()
+    case .success(let data):
+      guard let UserResponseDTO = data.data else { throw NetworkError.dataDecodingError }
+      return UserResponseDTO.toModel()
     case .failure(let error):
       throw error
     }
@@ -43,29 +43,28 @@ public final class UserRepositoryImpl: UserRepository {
     let result = await networkservice
       .request(
         UserEndpoint.userDetail(deviceId: deviceId),
-        dataType: UserResponseDTO.self
+        dataType: BaseDTO<UserResponseDTO>.self
       )
-    
     switch result {
-    case .success(let userResponseDTO):
+    case .success(let data):
+      guard let userResponseDTO = data.data else { throw NetworkError.dataDecodingError }
       return userResponseDTO.toModel()
     case .failure(let error):
       throw error
     }
-    
   }
   
   public func getSavedMeme(deviceId: String) async throws -> [MemeDetail] {
     let result = await networkservice
       .request(
         UserEndpoint.savedMeme(deviceId: deviceId),
-        dataType: [MemeResponseDTO].self
+        dataType: BaseDTO<MemeWithPaginationResponseDTO>.self
       )
     
     switch result {
-    case .success(let memeDetails):
-      return memeDetails.map { $0.toModel() }
-      
+    case .success(let data):
+      guard let memeResponseDTOList = data.data?.memeList else { throw NetworkError.dataDecodingError }
+      return memeResponseDTOList.map { $0.toModel() }
     case .failure(let error):
       throw error
     }
@@ -75,13 +74,13 @@ public final class UserRepositoryImpl: UserRepository {
     let result = await networkservice
       .request(
         UserEndpoint.lastSeenMeme(deviceId: deviceId),
-        dataType: [MemeResponseDTO].self
+        dataType: BaseDTO<[MemeResponseDTO]>.self
       )
     
     switch result {
-    case .success(let memeDetails):
-      return memeDetails.map { $0.toModel() }
-      
+    case .success(let data):
+      guard let memeResponseDTOList = data.data else { throw NetworkError.dataDecodingError }
+      return memeResponseDTOList.map { $0.toModel() }
     case .failure(let error):
       throw error
     }

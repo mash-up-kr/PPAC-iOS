@@ -66,6 +66,6 @@ public struct MemeListView: View {
                       keywords: MemeDetail.mock.keywords,
                       imageUrlString: mockImageList[$0 % 4],
                       source: MemeDetail.mock.source,
-                      isTodayMeme: true, reaction: $0 % 4) }
+                      isTodayMeme: true, reaction: $0 % 4, isFarmemed: true) }
   return MemeListView(memeDetailList: memeDetailList)
 }

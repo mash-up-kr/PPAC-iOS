@@ -18,7 +18,7 @@ public struct MemeDetailView: View {
   
   // MARK: - Properties
   
-  private let viewModel: MemeDetailViewModel
+  @ObservedObject private var viewModel: MemeDetailViewModel
   
   // MARK: - Initializers
   
@@ -29,31 +29,33 @@ public struct MemeDetailView: View {
   // MARK: - UI
   
   public var body: some View {
-    MemeDetailCardView(meme: viewModel.state.meme)
-      .padding(.horizontal, 24)
-      .memeDetailTabBar { tab in
-        tabBarTap(tab)
-      }
-      .background(
-        KFImage(URL(string: viewModel.state.meme.imageUrlString))
-          .resizable()
-          .loadDiskFileSynchronously()
-          .cacheMemoryOnly()
-          .aspectRatio(contentMode: .fill)
-          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-          .clipped()
-          .opacity(0.4)
-          .edgesIgnoringSafeArea(.top)
-      )
-      .plainNavigationBar(
-        backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
-        rightActionHandler: nil,
-        hasConfigureButton: false,
-        title: viewModel.state.meme.title
-      )
+    MemeDetailCardView(meme: $viewModel.state.meme) {
+      viewModel.dispatch(type: .likeButtonTapped)
+    }
+    .padding(.horizontal, 24)
+    .memeDetailTabBar(isFarmemed: $viewModel.state.meme.isFarmemed) { tab in
+      tabBarTap(tab)
+    }
+    .background(
+      KFImage(URL(string: viewModel.state.meme.imageUrlString))
+        .resizable()
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .aspectRatio(contentMode: .fill)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+        .clipped()
+        .opacity(0.4)
+        .edgesIgnoringSafeArea(.top)
+    )
+    .plainNavigationBar(
+      backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
+      rightActionHandler: nil,
+      hasConfigureButton: false,
+      title: viewModel.state.meme.title
+    )
   }
   
-  @MainActor 
+  @MainActor
   private func tabBarTap(_ type: MemeDetailTab) {
     switch type {
     case .copy:

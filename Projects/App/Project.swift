@@ -30,6 +30,7 @@ let project = Project.configure(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
+                .Core.PPACUtil,
                 .ThirdParty.Lottie,
                 .ThirdParty.Dependency,
             ],
@@ -60,6 +61,7 @@ let project = Project.configure(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
+                .Core.PPACUtil,
                 .ThirdParty.Dependency,
             ],
             settings: .settings(

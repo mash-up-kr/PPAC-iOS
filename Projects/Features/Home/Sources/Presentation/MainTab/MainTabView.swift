@@ -12,13 +12,18 @@ import MyPage
 import PPACData
 import PPACModels
 import PPACNetwork
+import ResourceKit
 
 public struct MainTabView: View {
   @State private var selectedTab: MainTab = .recommend
   @State private var hotKeywords: [HotKeyword] = []
   @State public var mimCategories: [MimCategory] = []
   
-  public init() {}
+  private let userDetail: UserDetail
+  
+  public init(userDetail: UserDetail) {
+    self.userDetail = userDetail
+  }
   
   public var body: some View {
     ZStack {
@@ -33,6 +38,7 @@ public struct MainTabView: View {
       VStack {
         Spacer()
         CustomTabBarView(selectedTab: $selectedTab)
+          .shadow(color: Color.Border.tertiary, radius: 10, x: 0, y: 0)
       }
     }
     .edgesIgnoringSafeArea(.bottom)
@@ -44,6 +50,18 @@ public struct MainTabView: View {
           mimCategories = try await repository.getMimCategorys()
           print("hotKeywords = \(hotKeywords)")
           print("mimCategories = \(mimCategories)")
+        } catch(let error) {
+          print("error = \(error )")
+        }
+        
+        let userRepository = UserRepositoryImpl(networkservice: NetworkService())
+        do {
+          let userData = try await userRepository.getUserDetail(deviceId: "")
+          let savesMeme = try await userRepository.getSavedMeme(deviceId: "")
+          let lastSeenMeme = try await userRepository.getLastSeenMeme(deviceId: "")
+          print("\n userData = \(userData)\n")
+          print("savesMeme = \(savesMeme)")
+          print("lastSeenMeme = \(lastSeenMeme)")
         } catch(let error) {
           print("error = \(error )")
         }
@@ -69,12 +87,13 @@ struct CustomTabBarView: View {
     }
     .frame(maxWidth: .infinity, maxHeight: 98)
     .background(.white)
-    .clipShape( 
+    .clipShape(
       .rect(
         topLeadingRadius: 30,
         topTrailingRadius: 30
       )
     )
+    
   }
 }
 
@@ -84,18 +103,29 @@ struct TabItemView: View {
   let tab: MainTab
   let isSelected: Bool
   
+  var tabImage: Image {
+    return isSelected ? tab.selectedImage : tab.image
+  }
+  
+  var color: SwiftUI.Color {
+    return isSelected ? Color.Text.brand : Color.Text.assistive
+  }
+  
   var body: some View {
     VStack {
-      Image(systemName: isSelected ? tab.selectedImage : tab.image)
-        .frame(width: 20, height: 20)
+      tabImage
+        .frame(width: 24, height: 24)
+        .padding(.bottom, 2)
+      
       Text(tab.title)
-        .font(.system(size: 11))
+        .font(Font.Weight.semiBold)
     }
+    .foregroundStyle(color)
     .padding(40)
   }
 }
 
 
 #Preview {
-  MainTabView()
+  MainTabView(userDetail: UserDetail.mock)
 }
