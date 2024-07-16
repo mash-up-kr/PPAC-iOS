@@ -12,43 +12,46 @@ import PPACUtil
 import PPACModels
 import PPACDomain
 import PPACNetwork
+import PPACData
 
 public final class MyPageRouter: Router, MyPageRouting {
   // MARK: - Properties
   public var delegate: (any RouterDelegate)?
-  
   public var navigationController: UINavigationController
   
   public var childRouters: [any Router] = []
   
   private let userDetail: UserDetail
   
-  // MARK: - Initializers
   
-  public init(_ navigationController: UINavigationController, userDetail: UserDetail) {
+  // MARK: - Initializers
+  public init(navigationController: UINavigationController, userDetail: UserDetail) {
     self.navigationController = navigationController
     self.userDetail = userDetail
+    
+    self.navigationController = self.createNavigationController()
   }
   
   // MARK: - Methods
-  
-  public func start() {
+  public func createNavigationController() -> UINavigationController {
     let repository = UserRepositoryImpl(networkservice: NetworkService())
-    let getUserDetailUseCase = GetUserDetailUseCaseImpl(userRepository: repository)
-    let getLastSeenMemeUseCase = GetLastSeenMemeUseCaseImpl(userRepository: repository)
-    let getSavedMemeUseCase = GetSavedMemeUseCaseImpl(userRepository: repository)
     
-    self.pushView(
-      MyPageView(
-        viewModel: MyPageViewModel(
-          userDetail: self.userDetail,
-          getUserDetailUseCase: getUserDetailUseCase,
-          getLastSeenMemeUseCase: getLastSeenMemeUseCase,
-          getSavedMemeUseCase: getSavedMemeUseCase
-        )
+    let myPageView = MyPageView(
+      viewModel: MyPageViewModel(
+        userDetail: self.userDetail,
+        getUserDetailUseCase: GetUserDetailUseCaseImpl(userRepository: repository),
+        getLastSeenMemeUseCase: GetLastSeenMemeUseCaseImpl(userRepository: repository),
+        getSavedMemeUseCase: GetSavedMemeUseCaseImpl(userRepository: repository)
       )
     )
+    
+    let viewController = UIHostingController(rootView: myPageView)
+    return UINavigationController(rootViewController: viewController)
   }
+
+  public func start() { }
   
   public func showSettingView() { }
+  
 }
+

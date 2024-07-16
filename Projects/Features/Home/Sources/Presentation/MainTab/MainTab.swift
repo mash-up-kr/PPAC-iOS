@@ -26,6 +26,17 @@ enum MainTab: String, CaseIterable, Identifiable {
     }
   }
   
+  var uiImage: UIImage {
+    switch self {
+    case .recommend:
+      return ResourceKitAsset.Icon.recommendInactive.image
+    case .search:
+      return ResourceKitAsset.Icon.discoverInactive.image
+    case .mypage:
+      return ResourceKitAsset.Icon.myInactive.image
+    }
+  }
+  
   var selectedImage: Image {
     switch self {
     case .recommend:
@@ -34,6 +45,17 @@ enum MainTab: String, CaseIterable, Identifiable {
       return ResourceKitAsset.Icon.discoverActive.swiftUIImage
     case .mypage:
       return ResourceKitAsset.Icon.myActive.swiftUIImage
+    }
+  }
+  
+  var selectedUIImage: UIImage {
+    switch self {
+    case .recommend:
+      return ResourceKitAsset.Icon.recommendActive.image
+    case .search:
+      return ResourceKitAsset.Icon.discoverActive.image
+    case .mypage:
+      return ResourceKitAsset.Icon.myActive.image
     }
   }
   

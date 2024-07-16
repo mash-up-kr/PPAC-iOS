@@ -5,11 +5,11 @@
 //  Created by 장혜령 on 2024/07/11.
 //
 
-import Foundation
 import SwiftUI
+
 import PPACDomain
-import PPACUtil
 import PPACModels
+import PPACUtil
 
 @MainActor
 public protocol SplashRouting: AnyObject {

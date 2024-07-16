@@ -14,16 +14,22 @@ import PPACModels
 struct SavedMemeListView: View {
   @State var memeDetailList: [MemeDetail]
   var body: some View {
-    memeDetailList.count > 0
-    ? memeListView
-    : emptyView
+    VStack {
+      ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
+                     title: "나의 파밈함")
+      if memeDetailList.count > 0 {
+        memeListView
+      } else {
+        emptyView
+      }
+    }
   }
   
   var memeListView: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
                      title: "나의 파밈함")
-      MemeListView(memeDetailList: $viewModel.state.savedMemeList)
+      MemeListView(memeDetailList: memeDetailList)
         .padding(.horizontal, 20)
     }
   }

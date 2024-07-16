@@ -23,7 +23,10 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var userDetail: UserDetail
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
-    var memeLevel: MemeLevelType
+    
+    var memeLevel: MemeLevelType {
+      return MemeLevelType(rawValue: userDetail.level) ?? .level1
+    }
     
     var conditionCount: Int {
       switch memeLevel {
@@ -37,11 +40,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         userDetail.save
       }
     }
-    //static let none = State(userDetail: UserDetail.mock, lastSeenMemeList: [], savedMemeList: [])
   }
   
   // MARK: - Properties
-  
   @Published public var state: State
   private var userDetail: UserDetail
   private let getUserDetailUseCase: GetUserDetailUseCase
@@ -49,6 +50,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let getSavedMemeUseCase: GetSavedMemeUseCase
   
   // MARK: - Initializers
+  
   public init(
     userDetail: UserDetail,
     getUserDetailUseCase: GetUserDetailUseCase,

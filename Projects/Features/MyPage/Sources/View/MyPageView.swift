@@ -11,9 +11,6 @@ import ResourceKit
 import PPACModels
 
 public struct MyPageView: View {
-//  private let memeLevel: MemeLevelType
-//  let memeDetailList: [MemeDetail]
-
   @ObservedObject private var viewModel: MyPageViewModel
   
   public init(viewModel: MyPageViewModel) {
@@ -24,8 +21,8 @@ public struct MyPageView: View {
     ScrollView {
       levelView
       divider
-      RecentlyMemeListView(memeDetailList: $viewModel.state.lastSeenMemeList)
-      SavedMemeListView(memeDetailList: $viewModel.state.savedMemeList)
+      RecentlyMemeListView(memeDetailList: viewModel.state.lastSeenMemeList)
+      SavedMemeListView(memeDetailList: viewModel.state.savedMemeList)
     }
     .background {
       LinearGradient(gradient: Gradient(colors: [Color.Background.brandassistive, Color.Background.white]),
@@ -38,10 +35,11 @@ public struct MyPageView: View {
   var levelView: some View {
     VStack {
       settingHeaderView
-      MyPageCharacterView(level: $viewModel.state.memeLevel)
+      MyPageCharacterView(level: viewModel.state.memeLevel)
       levelTitleTextView
-      LevelProgressView(level: $viewModel.state.memeLevel, conditionCount: $viewModel.state.conditionCount)
-      MemeLevelConditionView(conditionCount: $viewModel.state.conditionCount)
+      LevelProgressView(level: viewModel.state.memeLevel,
+                        conditionCount: viewModel.state.conditionCount)
+      MemeLevelConditionView(conditionCount: viewModel.state.conditionCount)
     }
   }
   
@@ -58,7 +56,7 @@ public struct MyPageView: View {
   }
   
   var levelTitleTextView: some View {
-    Text(memeLevel.levelTitleText)
+    Text(viewModel.state.memeLevel.levelTitleText)
       .font(Font.Family2.outLine)
       .padding(20)
   }

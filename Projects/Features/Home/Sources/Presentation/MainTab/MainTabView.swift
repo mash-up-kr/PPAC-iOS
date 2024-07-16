@@ -15,46 +15,31 @@ import PPACNetwork
 import ResourceKit
 
 public struct MainTabView: View {
-  @State private var selectedTab: MainTab = .recommend
+  @ObservedObject private var viewModel: MainTabViewModel
   @State private var hotKeywords: [HotKeyword] = []
   @State public var mimCategories: [MimCategory] = []
   
-  private let userDetail: UserDetail
-  
-  public init(userDetail: UserDetail) {
-    self.userDetail = userDetail
+  public init(viewModel: MainTabViewModel) {
+    self.viewModel = viewModel
   }
   
   public var body: some View {
     ZStack {
-      TabView(selection: $selectedTab) {
+      TabView(selection: $viewModel.state.selectedTab) {
         RecommendView()
           .tag(MainTab.recommend)
         SearchView(hotKeywords: hotKeywords, mimCategories: mimCategories)
           .tag(MainTab.search)
-        MyPageView(memeLevel: .level1, memeDetailList: [])
-          .tag(MainTab.mypage)
+//        MyPageView(memeLevel: .level1, memeDetailList: [])
+//          .tag(MainTab.mypage)
       }
       VStack {
         Spacer()
-        CustomTabBarView(selectedTab: $selectedTab)
+        CustomTabBarView(selectedTab: $viewModel.state.selectedTab)
           .shadow(color: Color.Border.tertiary, radius: 10, x: 0, y: 0)
       }
     }
     .edgesIgnoringSafeArea(.bottom)
-    .onAppear {
-      Task {
-        let repository = KeywordRepositoryImpl(networkService: NetworkService())
-        do {
-          hotKeywords = try await repository.getHotKeywords()
-          mimCategories = try await repository.getMimCategorys()
-          print("hotKeywords = \(hotKeywords)")
-          print("mimCategories = \(mimCategories)")
-        } catch(let error) {
-          print("error = \(error )")
-        }
-      }
-    }
   }
 }
 
@@ -115,5 +100,5 @@ struct TabItemView: View {
 
 
 #Preview {
-  MainTabView(userDetail: UserDetail.mock)
+  MainTabView(viewModel: MainTabViewModel(router: MainTabRouter(UINavigationController(), userDetail: UserDetail.mock)))
 }

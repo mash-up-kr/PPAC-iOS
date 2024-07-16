@@ -14,15 +14,20 @@ import Kingfisher
 struct RecentlyMemeListView: View {
   @State var memeDetailList: [MemeDetail]
   var body: some View {
-    memeDetailList.count > 0
-    ? memeListView
-    : emptyView
-  }
-  
-  var memeListView: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,
                      title: "최근 본 밈")
+      if memeDetailList.count > 0 {
+        memeListView
+      } else {
+        emptyView
+      }
+    }
+  }
+  
+  
+  var memeListView: some View {
+    VStack {
       HorizontalMimScrollView<MemeDetail, MemeSimpleItemView>(items: $memeDetailList)
         .frame(height: 120)
     }
