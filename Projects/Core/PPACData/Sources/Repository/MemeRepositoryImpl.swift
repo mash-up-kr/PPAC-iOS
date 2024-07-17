@@ -38,6 +38,18 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
+  public func getSearchKeywordMemeList(keyword: String) async throws -> [MemeDetail] {
+    let endpoint = MemeEndpoint.getSearchKeywordMemeList(keyword: keyword)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeWithPaginationResponseDTO>.self)
+    switch result {
+    case .success(let data):
+      guard let memeResponseDTOList = data.data?.memeList else { throw NetworkError.dataDecodingError }
+      return memeResponseDTOList.map { $0.toModel() }
+    case .failure(let error):
+      throw error
+    }
+  }
+  
   public func getMemeDetail(memeId: String) async throws -> MemeDetail {
     let endpoint = MemeEndpoint.meme(memeId: memeId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeResponseDTO>.self)

@@ -1,5 +1,5 @@
 //
-//  HorizontalMimScrollView.swift
+//  HorizontalMememScrollView.swift
 //  DesignSystem
 //
 //  Created by 리나 on 2024/06/29.
@@ -8,14 +8,14 @@
 import SwiftUI
 import ResourceKit
 
-public protocol HorizontalMimItemProtocol: Hashable { }
+public protocol HorizontalMemeItemProtocol: Hashable { }
 
-public protocol HorizontalMimItemViewProtocol: View {
-  associatedtype Item: HorizontalMimItemProtocol
+public protocol HorizontalMemeItemViewProtocol: View {
+  associatedtype Item: HorizontalMemeItemProtocol
   init(item: Item)
 }
 
-public struct HorizontalMimScrollView<Item: HorizontalMimItemProtocol, ItemView: HorizontalMimItemViewProtocol>: View where ItemView.Item == Item {
+public struct HorizontalMemeScrollView<Item: HorizontalMemeItemProtocol, ItemView: HorizontalMemeItemViewProtocol>: View where ItemView.Item == Item {
   @Binding public var items: [Item]
   private var itemClickHandler: ((Item) -> ())?
   public init(items: Binding<[Item]>, itemClickHandler: ((Item) -> ())? = nil) {

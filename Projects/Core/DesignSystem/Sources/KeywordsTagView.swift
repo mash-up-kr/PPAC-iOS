@@ -1,5 +1,5 @@
 //
-//  CategoryTagView.swift
+//  KeywordsTagView.swift
 //  DesignSystem
 //
 //  Created by 리나 on 2024/06/29.
@@ -7,20 +7,23 @@
 
 import SwiftUI
 import ResourceKit
+import PPACModels
 
 // thanks to NamS
-public struct CategoryTagView: View {
-  @State public var categories: [String]
+public struct KeywordsTagView: View {
+  @State public var keywords: [String]
+  var onClickHandler: ((String) -> ())?
 
-  public init(categories: [String]) {
-    self.categories = categories
+  public init(keywords: [String], onClickHandler: ((String) -> ())?) {
+    self.keywords = keywords
+    self.onClickHandler = onClickHandler
   }
   
   public var body: some View {
     ScrollView {
       CategoryTagLayout(verticalSpacing: 8, horizontalSpacing: 8) {
-        ForEach(categories, id: \.self) { category in
-          Text(category)
+        ForEach(keywords, id: \.self) { keyword in
+          Text(keyword)
             .font(Font.Body.Medium.medium)
             .foregroundColor(Color.Text.primary)
             .padding(.horizontal, 16)
@@ -28,14 +31,17 @@ public struct CategoryTagView: View {
             .background(
               Capsule().foregroundStyle(Color.Background.assistive)
             )
+            .onTapGesture {
+              onClickHandler?(keyword)
+            }
         }
       }
     }
     .onAppear {
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-        let cacheValue = categories
-        categories = []
-        categories = cacheValue
+        let cacheValue = keywords
+        keywords = []
+        keywords = cacheValue
       }
     }
   }

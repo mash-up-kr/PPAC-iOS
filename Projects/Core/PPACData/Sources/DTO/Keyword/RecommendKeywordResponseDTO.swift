@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import PPACModels
 
 struct RecommendKeywordResponseDTO: Decodable {
   let category: String

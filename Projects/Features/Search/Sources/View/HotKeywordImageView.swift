@@ -11,7 +11,7 @@ import PPACModels
 import DesignSystem
 import ResourceKit
 
-struct HotKeywordImageView: View, HorizontalMimItemViewProtocol {
+struct HotKeywordImageView: View, HorizontalMemeItemViewProtocol {
   typealias Item = HotKeyword
   
   let hotKeyword: HotKeyword

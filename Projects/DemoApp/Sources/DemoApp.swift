@@ -9,19 +9,24 @@
 import SwiftUI
 import Home
 import MemeDetail
+import Search
+import PPACModels
 
 @main
 struct DemoApp: App {
 	
 	enum Views: String, CaseIterable, Identifiable {
-		case MemeDetail
+//		case MemeDetail
+		case SearchResult
 		
 		var id: String { self.rawValue }
 		
 		var view: some View {
 			switch self {
-			case .MemeDetail:
-				getMemeDetailView()
+//			case .MemeDetail:
+//				getMemeDetailView()
+				case .SearchResult:
+					getSearchResultView()
 			}
 		}
 	}
@@ -44,13 +49,23 @@ struct DemoApp: App {
 }
 
 private extension DemoApp.Views {
-	func getMemeDetailView() -> some View {
-		return MemeDetailView(
-			viewModel: MemeDetailViewModel(
-				meme: .mock,
-				router: nil,
-				copyImageUseCase: CopyImageUseCaseImpl(),
-				postLikeUseCase: PostLikeUseCaseImpl()
+//	func getMemeDetailView() -> some View {
+//		return MemeDetailView(
+//			viewModel: MemeDetailViewModel(
+//				meme: .mock,
+//				router: nil,
+//				copyImageUseCase: CopyImageUseCaseImpl(),
+//				postLikeUseCase: PostLikeUseCaseImpl()
+//			)
+//		)
+//	}
+	
+	func getSearchResultView() -> some View {
+		return SearchResultView(
+			viewModel: SearchResultViewModel(
+				keyword: "무한도전",
+				memeList: [],
+				router: nil
 			)
 		)
 	}
