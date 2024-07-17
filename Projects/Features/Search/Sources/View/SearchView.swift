@@ -75,11 +75,11 @@ public struct SearchView: View {
       HorizontalMemeScrollView<HotKeyword, HotKeywordImageView>(items: $viewModel.state.hotKeywords) { hotKeyword in
         viewModel.dispatch(type: .hotKeywordTapped(keyword: hotKeyword.title))
       }
-        .frame(height: 90)
+      .frame(height: 90)
     }
     .padding(.bottom, 40)
   }
-
+  
   private var memeCategoriesViews: some View {
     VStack(alignment: .leading, spacing: 0) {
       HStack(spacing: 8) {
@@ -92,7 +92,7 @@ public struct SearchView: View {
           .font(Font.Heading.Small.semiBold)
           .foregroundColor(Color.Text.primary)
         
-       Spacer()
+        Spacer()
       }
       .padding(.horizontal, 20)
       .padding(.vertical, 18)
