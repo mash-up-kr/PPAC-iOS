@@ -43,11 +43,10 @@ public final class MainTabRouter: Router, ObservableObject {
   }
   
   public func start() {
-    setupTabChangeListener()
+    bindTabChanged()
   }
   
   public func switchToTab(_ tab: MainTab) {
-    print("switchToTab: \(tab)")
     childRouters = []
     switch tab {
     case .recommend:
@@ -64,9 +63,9 @@ public final class MainTabRouter: Router, ObservableObject {
     }
   }
   
-  private func setupTabChangeListener() {
+  private func bindTabChanged() {
     $selectedTab
-//      .removeDuplicates()
+      .removeDuplicates()
       .sink { [weak self] newTab in
         self?.switchToTab(newTab)
       }
