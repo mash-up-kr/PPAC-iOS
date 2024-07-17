@@ -10,7 +10,9 @@ import SwiftUI
 import Home
 import MemeDetail
 import Search
-import PPACModels
+import PPACDomain
+import PPACNetwork
+import PPACData
 
 @main
 struct DemoApp: App {
@@ -63,9 +65,11 @@ private extension DemoApp.Views {
 	func getSearchResultView() -> some View {
 		return SearchResultView(
 			viewModel: SearchResultViewModel(
-				keyword: "무한도전",
-				memeList: [],
-				router: nil
+				keyword: "긁",
+				router: nil,
+				searchKeywordUseCase: SearchKeywordUseCaseImpl(
+					repository: MemeRepositoryImpl(networkservice: NetworkService())
+				), copyImageUseCase: CopyImageUseCaseImpl()
 			)
 		)
 	}

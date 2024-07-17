@@ -35,7 +35,6 @@ let project = Project.configure(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
-                .Core.PPACModels,
                 .ThirdParty.Lottie,
                 .ThirdParty.Dependency,
             ],

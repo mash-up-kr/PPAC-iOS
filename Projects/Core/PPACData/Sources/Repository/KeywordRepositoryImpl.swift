@@ -23,11 +23,8 @@ public final class KeywordRepositoryImpl: KeywordRepository {
   // MARK: - Methods
   
   public func getHotKeywords() async throws -> [HotKeyword] {
-    let result = await self.networkService
-      .request(
-        KeywordEndPoint.getTopKeywords,
-        dataType: BaseDTO<[TopKeywordResponseDTO]>.self
-      )
+    let endPoint = KeywordEndPoint.getTopKeywords
+    let result = await self.networkService.request(endPoint, dataType: BaseDTO<[TopKeywordResponseDTO]>.self)
     switch result {
     case .success(let data):
       guard let hotKeywordData = data.data else { throw NetworkError.dataDecodingError }
@@ -40,11 +37,8 @@ public final class KeywordRepositoryImpl: KeywordRepository {
   }
   
   public func getMemeCategorys()  async throws -> [MemeCategory] {
-    let result = await self.networkService
-      .request(
-        KeywordEndPoint.getRecommendKeywords,
-        dataType: BaseDTO<[RecommendKeywordResponseDTO]>.self
-      )
+    let endPoint = KeywordEndPoint.getRecommendKeywords
+    let result = await self.networkService.request(endPoint, dataType: BaseDTO<[RecommendKeywordResponseDTO]>.self)
     switch result {
     case .success(let data):
       guard let memeCategoryData = data.data else { throw NetworkError.dataDecodingError }

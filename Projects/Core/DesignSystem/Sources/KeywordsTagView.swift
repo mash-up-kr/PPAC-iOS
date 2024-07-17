@@ -7,16 +7,15 @@
 
 import SwiftUI
 import ResourceKit
-import PPACModels
 
 // thanks to NamS
 public struct KeywordsTagView: View {
   @State public var keywords: [String]
-  var onClickHandler: ((String) -> ())?
+  var onTapHandler: ((String) -> ())?
 
-  public init(keywords: [String], onClickHandler: ((String) -> ())?) {
+  public init(keywords: [String], onTapHandler: ((String) -> ())?) {
     self.keywords = keywords
-    self.onClickHandler = onClickHandler
+    self.onTapHandler = onTapHandler
   }
   
   public var body: some View {
@@ -32,12 +31,13 @@ public struct KeywordsTagView: View {
               Capsule().foregroundStyle(Color.Background.assistive)
             )
             .onTapGesture {
-              onClickHandler?(keyword)
+              onTapHandler?(keyword)
             }
         }
       }
     }
     .onAppear {
+      // tagView 사이즈를 잰 후 다시 그리기 위함
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
         let cacheValue = keywords
         keywords = []

@@ -8,6 +8,7 @@
 import Foundation
 
 import PPACNetwork
+import PPACUtil
 
 public enum MemeEndpoint: Requestable {
   case recommendMeme(size: Int)
@@ -44,7 +45,7 @@ public enum MemeEndpoint: Requestable {
   public var headers: [String : String]? {
     switch self {
     case .getSearchKeywordMemeList:
-      return ["x-device-id": "1111-2222-3333-4444"]
+      return ["x-device-id": UserInfo.shared.deviceId]
     default:
       return nil
     }

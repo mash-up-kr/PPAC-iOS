@@ -11,16 +11,16 @@ import PPACModels
 public struct MemeListView: View {
   @Binding var memeDetailList: [MemeDetail]
   private let columns = Array(
-    repeating: GridItem(.flexible(),
-                        spacing: 12,
-                        alignment: .center)
-    , count: 2
+    repeating: GridItem(
+      .flexible(),
+      spacing: 12,
+      alignment: .center
+    ), count: 2
   )
   private let memeClickHandler: ((MemeDetail) -> ())?
   private let memeCopyHandler: ((MemeDetail) -> ())?
   
   public init(
-    
     memeDetailList: Binding<[MemeDetail]>,
     memeClickHandler: ((MemeDetail) -> ())? = nil,
     memeCopyHandler: ((MemeDetail) -> ())? = nil

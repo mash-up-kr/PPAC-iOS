@@ -7,17 +7,20 @@
 
 import SwiftUI
 import ResourceKit
-import PPACModels
 
 public struct MemeCategoryView: View {
   public let category: String
   public let keywords: [String]
-  public let onClickHandler: ((String) -> ())?
+  public let onTapHandler: ((String) -> ())?
   
-  public init(category: String, keywords: [String], onClickHandler: ((String) -> ())?) {
+  public init(
+    category: String,
+    keywords: [String],
+    onTapHandler: ((String) -> ())?
+  ) {
     self.category = category
     self.keywords = keywords
-    self.onClickHandler = onClickHandler
+    self.onTapHandler = onTapHandler
   }
   
   public var body: some View {
@@ -33,7 +36,7 @@ public struct MemeCategoryView: View {
       .padding(.bottom, 16)
       .padding(.horizontal, 20)
       
-      KeywordsTagView(keywords: keywords, onClickHandler: onClickHandler)
+      KeywordsTagView(keywords: keywords, onTapHandler: onTapHandler)
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
     }
