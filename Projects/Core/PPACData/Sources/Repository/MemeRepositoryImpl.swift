@@ -24,8 +24,8 @@ public class MemeRepositoryImpl: MemeRepository {
   
   // MARK: - Methods
   
-  public func getRecommendMemes(size: Int) async throws -> [MemeDetail] {
-    let endpoint = MemeEndpoint.recommendMeme(size: size)
+  public func getRecommendMemes(size: Int, deviceId: String) async throws -> [MemeDetail] {
+    let endpoint = MemeEndpoint.recommendMeme(size: size, deviceId: deviceId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<[MemeResponseDTO]>.self)
     switch result {
     case .success(let data):

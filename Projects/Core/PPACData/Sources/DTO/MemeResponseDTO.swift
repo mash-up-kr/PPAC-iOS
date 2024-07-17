@@ -26,9 +26,10 @@ struct MemeWithPaginationResponseDTO: Decodable {
 struct MemeResponseDTO: Decodable {
   let _id: String
   let title: String
-  let keywordIds: [String]
+  let keywords: [MemeKeywordResponseDTO]
   let image: String
   let reaction: Int
+  let watch: Int
   let source: String
   let isTodayMeme: Bool
   let isDeleted: Bool?
@@ -39,9 +40,10 @@ struct MemeResponseDTO: Decodable {
   public init(
     _id: String,
     title: String,
-    keywordIds: [String],
+    keywords: [MemeKeywordResponseDTO],
     image: String,
     reaction: Int,
+    watch: Int,
     source: String,
     isTodayMeme: Bool,
     isDeleted: Bool?,
@@ -51,9 +53,10 @@ struct MemeResponseDTO: Decodable {
   ) {
     self._id = _id
     self.title = title
-    self.keywordIds = keywordIds
+    self.keywords = keywords
     self.image = image
     self.reaction = reaction
+    self.watch = watch
     self.source = source
     self.isTodayMeme = isTodayMeme
     self.isDeleted = isDeleted
@@ -63,13 +66,26 @@ struct MemeResponseDTO: Decodable {
   }
 }
 
+struct MemeKeywordResponseDTO: Decodable {
+  let _id: String
+  let name: String
+  
+  public init(
+    _id: String,
+    name: String
+  ) {
+    self._id = _id
+    self.name = name
+  }
+}
+
 extension MemeResponseDTO {
   
   func toModel() -> MemeDetail {
     return MemeDetail(
       id: self._id,
       title: self.title,
-      keywords: self.keywordIds,
+      keywords: self.keywords.map { $0.name },
       imageUrlString: self.image,
       source: self.source,
       isTodayMeme: self.isTodayMeme,

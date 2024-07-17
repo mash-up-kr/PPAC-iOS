@@ -7,8 +7,12 @@
 
 import UIKit
 import SwiftUI
+
 import PPACUtil
 import PPACModels
+import PPACDomain
+import PPACData
+import PPACNetwork
 import DesignSystem
 
 public final class RecommendRouter: Router {
@@ -22,9 +26,6 @@ public final class RecommendRouter: Router {
   public var childRouters: [any Router] = []
   private var selectedTab: Binding<MainTab>
   
-  let recommendMemes: [MemeDetail]
-  let user: UserDetail
-  
   // MARK: - Initializers
   
   public init(_ navigationController: UINavigationController, selectedTab: Binding<MainTab>) {
@@ -36,7 +37,23 @@ public final class RecommendRouter: Router {
   // MARK: - Methods
   
   public func start() {
-    let view = RecommendView().tabBar(selectedTab: selectedTab)
-    setRootView(view)
+    let networkService = NetworkService()
+    let memeRepository = MemeRepositoryImpl(networkservice: networkService)
+    let userRepository = UserRepositoryImpl(networkservice: networkService)
+    
+    let getRecommendMemesUseCase = GetRecommendMemesUseCaseImpl(
+      repository: memeRepository
+    )
+    let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
+    
+    self.pushView(
+      RecommendView(
+        RecommendViewModel(
+          router: self,
+          getRecommendMemesUseCase: getRecommendMemesUseCase,
+          getUserInfoUseCase: getUserInfoUseCase
+        )
+      )
+    )
   }
 }

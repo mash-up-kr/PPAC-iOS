@@ -21,7 +21,7 @@ final public class NetworkService: NetworkServiceable {
     let urlRequest = request.buildURLRequest(with: url)
     let (data, response): (Data, URLResponse)
     do {
-        (data, response) = try await URLSession.shared.data(for: urlRequest)
+      (data, response) = try await URLSession.shared.data(for: urlRequest)
     } catch {
       NetworkLogger.logError(.invalidResponse)
       return .failure(.invalidResponse)
@@ -37,11 +37,13 @@ final public class NetworkService: NetworkServiceable {
     switch httpResponse.statusCode {
     case 200..<300:
       let decoder = JSONDecoder()
-        if let decodedData = try? decoder.decode(T.self, from: data) {
+      do {
+        let decodedData = try decoder.decode(T.self, from: data)
         return .success(decodedData)
-      } else {
-        error = .dataDecodingError
+      } catch {
+        print("Decode fail reason: \(error)")
       }
+      error = .dataDecodingError
     case 400..<500:
       error = .clientError(statusCode: httpResponse.statusCode, message: String(data: data, encoding: .utf8))
     case 500..<600:
@@ -51,5 +53,13 @@ final public class NetworkService: NetworkServiceable {
     }
     NetworkLogger.logError(error)
     return .failure(error)
+  }
+  
+  private func printJson(data: Data) {
+    if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
+       let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
+       let prettyString = String(data: prettyData, encoding: .utf8) {
+      print("Response JSON:\n\(prettyString)")
+    }
   }
 }

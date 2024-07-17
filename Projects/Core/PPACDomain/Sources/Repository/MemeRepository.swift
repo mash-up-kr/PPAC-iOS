@@ -11,7 +11,7 @@ import PPACModels
 
 public protocol MemeRepository {
   
-  func getRecommendMemes(size: Int) async throws -> [MemeDetail]
+  func getRecommendMemes(size: Int, deviceId: String) async throws -> [MemeDetail]
   func getMemeDetail(memeId: String) async throws -> MemeDetail
   func bookmarkMeme(memeId: String) async throws
   func shareMeme(memeId: String) async throws

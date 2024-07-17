@@ -19,14 +19,6 @@ struct RecommendMemeImagesView: View {
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
   
-  init(
-    memes: [MemeDetail],
-    isTagHidden: Bool
-  ) {
-    self.memes = memes
-    self.isTagHidden = isTagHidden
-  }
-  
   public var body: some View {
     VStack(spacing: 0) {
       ScrollView(.horizontal) {
@@ -62,7 +54,7 @@ struct RecommendMemeImagesView: View {
       }
     }
     .onAppear {
-      self.currentViewingMeme = memes.first
+      self.currentViewingMeme = self.memes.first
     }
   }
 }
@@ -77,7 +69,8 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 4
+        reaction: 4, 
+        isFarmemed: false
       ),
       MemeDetail(
         id: "2",
@@ -86,7 +79,8 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 1
+        reaction: 1,
+        isFarmemed: false
       ),
       MemeDetail(
         id: "3",
@@ -95,7 +89,8 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 0
+        reaction: 0,
+        isFarmemed: false
       ),
       MemeDetail(
         id: "4",
@@ -104,7 +99,8 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 4
+        reaction: 4,
+        isFarmemed: false
       ),
       MemeDetail(
         id: "5",
@@ -113,8 +109,10 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 4
-      )],
+        reaction: 4,
+        isFarmemed: false
+      )
+    ],
     isTagHidden: false
   )
 }

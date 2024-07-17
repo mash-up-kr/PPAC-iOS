@@ -36,13 +36,13 @@ public enum UserEndpoint: Requestable {
   public var headers: [String : String]? {
     switch self {
     case .create(let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .userDetail(let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .savedMeme(let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     case .lastSeenMeme(let deviceId):
-      return ["deviceId": deviceId]
+      return ["x-device-id": deviceId]
     }
   }
   
