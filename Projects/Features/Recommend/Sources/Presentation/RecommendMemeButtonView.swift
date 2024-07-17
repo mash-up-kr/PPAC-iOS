@@ -10,7 +10,13 @@ import SwiftUI
 import ResourceKit
 import DesignSystem
 
+import Lottie
+
 struct RecommendMemeButtonView : View {
+  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
+  
+  @Binding var reactionCount: Int?
+  
   let reactionButtonTapped: () -> Void
   let copyButtonTapped: () -> Void
   let shareButtonTapped: () -> Void
@@ -18,7 +24,19 @@ struct RecommendMemeButtonView : View {
   
   public var body: some View  {
     HStack {
-      likeButton(reactionButtonTapped)
+      LikeButton(
+        reactionCount: $reactionCount,
+        didTapped: reactionButtonTapped
+      )
+      .overlay(content: {
+        LottieView(animation: AnimationAsset.kkEffect.animation)
+          .playbackMode(playbackMode)
+          .animationDidFinish { _ in
+            playbackMode = .paused(at: .progress(100))
+          }
+          .offset(y: -50)
+      })
+      
       copyButton(copyButtonTapped)
       shareButton(shareButtonTapped)
       saveButton(saveButtonTapped)
@@ -35,22 +53,6 @@ struct RecommendMemeButtonView : View {
         endPoint: .bottom
       )
     )
-  }
-}
-
-func likeButton(_ likeAction: @escaping () -> Void) -> some View {
-  Button(action: likeAction) {
-    RoundedRectangle(cornerRadius: 40)
-      .foregroundStyle(.white)
-      .frame(width: 156 ,height: 50)
-      .overlay {
-        HStack {
-          ResourceKitAsset.Icon.ㅋ.swiftUIImage
-          Text("개웃겨")
-            .font(Font.Family2.outLine)
-            .foregroundStyle(Color.Icon.primary)
-        }
-      }
   }
 }
 
@@ -82,10 +84,13 @@ func saveButton(_ saveAction: @escaping () -> Void) -> some View {
 }
 
 #Preview {
-  RecommendMemeButtonView(
+  @State var count: Int? = 1
+  
+  return RecommendMemeButtonView(
+    reactionCount: $count,
     reactionButtonTapped: { print("reaction~~") },
-    copyButtonTapped: {print("copy~~")},
-    shareButtonTapped: {print("share~~")},
-    saveButtonTapped: {print("save!!")}
+    copyButtonTapped: { print("copy~~") },
+    shareButtonTapped: { print("share~~") },
+    saveButtonTapped: { print("save!!") }
   )
 }

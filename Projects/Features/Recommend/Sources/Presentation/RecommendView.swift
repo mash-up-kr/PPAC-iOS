@@ -22,6 +22,7 @@ public struct RecommendView: View {
   @State private var buttonHeight: CGFloat = 0
   
   @State private var currentViewingMemeId: String?
+  @State private var currentViewingMemeReaction: Int?
   
   public init(
     _ viewModel: RecommendViewModel
@@ -45,6 +46,7 @@ public struct RecommendView: View {
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
               currentViewingMemeId: $currentViewingMemeId,
+              currentViewingMemeReaction: $currentViewingMemeReaction,
               memes: viewModel.state.recommendMemes,
               isTagHidden: isOverlapView
             )
@@ -61,6 +63,7 @@ public struct RecommendView: View {
           Spacer()
           
           RecommendMemeButtonView(
+            reactionCount: $currentViewingMemeReaction,
             reactionButtonTapped: {
               viewModel.dispatch(
                 type: .likeButtonTapped(memeId: currentViewingMemeId)

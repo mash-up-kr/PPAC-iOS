@@ -17,6 +17,7 @@ struct RecommendMemeImagesView: View {
   @State private var currentViewingMeme: MemeDetail?
   
   @Binding var currentViewingMemeId: String?
+  @Binding var currentViewingMemeReaction: Int?
   
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
@@ -53,6 +54,7 @@ struct RecommendMemeImagesView: View {
       .onChange(of: currentViewingMeme) { oldValue, newValue in
         if let newValue {
           self.currentViewingMemeId = newValue.id
+          self.currentViewingMemeReaction = newValue.reaction
         }
       }
       
@@ -63,6 +65,7 @@ struct RecommendMemeImagesView: View {
     .onAppear {
       self.currentViewingMeme = self.memes.first
       self.currentViewingMemeId = self.currentViewingMeme?.id
+      self.currentViewingMemeReaction = self.currentViewingMeme?.reaction
     }
   }
 }
@@ -70,6 +73,7 @@ struct RecommendMemeImagesView: View {
 #Preview {
   RecommendMemeImagesView(
     currentViewingMemeId: .constant("668a44950289555e368174a6"),
+    currentViewingMemeReaction: .constant(0),
     memes: [
       MemeDetail(
         id: "668a44950289555e368174a6",
