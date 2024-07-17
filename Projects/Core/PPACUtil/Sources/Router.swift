@@ -41,7 +41,7 @@ public extension Router {
         navigationController.dismiss(animated: true)
     }
     
-    func pushView<V: View>(_ view: V, animated: Bool = true) {
+    func pushView<V: View>(_ view: V, animated: Bool = false) {
         let viewController = UIHostingController(rootView: view)
         navigationController.pushViewController(viewController, animated: animated)
     }
@@ -57,4 +57,9 @@ public extension Router {
         viewController.modalPresentationStyle = .fullScreen
         navigationController.present(viewController, animated: animated)
     }
+  
+  func setRootView<V: View>(_ view: V) {
+    let viewController = UIHostingController(rootView: view)
+    navigationController.viewControllers = [viewController]
+  }
 }
