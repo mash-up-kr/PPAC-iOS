@@ -48,5 +48,6 @@ struct SpeechBalloonView: View {
 }
 
 #Preview {
-  MyPageCharacterView(level: .level3)
+  //@State var level: MemeLevelType = .level3
+  return MyPageCharacterView(level: .level3)
 }

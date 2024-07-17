@@ -21,8 +21,9 @@ public struct MyPageView: View {
     ScrollView {
       levelView
       divider
-      RecentlyMemeListView(memeDetailList: viewModel.state.lastSeenMemeList)
-      SavedMemeListView(memeDetailList: viewModel.state.savedMemeList)
+      RecentlyMemeListView(memeDetailList: $viewModel.state.lastSeenMemeList)
+      SavedMemeListView(memeDetailList: $viewModel.state.savedMemeList)
+      Spacer(minLength: 70)
     }
     .background {
       LinearGradient(gradient: Gradient(colors: [Color.Background.brandassistive, Color.Background.white]),
@@ -39,7 +40,8 @@ public struct MyPageView: View {
       levelTitleTextView
       LevelProgressView(level: viewModel.state.memeLevel,
                         conditionCount: viewModel.state.conditionCount)
-      MemeLevelConditionView(conditionCount: viewModel.state.conditionCount)
+      MemeLevelConditionView(level: viewModel.state.memeLevel,
+                             conditionCount: viewModel.state.conditionCount)
     }
   }
   

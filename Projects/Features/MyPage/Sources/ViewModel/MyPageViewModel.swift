@@ -73,7 +73,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   }
   
   private func fetchUserMemes() {
-    Task {
+    Task { 
       do {
         let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
         let savedMemeList = try await self.getSavedMemeUseCase.execute()

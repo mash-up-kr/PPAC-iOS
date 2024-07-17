@@ -74,6 +74,7 @@ struct MemeItemInfoView: View {
     HStack {
       VStack(alignment: .leading, spacing: 6) {
         Text(memeName)
+          .font(Font.Body.Medium.medium)
           .lineLimit(2)
         if reaction > 0 {
           memeReactionView

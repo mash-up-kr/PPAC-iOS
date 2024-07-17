@@ -12,7 +12,7 @@ import PPACModels
 import Kingfisher
 
 struct RecentlyMemeListView: View {
-  @State var memeDetailList: [MemeDetail]
+  @Binding var memeDetailList: [MemeDetail]
   var body: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,
@@ -56,7 +56,7 @@ struct MemeSimpleItemView: View, HorizontalMimItemViewProtocol {
   }
 }
 
-#Preview {
-  let memeDetailList: [MemeDetail] = Array(repeating: MemeDetail.mock, count: 10)
-  return RecentlyMemeListView(memeDetailList: memeDetailList)
-}
+//#Preview {
+//  @State var memeDetailList: [MemeDetail] = Array(repeating: MemeDetail.mock, count: 10)
+//  return RecentlyMemeListView(memeDetailList: memeDetailList)
+//}

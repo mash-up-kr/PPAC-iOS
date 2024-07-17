@@ -9,12 +9,13 @@ import SwiftUI
 import ResourceKit
 
 struct MemeLevelConditionView: View {
+  let level: MemeLevelType
   let conditionCount: Int
   
   var body: some View {
     VStack {
       MemeLevelConditionInfoView(conditionCount: conditionCount)
-      MemeLevelConditionCheckView(memeLevel: .level3)
+      MemeLevelConditionCheckView(memeLevel: level)
         .offset(x: 0, y: -10)
     }
     .padding(.top, 16)
@@ -48,6 +49,6 @@ struct MemeLevelConditionView: View {
 
 
 #Preview {
-  MemeLevelConditionView(conditionCount: 10)
+  MemeLevelConditionView(level: .level3,conditionCount: 10)
   //MemeLevelConditionView(conditionCount: 10)
 }

@@ -12,7 +12,7 @@ import PPACModels
 
 
 struct SavedMemeListView: View {
-  @State var memeDetailList: [MemeDetail]
+  @Binding var memeDetailList: [MemeDetail]
   var body: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
@@ -27,8 +27,6 @@ struct SavedMemeListView: View {
   
   var memeListView: some View {
     VStack {
-      ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
-                     title: "나의 파밈함")
       MemeListView(memeDetailList: memeDetailList)
         .padding(.horizontal, 20)
     }
