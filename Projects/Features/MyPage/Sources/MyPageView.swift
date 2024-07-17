@@ -30,9 +30,12 @@ public struct MyPageView: View {
       Spacer(minLength: 70)
     }
     .background {
-      LinearGradient(gradient: Gradient(colors: [Color.Background.brandassistive, Color.Background.white]),
-                                  startPoint: .top, endPoint: .bottom)
-      
+      LinearGradient(
+        gradient: Gradient(
+          colors: [Color.Background.brandassistive, Color.Background.white]
+        ),
+        startPoint: .top, endPoint: .bottom
+      )
     }
     .edgesIgnoringSafeArea(.all)
   }
@@ -48,7 +51,6 @@ public struct MyPageView: View {
                              conditionCount: viewModel.state.conditionCount)
     }
   }
-  
   
   var settingHeaderView: some View {
     HStack {

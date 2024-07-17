@@ -15,7 +15,7 @@ struct MyPageCharacterView: View {
     SpeechBalloonView(description: level.speechBalloonText)
     level.levelCharacterImage
       .resizable()
-      .frame(width: 190, height: 190, alignment: .center)
+      .frame(width: 225, height: 200, alignment: .center)
   }
 }
 
@@ -48,6 +48,5 @@ struct SpeechBalloonView: View {
 }
 
 #Preview {
-  //@State var level: MemeLevelType = .level3
   return MyPageCharacterView(level: .level3)
 }
