@@ -9,28 +9,31 @@ import UIKit
 import SwiftUI
 import PPACUtil
 import PPACModels
+import DesignSystem
 
-final class RecommendRouter: Router {
+public final class RecommendRouter: Router {
   
   // MARK: - Properties
   
-  var delegate: (any RouterDelegate)?
+  public var delegate: (any RouterDelegate)?
   
-  var navigationController: UINavigationController
+  public var navigationController: UINavigationController
   
-  var childRouters: [any Router] = []
+  public var childRouters: [any Router] = []
+  private var selectedTab: Binding<MainTab>
   
   // MARK: - Initializers
   
-  init(_ navigationController: UINavigationController) {
+  public init(_ navigationController: UINavigationController, selectedTab: Binding<MainTab>) {
     navigationController.isNavigationBarHidden = true
     self.navigationController = navigationController
+    self.selectedTab = selectedTab
   }
   
   // MARK: - Methods
   
-  func start() {
-    self.pushView(EmptyView())
+  public func start() {
+    let view = RecommendView().tabBar(selectedTab: selectedTab)
+    setRootView(view)
   }
-  
 }

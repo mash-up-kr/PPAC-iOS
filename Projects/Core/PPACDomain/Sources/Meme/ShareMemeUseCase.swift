@@ -10,7 +10,7 @@ import Foundation
 import PPACModels
 
 public protocol ShareMemeUseCase {
-    func execute(memeId: String, deviceId: String) async throws
+    func execute(memeId: String) async throws
 }
 
 public class ShareMemeUseCaseImpl: ShareMemeUseCase {
@@ -20,7 +20,7 @@ public class ShareMemeUseCaseImpl: ShareMemeUseCase {
         self.repository = repository
     }
 
-    public func execute(memeId: String, deviceId: String) async throws {
-        try await repository.shareMeme(memeId: memeId, deviceId: deviceId)
+    public func execute(memeId: String) async throws {
+        try await repository.shareMeme(memeId: memeId)
     }
 }

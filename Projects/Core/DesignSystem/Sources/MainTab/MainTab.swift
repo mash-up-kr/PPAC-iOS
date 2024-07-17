@@ -8,14 +8,14 @@
 import SwiftUI
 import ResourceKit
 
-enum MainTab: String, CaseIterable, Identifiable {
+public enum MainTab: String, CaseIterable, Identifiable {
   case recommend
   case search
   case mypage
   
-  var id: String { rawValue }
+  public var id: String { rawValue }
   
-  var image: Image {
+  public var image: Image {
     switch self {
     case .recommend:
       return ResourceKitAsset.Icon.recommendInactive.swiftUIImage
@@ -26,18 +26,7 @@ enum MainTab: String, CaseIterable, Identifiable {
     }
   }
   
-  var uiImage: UIImage {
-    switch self {
-    case .recommend:
-      return ResourceKitAsset.Icon.recommendInactive.image
-    case .search:
-      return ResourceKitAsset.Icon.discoverInactive.image
-    case .mypage:
-      return ResourceKitAsset.Icon.myInactive.image
-    }
-  }
-  
-  var selectedImage: Image {
+  public var selectedImage: Image {
     switch self {
     case .recommend:
       return ResourceKitAsset.Icon.recommendActive.swiftUIImage
@@ -48,18 +37,7 @@ enum MainTab: String, CaseIterable, Identifiable {
     }
   }
   
-  var selectedUIImage: UIImage {
-    switch self {
-    case .recommend:
-      return ResourceKitAsset.Icon.recommendActive.image
-    case .search:
-      return ResourceKitAsset.Icon.discoverActive.image
-    case .mypage:
-      return ResourceKitAsset.Icon.myActive.image
-    }
-  }
-  
-  var title: String {
+  public var title: String {
     switch self {
     case .recommend:
       return "추천"

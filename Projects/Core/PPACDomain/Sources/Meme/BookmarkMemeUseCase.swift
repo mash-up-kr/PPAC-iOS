@@ -10,7 +10,7 @@ import Foundation
 import PPACModels
 
 public protocol BookmarkMemeUseCase {
-    func execute(memeId: String, deviceId: String) async throws
+    func execute(memeId: String) async throws
 }
 
 public class BookmarkMemeUseCaseImpl: BookmarkMemeUseCase {
@@ -20,7 +20,7 @@ public class BookmarkMemeUseCaseImpl: BookmarkMemeUseCase {
         self.repository = repository
     }
 
-    public func execute(memeId: String, deviceId: String) async throws {
-        try await repository.bookmarkMeme(memeId: memeId, deviceId: deviceId)
+    public func execute(memeId: String) async throws {
+        try await repository.bookmarkMeme(memeId: memeId)
     }
 }

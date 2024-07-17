@@ -92,7 +92,7 @@ private extension MemeDetailViewModel {
   @MainActor
   func postReaction() async {
     do {
-      try await reactToMemeUseCase.execute(memeId: state.meme.id, deviceId: "qwer1234")
+      try await reactToMemeUseCase.execute(memeId: state.meme.id)
       self.state.meme.reaction += 1
       print("reaction success")
     } catch {
@@ -121,7 +121,7 @@ private extension MemeDetailViewModel {
     if state.meme.isFarmemed { return }
     
     do {
-      try await bookmarkMemeUseCase.execute(memeId: state.meme.id, deviceId: "qwer1234")
+      try await bookmarkMemeUseCase.execute(memeId: state.meme.id)
       state.meme.isFarmemed = true
       print("isFarmemed: \(state.meme.isFarmemed)")
     } catch {
