@@ -15,27 +15,30 @@ import PPACNetwork
 import PPACData
 
 import MemeDetail
+import DesignSystem
 
 public final class MyPageRouter: Router, MyPageRouting {
+  
   // MARK: - Properties
   public var delegate: (any RouterDelegate)?
   public var navigationController: UINavigationController
-  
   public var childRouters: [any Router] = []
-  
+  private var selectedTab: Binding<MainTab>
   private let userDetail: UserDetail
   
-  
   // MARK: - Initializers
-  public init(navigationController: UINavigationController, userDetail: UserDetail) {
+  public init(
+    navigationController: UINavigationController,
+    selectedTab: Binding<MainTab>,
+    userDetail: UserDetail
+  ) {
     self.navigationController = navigationController
+    self.selectedTab = selectedTab
     self.userDetail = userDetail
-    
-    //self.navigationController = self.createNavigationController()
   }
   
   // MARK: - Methods
-  public func createNavigationController() -> UINavigationController {
+  public func start() { 
     let repository = UserRepositoryImpl(networkservice: NetworkService())
     
     let myPageView = MyPageView(
@@ -46,20 +49,18 @@ public final class MyPageRouter: Router, MyPageRouting {
         getLastSeenMemeUseCase: GetLastSeenMemeUseCaseImpl(userRepository: repository),
         getSavedMemeUseCase: GetSavedMemeUseCaseImpl(userRepository: repository)
       )
-    )
+    ).tabBar(selectedTab: selectedTab)
     
-    let viewController = UIHostingController(rootView: myPageView)
-    return UINavigationController(rootViewController: viewController)
+    self.setRootView(myPageView)
   }
-
-  public func start() { }
-  
-  public func showSettingView() { }
   
   public func showMemeDetail(memeDetail: MemeDetail) {
     let router = MemeDetailRouter(self.navigationController, meme: memeDetail)
     self.childRouters.append(router)
     router.start()
   }
+  
+  public func showSettingView() { }
+  
 }
 
