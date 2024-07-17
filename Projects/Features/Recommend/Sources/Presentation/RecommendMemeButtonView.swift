@@ -11,12 +11,17 @@ import ResourceKit
 import DesignSystem
 
 struct RecommendMemeButtonView : View {
+  let reactionButtonTapped: () -> Void
+  let copyButtonTapped: () -> Void
+  let shareButtonTapped: () -> Void
+  let saveButtonTapped: () -> Void
+  
   public var body: some View  {
     HStack {
-      likeButton
-      copyButton
-      shareButton
-      saveButton
+      likeButton(reactionButtonTapped)
+      copyButton(copyButtonTapped)
+      shareButton(shareButtonTapped)
+      saveButton(saveButtonTapped)
     }
     .padding(.vertical, 30)
     .padding(.horizontal, 32)
@@ -33,10 +38,8 @@ struct RecommendMemeButtonView : View {
   }
 }
 
-var likeButton: some View {
-  Button(action: {
-    print("i like it!")
-  }) {
+func likeButton(_ likeAction: @escaping () -> Void) -> some View {
+  Button(action: likeAction) {
     RoundedRectangle(cornerRadius: 40)
       .foregroundStyle(.white)
       .frame(width: 156 ,height: 50)
@@ -51,36 +54,38 @@ var likeButton: some View {
   }
 }
 
-var copyButton: some View {
+func copyButton(_ copyAction: @escaping () -> Void) -> some View {
   CircleButton(
     width: 50,
     height: 50,
-    image: ResourceKitAsset.Icon.copy.swiftUIImage
-  ) {
-    print("Copy~~")
-  }
+    image: ResourceKitAsset.Icon.copy.swiftUIImage,
+    action: copyAction
+  )
 }
 
-var shareButton: some View {
+func shareButton(_ shareAction: @escaping () -> Void) -> some View {
   CircleButton(
     width: 50,
     height: 50,
-    image: ResourceKitAsset.Icon.share.swiftUIImage
-  ) {
-    print("Share~")
-  }
+    image: ResourceKitAsset.Icon.share.swiftUIImage,
+    action: shareAction
+  )
 }
 
-var saveButton: some View {
+func saveButton(_ saveAction: @escaping () -> Void) -> some View {
   CircleButton(
     width: 50,
     height: 50,
-    image: ResourceKitAsset.Icon.stroke.swiftUIImage
-  ) {
-    print("Save~")
-  }
+    image: ResourceKitAsset.Icon.stroke.swiftUIImage,
+    action: saveAction
+  )
 }
 
 #Preview {
-  RecommendMemeButtonView()
+  RecommendMemeButtonView(
+    reactionButtonTapped: { print("reaction~~") },
+    copyButtonTapped: {print("copy~~")},
+    shareButtonTapped: {print("share~~")},
+    saveButtonTapped: {print("save!!")}
+  )
 }

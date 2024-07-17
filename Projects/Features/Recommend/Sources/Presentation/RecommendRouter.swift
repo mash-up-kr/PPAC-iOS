@@ -15,7 +15,7 @@ import PPACData
 import PPACNetwork
 import DesignSystem
 
-public final class RecommendRouter: Router {
+public final class RecommendRouter: Router, RecommendRouting {
   
   // MARK: - Properties
   
@@ -28,7 +28,10 @@ public final class RecommendRouter: Router {
   
   // MARK: - Initializers
   
-  public init(_ navigationController: UINavigationController, selectedTab: Binding<MainTab>) {
+  public init(
+    _ navigationController: UINavigationController,
+    selectedTab: Binding<MainTab>
+  ) {
     navigationController.isNavigationBarHidden = true
     self.navigationController = navigationController
     self.selectedTab = selectedTab
@@ -41,19 +44,28 @@ public final class RecommendRouter: Router {
     let memeRepository = MemeRepositoryImpl(networkservice: networkService)
     let userRepository = UserRepositoryImpl(networkservice: networkService)
     
-    let getRecommendMemesUseCase = GetRecommendMemesUseCaseImpl(
-      repository: memeRepository
-    )
+    let getRecommendMemesUseCase = GetRecommendMemesUseCaseImpl(repository: memeRepository)
     let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
+    let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
+    let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
+    let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
     
-    self.pushView(
-      RecommendView(
-        RecommendViewModel(
-          router: self,
-          getRecommendMemesUseCase: getRecommendMemesUseCase,
-          getUserInfoUseCase: getUserInfoUseCase
-        )
+    let recommendView = RecommendView(
+      RecommendViewModel(
+        router: self,
+        getRecommendMemesUseCase: getRecommendMemesUseCase,
+        getUserInfoUseCase: getUserInfoUseCase,
+        watchMemeUseCase: watchMemeUseCase,
+        reactToMemeUseCase: reactToMemeUseCase,
+        bookmarkMemeUseCase: bookmarkMemeUseCase
       )
     )
+    
+    setRootView(recommendView)
+  }
+  
+  public func showShareView(items: [Any]) {
+    let vc = UIActivityViewController(activityItems: items, applicationActivities: nil)
+    self.navigationController.present(vc, animated: true)
   }
 }

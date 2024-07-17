@@ -16,6 +16,8 @@ import PPACModels
 struct RecommendMemeImagesView: View {
   @State private var currentViewingMeme: MemeDetail?
   
+  @Binding var currentViewingMemeId: String?
+  
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
   
@@ -48,6 +50,11 @@ struct RecommendMemeImagesView: View {
       .contentMargins(.horizontal, 60.0)
       .padding(.top, 36)
       .padding(.bottom, 20)
+      .onChange(of: currentViewingMeme) { oldValue, newValue in
+        if let newValue {
+          self.currentViewingMemeId = newValue.id
+        }
+      }
       
       if let currentViewingMeme, isTagHidden == false {
         HashTagView(keywords: currentViewingMeme.keywords)
@@ -55,12 +62,14 @@ struct RecommendMemeImagesView: View {
     }
     .onAppear {
       self.currentViewingMeme = self.memes.first
+      self.currentViewingMemeId = self.currentViewingMeme?.id
     }
   }
 }
 
 #Preview {
   RecommendMemeImagesView(
+    currentViewingMemeId: .constant("668a44950289555e368174a6"),
     memes: [
       MemeDetail(
         id: "668a44950289555e368174a6",

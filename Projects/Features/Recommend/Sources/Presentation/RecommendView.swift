@@ -21,6 +21,8 @@ public struct RecommendView: View {
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
   
+  @State private var currentViewingMemeId: String?
+  
   public init(
     _ viewModel: RecommendViewModel
   ) {
@@ -42,6 +44,7 @@ public struct RecommendView: View {
           
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
+              currentViewingMemeId: $currentViewingMemeId,
               memes: viewModel.state.recommendMemes,
               isTagHidden: isOverlapView
             )
@@ -57,10 +60,31 @@ public struct RecommendView: View {
         VStack {
           Spacer()
           
-          RecommendMemeButtonView()
-            .onReadSize { size in
-              buttonHeight = size.height
+          RecommendMemeButtonView(
+            reactionButtonTapped: {
+              viewModel.dispatch(
+                type: .likeButtonTapped(memeId: currentViewingMemeId)
+              )
+            },
+            copyButtonTapped: {
+              viewModel.dispatch(
+                type: .copyButtonTapped(memeId: currentViewingMemeId)
+              )
+            },
+            shareButtonTapped : {
+              viewModel.dispatch(
+                type: .shareButtonTapped(memeId: currentViewingMemeId)
+              )
+            },
+            saveButtonTapped : {
+              viewModel.dispatch(
+                type: .farmemeButtonTapped(memeId: currentViewingMemeId)
+              )
             }
+          )
+          .onReadSize { size in
+            buttonHeight = size.height
+          }
         }
         .zIndex(2)
       }
@@ -90,13 +114,19 @@ public struct RecommendView: View {
     repository: memeRepository
   )
   let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
+  let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
+  let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
+  let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
   
   
   return RecommendView(
     RecommendViewModel(
       router: nil,
       getRecommendMemesUseCase: getRecommendMemesUseCase,
-      getUserInfoUseCase: getUserInfoUseCase
+      getUserInfoUseCase: getUserInfoUseCase,
+      watchMemeUseCase: watchMemeUseCase,
+      reactToMemeUseCase: reactToMemeUseCase,
+      bookmarkMemeUseCase: bookmarkMemeUseCase
     )
   )
 }
