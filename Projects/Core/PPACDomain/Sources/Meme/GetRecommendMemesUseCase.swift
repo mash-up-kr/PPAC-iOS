@@ -22,8 +22,6 @@ public class GetRecommendMemesUseCaseImpl: GetRecommendMemesUseCase {
   }
   
   public func execute(size: Int) async throws -> [MemeDetail] {
-    let deviceId = UserInfo.shared.deviceId
-    
-    return try await repository.getRecommendMemes(size: size, deviceId: deviceId)
+    return try await repository.getRecommendMemes(size: size)
   }
 }
