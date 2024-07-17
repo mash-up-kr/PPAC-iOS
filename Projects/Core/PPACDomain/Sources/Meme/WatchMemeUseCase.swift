@@ -10,7 +10,7 @@ import Foundation
 import PPACModels
 
 public protocol WatchMemeUseCase {
-    func execute(memeId: String, type: String, deviceId: String) async throws
+    func execute(memeId: String, type: String) async throws
 }
 
 public class WatchMemeUseCaseImpl: WatchMemeUseCase {
@@ -20,7 +20,7 @@ public class WatchMemeUseCaseImpl: WatchMemeUseCase {
         self.repository = repository
     }
 
-    public func execute(memeId: String, type: String, deviceId: String) async throws {
-        try await repository.watchMeme(memeId: memeId, type: type, deviceId: deviceId)
+    public func execute(memeId: String, type: String) async throws {
+        try await repository.watchMeme(memeId: memeId, type: type)
     }
 }

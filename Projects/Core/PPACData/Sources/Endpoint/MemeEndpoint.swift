@@ -18,10 +18,10 @@ public enum MemeEndpoint: Requestable {
   
   case recommendMeme(size: Int)
   case meme(memeId: String)
-  case bookmark(memeId: String, deviceId: String)
-  case share(memeId: String, deviceId: String)
-  case watch(memeId: String, type: String, deviceId: String)
-  case reaction(memeId: String, deviceId: String)
+  case bookmark(memeId: String)
+  case share(memeId: String)
+  case watch(memeId: String, type: String)
+  case reaction(memeId: String)
   
   public var url: String {
     return "https://ppac-server.run.goorm.io/api"
@@ -45,18 +45,7 @@ public enum MemeEndpoint: Requestable {
   }
   
   public var headers: [String : String]? {
-    switch self {
-    case .recommendMeme, .meme:
-      return nil
-    case .bookmark(_, let deviceId):
-      return ["x-device-id": deviceId]
-    case .share(_, let deviceId):
-      return ["x-device-id": deviceId]
-    case .watch(_, _, let deviceId):
-      return ["x-device-id": deviceId]
-    case .reaction(_, let deviceId):
-      return ["x-device-id": deviceId]
-    }
+    return nil
   }
   
   public var path: String? {
@@ -65,13 +54,13 @@ public enum MemeEndpoint: Requestable {
       return "/meme/recomment-memes"
     case .meme(let memeId):
       return "/meme/\(memeId)"
-    case .bookmark(let memeId, _):
+    case .bookmark(let memeId):
       return "/meme/\(memeId)/save"
-    case .share(let memeId, _):
+    case .share(let memeId):
       return "/meme/\(memeId)/share"
-    case .watch(let memeId, let type, _):
+    case .watch(let memeId, let type):
       return "/meme/\(memeId)/watch/\(type)"
-    case .reaction(let memeId, _):
+    case .reaction(let memeId):
       return "/meme/\(memeId)/reaction"
     }
   }
@@ -80,13 +69,13 @@ public enum MemeEndpoint: Requestable {
     switch self {
     case .recommendMeme(let size):
       return .query(["size": String(size)])
-    case .bookmark(_, _):
+    case .bookmark:
       return nil
-    case .share(_, _):
+    case .share:
       return nil
-    case .watch(_, _, _):
+    case .watch:
       return nil
-    case .reaction(_, _):
+    case .reaction:
       return nil
     case .meme(memeId: _):
       return nil

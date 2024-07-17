@@ -52,8 +52,8 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
-  public func bookmarkMeme(memeId: String, deviceId: String) async throws {
-      let endpoint = MemeEndpoint.bookmark(memeId: memeId, deviceId: deviceId)
+  public func bookmarkMeme(memeId: String) async throws {
+      let endpoint = MemeEndpoint.bookmark(memeId: memeId)
       let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
       switch result {
       case .success:
@@ -64,8 +64,8 @@ public class MemeRepositoryImpl: MemeRepository {
   }
 
   
-  public func shareMeme(memeId: String, deviceId: String) async throws {
-    let endpoint = MemeEndpoint.share(memeId: memeId, deviceId: deviceId)
+  public func shareMeme(memeId: String) async throws {
+    let endpoint = MemeEndpoint.share(memeId: memeId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
@@ -75,8 +75,8 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
-  public func watchMeme(memeId: String, type: String, deviceId: String) async throws {
-    let endpoint = MemeEndpoint.watch(memeId: memeId, type: type, deviceId: deviceId)
+  public func watchMeme(memeId: String, type: String) async throws {
+    let endpoint = MemeEndpoint.watch(memeId: memeId, type: type)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
@@ -86,8 +86,8 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
-  public func reactToMeme(memeId: String, deviceId: String) async throws {
-    let endpoint = MemeEndpoint.reaction(memeId: memeId, deviceId: deviceId)
+  public func reactToMeme(memeId: String) async throws {
+    let endpoint = MemeEndpoint.reaction(memeId: memeId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
