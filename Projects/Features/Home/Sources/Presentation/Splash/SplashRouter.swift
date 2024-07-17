@@ -44,7 +44,8 @@ public final class SplashRouter: Router, SplashRouting {
   }
   
   public func showMainTabView(userDetail: UserDetail) {
-    let mainTabRouter = MainTabRouter(navigationController: self.navigationController)
+    let mainTabRouter = MainTabRouter(navigationController: self.navigationController,
+                                      userDetail: userDetail)
     self.childRouters.append(mainTabRouter)
     mainTabRouter.start()
   }

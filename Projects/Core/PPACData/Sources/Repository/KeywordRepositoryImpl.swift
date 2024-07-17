@@ -45,7 +45,7 @@ public final class KeywordRepositoryImpl: KeywordRepository {
     case .success(let data):
       guard let mimCategoryData = data.data else { throw NetworkError.dataDecodingError }
       let mimCategorys = mimCategoryData
-        .compactMap { MimCategory(title: $0.category, categories: $0.keywords) }
+        .compactMap { MimCategory(title: $0.category, categories: $0.keywords.map {$0.name }) }
       return mimCategorys
     case .failure(let error):
       throw error

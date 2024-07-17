@@ -26,32 +26,35 @@ struct MemeWithPaginationResponseDTO: Decodable {
 struct MemeResponseDTO: Decodable {
   let _id: String
   let title: String
-  let keywordIds: [String]
+  let keywords: [KeywordResponseDTO]
   let image: String
   let reaction: Int
   let source: String
   let isTodayMeme: Bool
   let isDeleted: Bool?
-  let createdAt: String
+  let createdAt: String?
   let updatedAt: String
-  let isFarmemed: Bool?
+  let isSaved: Bool
+  let watch: Int
   
   public init(
     _id: String,
     title: String,
-    keywordIds: [String],
+    keywords: [KeywordResponseDTO],
     image: String,
     reaction: Int,
     source: String,
     isTodayMeme: Bool,
     isDeleted: Bool?,
-    createdAt: String,
+    createdAt: String?,
     updatedAt: String,
-    isFarmemed: Bool?
-  ) {
+    isSaved: Bool,
+    watch: Int
+  )
+  {
     self._id = _id
     self.title = title
-    self.keywordIds = keywordIds
+    self.keywords = keywords
     self.image = image
     self.reaction = reaction
     self.source = source
@@ -59,7 +62,8 @@ struct MemeResponseDTO: Decodable {
     self.isDeleted = isDeleted
     self.createdAt = createdAt
     self.updatedAt = updatedAt
-    self.isFarmemed = isFarmemed
+    self.isSaved = isSaved
+    self.watch = watch
   }
 }
 
@@ -69,12 +73,12 @@ extension MemeResponseDTO {
     return MemeDetail(
       id: self._id,
       title: self.title,
-      keywords: self.keywordIds,
+      keywords: self.keywords.map { $0.name },
       imageUrlString: self.image,
       source: self.source,
       isTodayMeme: self.isTodayMeme,
       reaction: self.reaction,
-      isFarmemed: self.isFarmemed ?? false
+      isFarmemed: self.isSaved 
     )
   }
 }

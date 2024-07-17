@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import ResourceKit
 
-public enum MemeLevelType: Int, CaseIterable, Identifiable {
+public enum MemeLevelType: Int, CaseIterable, Identifiable, Comparable {
   public var id: Int { rawValue }
   
   case level1 = 1
@@ -71,4 +71,9 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable {
       return ResourceKitAsset.Icon.level4Character.swiftUIImage
     }
   }
+  
+  // MARK: Comparable
+  public static func < (lhs: MemeLevelType, rhs: MemeLevelType) -> Bool {
+      return lhs.rawValue < rhs.rawValue
+    }
 }

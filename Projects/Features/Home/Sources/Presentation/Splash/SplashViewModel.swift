@@ -5,11 +5,11 @@
 //  Created by 장혜령 on 2024/07/11.
 //
 
-import Foundation
 import SwiftUI
+
 import PPACDomain
-import PPACUtil
 import PPACModels
+import PPACUtil
 
 @MainActor
 public protocol SplashRouting: AnyObject {
@@ -27,7 +27,6 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   // MARK: - Properties
   weak var router: SplashRouting?
   @Published var state: State
-  @Published var isVisible: Bool = true
   private let checkUserInfoUseCase: CheckUserInfoUseCase
   
   // MARK: - Initializers
@@ -46,7 +45,7 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   private func fetchUserInfo() {
     Task {
       do {
-        let userDetail = try await self.checkUserInfoUseCase.checkUserInfo()
+        let userDetail = try await self.checkUserInfoUseCase.execute()
         self.updateMemeLevel(to: userDetail.level)
         self.state = State(isVisible: false)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) { [weak self] in

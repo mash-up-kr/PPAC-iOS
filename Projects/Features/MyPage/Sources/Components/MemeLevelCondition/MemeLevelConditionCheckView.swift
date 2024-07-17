@@ -65,7 +65,7 @@ struct MemeLevelConditionCheckView: View {
   var stepCheckView: some View {
     HStack {
       ForEach(MemeLevelType.allCases) { type in
-        levelStepView(type: type)
+        levelStepView(levelType: type, currentLevel: memeLevel)
         if type != .level4 {
           Spacer()
         }
@@ -81,8 +81,10 @@ struct MemeLevelConditionCheckView: View {
 }
 
 struct levelStepView: View {
-  let type: MemeLevelType
+  let levelType: MemeLevelType
+  let currentLevel: MemeLevelType
   
+ 
   var body: some View {
     VStack(alignment: .center, spacing: 10) {
       stepCheckImageView
@@ -91,21 +93,12 @@ struct levelStepView: View {
   }
   
   var stepCheckImageView: some View {
-    ZStack {
-      ResourceKitAsset.Icon.levelcheck.swiftUIImage
-        .frame(width: 20, height: 20, alignment: .center)
-      Circle()
-        .foregroundStyle(Color.Background.assistive)
-        .frame(width: 20, height: 20, alignment: .center)
-      Circle()
-        .foregroundStyle(Color.Text.assistive)
-        .frame(width: 8, height: 8, alignment: .center)
-    }
+    levelCircleView
     .frame(width: 24, height: 24, alignment: .center)
   }
   
   var stepDescriptionChip: some View {
-    Text(type.levelStepText)
+    Text(levelType.levelStepText)
       .foregroundStyle(Color.Text.secondary)
       .font(Font.Body.Small.semiBold)
       .padding(.vertical, 5)
@@ -114,6 +107,38 @@ struct levelStepView: View {
         RoundedRectangle(cornerRadius: 25, style: .continuous)
           .foregroundStyle(Color.Background.assistive)
       }
+  }
+  
+  var levelCircleView: some View {
+    if levelType < currentLevel {
+      return AnyView(completedLevelCircleView)
+    } else if levelType == currentLevel {
+      return AnyView(currentLevelCircleView)
+    } else {
+      return AnyView(nextLevelCircleView)
+    }
+  }
+  
+  var completedLevelCircleView: some View {
+    ResourceKitAsset.Icon.levelcheck.swiftUIImage
+      .frame(width: 20, height: 20, alignment: .center)
+  }
+  
+  var currentLevelCircleView: some View {
+    ZStack {
+      Circle()
+        .foregroundStyle(Color.Background.assistive)
+        .frame(width: 20, height: 20, alignment: .center)
+      Circle()
+        .foregroundStyle(Color.Text.assistive)
+        .frame(width: 8, height: 8, alignment: .center)
+    }
+  }
+  
+  var nextLevelCircleView: some View {
+    Circle()
+      .foregroundStyle(Color.Text.assistive)
+      .frame(width: 8, height: 8, alignment: .center)
   }
 }
 

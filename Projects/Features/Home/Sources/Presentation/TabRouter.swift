@@ -13,6 +13,7 @@ import Recommend
 import Search
 import MyPage
 import PPACUtil
+import PPACModels
 import DesignSystem
 
 import MemeDetail
@@ -27,6 +28,7 @@ public final class MainTabRouter: Router, ObservableObject {
   public var navigationController: UINavigationController
   public var childRouters: [Router] = []
   private var cancellables: Set<AnyCancellable> = []
+  private let userDetail: UserDetail
   
   @Published private var selectedTab: MainTab = .recommend
   
@@ -37,9 +39,10 @@ public final class MainTabRouter: Router, ObservableObject {
     )
   }
   
-  public init(navigationController: UINavigationController) {
+  public init(navigationController: UINavigationController, userDetail: UserDetail) {
     print("MainTabRouter init")
     self.navigationController = navigationController
+    self.userDetail = userDetail
   }
   
   public func start() {
@@ -59,7 +62,11 @@ public final class MainTabRouter: Router, ObservableObject {
       childRouters.append(detailRouter)
       detailRouter.start()
     case .mypage:
-      fatalError()
+      let myPageRouter = MyPageRouter(navigationController: self.navigationController,
+                                      selectedTab: selectedTabBinding,
+                                      userDetail: self.userDetail)
+      childRouters.append(myPageRouter)
+      myPageRouter.start()
     }
   }
   

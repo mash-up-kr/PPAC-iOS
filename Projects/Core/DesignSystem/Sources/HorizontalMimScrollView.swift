@@ -17,9 +17,10 @@ public protocol HorizontalMimItemViewProtocol: View {
 
 public struct HorizontalMimScrollView<Item: HorizontalMimItemProtocol, ItemView: HorizontalMimItemViewProtocol>: View where ItemView.Item == Item {
   @Binding public var items: [Item]
-  
-  public init(items: Binding<[Item]>) {
+  private var itemClickHandler: ((Item) -> ())?
+  public init(items: Binding<[Item]>, itemClickHandler: ((Item) -> ())? = nil) {
     self._items = items
+    self.itemClickHandler = itemClickHandler
   }
   
   public var body: some View {
@@ -27,6 +28,9 @@ public struct HorizontalMimScrollView<Item: HorizontalMimItemProtocol, ItemView:
       LazyHStack(spacing: 10) {
         ForEach(items, id: \.self) { item in
           ItemView(item: item)
+            .onTapGesture {
+              itemClickHandler?(item)
+            }
         }
         .listStyle(.plain)
       }

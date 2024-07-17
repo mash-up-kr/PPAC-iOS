@@ -11,7 +11,7 @@ import PPACUtil
 import PPACNetwork
 
 public protocol CheckUserInfoUseCase {
-  func checkUserInfo() async throws -> UserDetail
+  func execute() async throws -> UserDetail
 }
 
 final public class CheckUserInfoUseCaseImpl: CheckUserInfoUseCase {
@@ -21,7 +21,7 @@ final public class CheckUserInfoUseCaseImpl: CheckUserInfoUseCase {
     self.userRepository = userRepository
   }
   
-  public func checkUserInfo() async throws -> UserDetail {
+  public func execute() async throws -> UserDetail {
     if UserInfo.shared.deviceId.isEmpty {
       return try await createUser()
     } else {
@@ -39,7 +39,7 @@ final public class CheckUserInfoUseCaseImpl: CheckUserInfoUseCase {
   }
   
   private func getUserDetail() async throws -> UserDetail {
-    return try await self.userRepository.getUserDetail(deviceId: "")
+    return try await self.userRepository.getUserDetail()
   }
 }
 
@@ -47,16 +47,16 @@ public class MockCheckUserInfoUseCase: CheckUserInfoUseCase {
   public let userRepository: UserRepository
   
   public init() {
-    userRepository = MockUserRepository()
+    self.userRepository = MockUserRepository()
   }
-  public func checkUserInfo() async throws -> UserDetail {
+  public func execute() async throws -> UserDetail {
     return UserDetail.mock
   }
   
   class MockUserRepository: UserRepository {
     func create(deviceId: String) async throws -> UserDetail { return UserDetail.mock }
-    func getUserDetail(deviceId: String) async throws -> UserDetail { return UserDetail.mock }
-    func getSavedMeme(deviceId: String) async throws -> [MemeDetail] { return [] }
-    func getLastSeenMeme(deviceId: String) async throws -> [MemeDetail] { return [] }
+    func getUserDetail() async throws -> UserDetail { return UserDetail.mock }
+    func getSavedMeme() async throws -> [MemeDetail] { return [] }
+    func getLastSeenMeme() async throws -> [MemeDetail] { return [] }
   }
 }

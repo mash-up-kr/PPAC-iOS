@@ -9,5 +9,10 @@ import Foundation
 
 struct RecommendKeywordResponseDTO: Decodable {
   let category: String
-  let keywords: [String]
+  let keywords: [KeywordResponseDTO]
+}
+
+struct KeywordResponseDTO: Decodable {
+  let _id: String
+  let name: String
 }
