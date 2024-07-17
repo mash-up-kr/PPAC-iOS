@@ -9,8 +9,9 @@ import UIKit
 import SwiftUI
 import PPACUtil
 import PPACModels
+import DesignSystem
 
-public final class RecommendRouter: Router, RecommendRouting {
+public final class RecommendRouter: Router {
   
   // MARK: - Properties
   
@@ -19,27 +20,23 @@ public final class RecommendRouter: Router, RecommendRouting {
   public var navigationController: UINavigationController
   
   public var childRouters: [any Router] = []
+  private var selectedTab: Binding<MainTab>
   
   let recommendMemes: [MemeDetail]
   let user: UserDetail
   
   // MARK: - Initializers
   
-  public init(
-    _ navigationController: UINavigationController,
-    recommendMemes: [MemeDetail],
-    user: UserDetail
-  ) {
+  public init(_ navigationController: UINavigationController, selectedTab: Binding<MainTab>) {
     navigationController.isNavigationBarHidden = true
     self.navigationController = navigationController
-    self.recommendMemes = recommendMemes
-    self.user = user
+    self.selectedTab = selectedTab
   }
   
   // MARK: - Methods
   
   public func start() {
-    self.pushView(EmptyView())
+    let view = RecommendView().tabBar(selectedTab: selectedTab)
+    setRootView(view)
   }
-  
 }
