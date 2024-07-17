@@ -47,7 +47,8 @@ public final class MyPageRouter: Router, MyPageRouting {
         userDetail: self.userDetail,
         getUserDetailUseCase: GetUserDetailUseCaseImpl(userRepository: repository),
         getLastSeenMemeUseCase: GetLastSeenMemeUseCaseImpl(userRepository: repository),
-        getSavedMemeUseCase: GetSavedMemeUseCaseImpl(userRepository: repository)
+        getSavedMemeUseCase: GetSavedMemeUseCaseImpl(userRepository: repository),
+        copyImageUseCase: CopyImageUseCaseImpl()
       )
     ).tabBar(selectedTab: selectedTab)
     

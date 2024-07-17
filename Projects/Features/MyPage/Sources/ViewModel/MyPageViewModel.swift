@@ -57,6 +57,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let getUserDetailUseCase: GetUserDetailUseCase
   private let getLastSeenMemeUseCase: GetLastSeenMemeUseCase
   private let getSavedMemeUseCase: GetSavedMemeUseCase
+  private let copyImageUseCase: CopyImageUseCase
   public var handler: Handler = .none
   
   // MARK: - Initializers
@@ -66,7 +67,8 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     userDetail: UserDetail,
     getUserDetailUseCase: GetUserDetailUseCase,
     getLastSeenMemeUseCase: GetLastSeenMemeUseCase,
-    getSavedMemeUseCase: GetSavedMemeUseCase
+    getSavedMemeUseCase: GetSavedMemeUseCase,
+    copyImageUseCase: CopyImageUseCase
   ) {
     self.router = router
     self.state = State(userDetail: userDetail, lastSeenMemeList: [], savedMemeList: [])
@@ -74,6 +76,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
     self.getSavedMemeUseCase = getSavedMemeUseCase
+    self.copyImageUseCase = copyImageUseCase
     
     self.initHandler()
     self.fetchUserMemes() // 이걸 routing 에서 하는걸로?
@@ -111,6 +114,11 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       guard let self else { return }
       Task {
         print("memeCopyHandler \(memeDetail.title)")
+        do {
+          try await self.copyImageUseCase.execute(url: memeDetail.imageUrlString)
+        } catch {
+          print("복사 실패")
+        }
       }
     }
     
