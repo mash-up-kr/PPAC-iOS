@@ -22,7 +22,11 @@ public struct MyPageView: View {
       levelView
       divider
       RecentlyMemeListView(memeDetailList: $viewModel.state.lastSeenMemeList)
-      SavedMemeListView(memeDetailList: $viewModel.state.savedMemeList)
+      SavedMemeListView(
+        memeDetailList: $viewModel.state.savedMemeList,
+        memeClickHandler: viewModel.handler.memeClickHandler,
+        memeCopyHandler: viewModel.handler.memeCopyHandler
+      )
       Spacer(minLength: 70)
     }
     .background {

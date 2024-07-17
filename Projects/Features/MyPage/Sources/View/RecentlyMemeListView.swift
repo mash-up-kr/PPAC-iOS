@@ -13,6 +13,7 @@ import Kingfisher
 
 struct RecentlyMemeListView: View {
   @Binding var memeDetailList: [MemeDetail]
+
   var body: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,

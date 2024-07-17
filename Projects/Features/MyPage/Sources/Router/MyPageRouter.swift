@@ -14,6 +14,8 @@ import PPACDomain
 import PPACNetwork
 import PPACData
 
+import MemeDetail
+
 public final class MyPageRouter: Router, MyPageRouting {
   // MARK: - Properties
   public var delegate: (any RouterDelegate)?
@@ -29,7 +31,7 @@ public final class MyPageRouter: Router, MyPageRouting {
     self.navigationController = navigationController
     self.userDetail = userDetail
     
-    self.navigationController = self.createNavigationController()
+    //self.navigationController = self.createNavigationController()
   }
   
   // MARK: - Methods
@@ -38,6 +40,7 @@ public final class MyPageRouter: Router, MyPageRouting {
     
     let myPageView = MyPageView(
       viewModel: MyPageViewModel(
+        router: self,
         userDetail: self.userDetail,
         getUserDetailUseCase: GetUserDetailUseCaseImpl(userRepository: repository),
         getLastSeenMemeUseCase: GetLastSeenMemeUseCaseImpl(userRepository: repository),
@@ -53,5 +56,10 @@ public final class MyPageRouter: Router, MyPageRouting {
   
   public func showSettingView() { }
   
+  public func showMemeDetail(memeDetail: MemeDetail) {
+    let router = MemeDetailRouter(self.navigationController, meme: memeDetail)
+    self.childRouters.append(router)
+    router.start()
+  }
 }
 

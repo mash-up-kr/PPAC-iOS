@@ -9,16 +9,22 @@ import SwiftUI
 import PPACModels
 
 public struct MemeListView: View {
-
   private let memeDetailList: [MemeDetail]
   private let columns = Array(repeating: GridItem(.flexible(),
-                                          spacing: 12,
-                                          alignment: .center),count: 2)
+                                                  spacing: 12,
+                                                  alignment: .center),count: 2)
+  private let memeClickHandler: ((MemeDetail) -> ())?
+  private let memeCopyHandler: ((MemeDetail) -> ())?
   
-  public init(memeDetailList: [MemeDetail]) {
+  public init(
+    memeDetailList: [MemeDetail],
+    memeClickHandler: ((MemeDetail) -> ())? = nil,
+    memeCopyHandler: ((MemeDetail) -> ())? = nil
+  ) {
     self.memeDetailList = memeDetailList
+    self.memeClickHandler = memeClickHandler
+    self.memeCopyHandler = memeCopyHandler
   }
-  
   
   var oddIndexedItems: [MemeDetail] {
     memeDetailList.enumerated().compactMap { index, element in
@@ -38,17 +44,25 @@ public struct MemeListView: View {
       HStack {
         LazyVStack {
           ForEach(oddIndexedItems) { memeDetail in
-            MemeItemView(memeDetail: memeDetail)
+            MemeItemView(
+              memeDetail: memeDetail,
+              memeClickHandler: memeClickHandler,
+              memeCopyHandler: memeCopyHandler
+            )
           }
         }
         
         LazyVStack {
           ForEach(evenIndexedItems) { memeDetail in
-            MemeItemView(memeDetail: memeDetail)
+            MemeItemView(
+              memeDetail: memeDetail,
+              memeClickHandler: memeClickHandler,
+              memeCopyHandler: memeCopyHandler
+            )
           }
         }
       }
-      .frame(maxWidth: .infinity) 
+      .frame(maxWidth: .infinity)
     }
     .scrollTargetBehavior(.viewAligned)
   }
@@ -57,8 +71,8 @@ public struct MemeListView: View {
 #Preview {
   let mockImageList = ["https://plus.unsplash.com/premium_photo-1661892088256-0a17130b3d0d?q=80&w=3560&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
                        "https://plus.unsplash.com/premium_photo-1676955432796-226f504a560b?q=80&w=3333&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-  "https://images.unsplash.com/photo-1720247521923-f531207d23d8?q=80&w=2667&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-             
+                       "https://images.unsplash.com/photo-1720247521923-f531207d23d8?q=80&w=2667&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                       
                        "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ]
   
   let memeDetailList = (0..<20)

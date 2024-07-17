@@ -66,6 +66,7 @@ public final class MainTabRouter: Router, MainTabRouting {
     let viewController = myPageRouter.createNavigationController()
     let tabItem = self.getTabBarItem(with: .mypage)
     viewController.tabBarItem = tabItem
+    self.childRouters.append(myPageRouter)
     return viewController
   }
   
