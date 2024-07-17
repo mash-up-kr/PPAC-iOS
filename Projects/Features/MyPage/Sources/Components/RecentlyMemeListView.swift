@@ -13,7 +13,8 @@ import Kingfisher
 
 struct RecentlyMemeListView: View {
   @Binding var memeDetailList: [MemeDetail]
-
+  var memeClickHandler: ((MemeDetail) -> ())?
+  
   var body: some View {
     VStack {
       ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,
@@ -29,8 +30,11 @@ struct RecentlyMemeListView: View {
   
   var memeListView: some View {
     VStack {
-      HorizontalMimScrollView<MemeDetail, MemeSimpleItemView>(items: $memeDetailList)
-        .frame(height: 120)
+      HorizontalMimScrollView<MemeDetail, MemeSimpleItemView>(
+        items: $memeDetailList,
+        itemClickHandler: memeClickHandler
+      )
+      .frame(height: 120)
     }
     .padding(.bottom, 50)
   }

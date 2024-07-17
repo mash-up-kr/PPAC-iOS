@@ -18,13 +18,15 @@ public protocol MyPageRouting: AnyObject {
 
 final public class MyPageViewModel: ViewModelType, ObservableObject {
   
-  public enum Action { }
+  public enum Action { 
+    case onAppearMyPageView
+  }
   
   public struct Handler {
     var memeClickHandler: ((MemeDetail) -> ())?
     var memeCopyHandler: ((MemeDetail) -> ())?
     
-    static let none = Handler(memeClickHandler: nil)
+    static let none = Handler()
   }
   
   public struct State {
@@ -79,26 +81,28 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.copyImageUseCase = copyImageUseCase
     
     self.initHandler()
-    self.fetchUserMemes() // 이걸 routing 에서 하는걸로?
   }
   
   // MARK: - Methods
-  @MainActor
   public func dispatch(type: Action) {
-    
+    Task { @MainActor in
+      switch type {
+      case .onAppearMyPageView:
+        await self.fetchUserMemes()
+      }
+    }
   }
   
-  private func fetchUserMemes() {
-    Task {
-      do {
-        let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
-        let savedMemeList = try await self.getSavedMemeUseCase.execute()
-        self.state = State(userDetail: state.userDetail,
-                           lastSeenMemeList: lastSeenMemeList,
-                           savedMemeList: savedMemeList)
-      } catch(let error) {
-        print("fetchUserMemes error = \(error)")
-      }
+  @MainActor
+  private func fetchUserMemes() async {
+    do {
+      let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
+      let savedMemeList = try await self.getSavedMemeUseCase.execute()
+      self.state = State(userDetail: state.userDetail,
+                         lastSeenMemeList: lastSeenMemeList,
+                         savedMemeList: savedMemeList)
+    } catch(let error) {
+      print("fetchUserMemes error = \(error)")
     }
   }
   

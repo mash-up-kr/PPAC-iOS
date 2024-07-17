@@ -21,7 +21,10 @@ public struct MyPageView: View {
     ScrollView {
       levelView
       divider
-      RecentlyMemeListView(memeDetailList: $viewModel.state.lastSeenMemeList)
+      RecentlyMemeListView(
+        memeDetailList: $viewModel.state.lastSeenMemeList,
+        memeClickHandler: viewModel.handler.memeClickHandler
+      )
       SavedMemeListView(
         memeDetailList: $viewModel.state.savedMemeList,
         memeClickHandler: viewModel.handler.memeClickHandler,
@@ -29,17 +32,24 @@ public struct MyPageView: View {
       )
       Spacer(minLength: 70)
     }
+    .onAppear {
+      viewModel.dispatch(type: .onAppearMyPageView)
+    }
     .background {
-      LinearGradient(
-        gradient: Gradient(
-          colors: [Color.Background.brandassistive, Color.Background.white]
-        ),
-        startPoint: .top, endPoint: .bottom
-      )
+      gradientBackgroundView
     }
     .edgesIgnoringSafeArea(.all)
   }
 
+  var gradientBackgroundView: some View {
+    LinearGradient(
+      gradient: Gradient(
+        colors: [Color.Background.brandassistive, Color.Background.white]
+      ),
+      startPoint: .top, endPoint: .bottom
+    )
+  }
+  
   var levelView: some View {
     VStack {
       settingHeaderView
