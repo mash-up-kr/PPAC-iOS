@@ -29,7 +29,6 @@ struct MemeResponseDTO: Decodable {
   let keywords: [KeywordResponseDTO]
   let image: String
   let reaction: Int
-  let watch: Int
   let source: String
   let isTodayMeme: Bool
   let isDeleted: Bool?
@@ -44,7 +43,6 @@ struct MemeResponseDTO: Decodable {
     keywords: [KeywordResponseDTO],
     image: String,
     reaction: Int,
-    watch: Int,
     source: String,
     isTodayMeme: Bool,
     isDeleted: Bool?,
@@ -59,7 +57,6 @@ struct MemeResponseDTO: Decodable {
     self.keywords = keywords
     self.image = image
     self.reaction = reaction
-    self.watch = watch
     self.source = source
     self.isTodayMeme = isTodayMeme
     self.isDeleted = isDeleted

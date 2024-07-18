@@ -22,9 +22,7 @@ final public class GetUserInfoUseCaseImpl: GetUserInfoUseCase {
   }
   
   public func get() async throws -> UserDetail {
-    let deviceId = UserInfo.shared.deviceId
-    
-    return try await self.userRepository.getUserDetail(deviceId: deviceId)
+    return try await self.userRepository.getUserDetail()
   }
   
 }
