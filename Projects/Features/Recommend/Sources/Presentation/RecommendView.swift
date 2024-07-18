@@ -20,9 +20,7 @@ public struct RecommendView: View {
   @State private var memeImageHeight: CGFloat = 0
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
-  
-  @State private var currentViewingMemeId: String?
-  @State private var currentViewingMemeReaction: Int?
+  @State private var currentMeme: MemeDetail?
   
   public init(
     _ viewModel: RecommendViewModel
@@ -45,8 +43,7 @@ public struct RecommendView: View {
           
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
-              currentViewingMemeId: $currentViewingMemeId,
-              currentViewingMemeReaction: $currentViewingMemeReaction,
+              currentMeme: $currentMeme,
               memes: viewModel.state.recommendMemes,
               isTagHidden: isOverlapView
             )
@@ -63,25 +60,25 @@ public struct RecommendView: View {
           Spacer()
           
           RecommendMemeButtonView(
-            reactionCount: $currentViewingMemeReaction,
+            meme: $currentMeme,
             reactionButtonTapped: {
               viewModel.dispatch(
-                type: .likeButtonTapped(memeId: currentViewingMemeId)
+                type: .likeButtonTapped(memeId: currentMeme?.id)
               )
             },
             copyButtonTapped: {
               viewModel.dispatch(
-                type: .copyButtonTapped(memeId: currentViewingMemeId)
+                type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
               )
             },
             shareButtonTapped : {
               viewModel.dispatch(
-                type: .shareButtonTapped(memeId: currentViewingMemeId)
+                type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
               )
             },
             saveButtonTapped : {
               viewModel.dispatch(
-                type: .farmemeButtonTapped(memeId: currentViewingMemeId)
+                type: .farmemeButtonTapped(memeId: currentMeme?.id)
               )
             }
           )
@@ -106,6 +103,11 @@ public struct RecommendView: View {
         endPoint: .bottom
       )
     )
+    .onChange(of: currentMeme) {
+      if let currentMeme {
+        viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
+      }
+    }
   }
 }
 

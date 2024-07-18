@@ -14,10 +14,7 @@ import ResourceKit
 import PPACModels
 
 struct RecommendMemeImagesView: View {
-  @State private var currentViewingMeme: MemeDetail?
-  
-  @Binding var currentViewingMemeId: String?
-  @Binding var currentViewingMemeReaction: Int?
+  @Binding var currentMeme: MemeDetail?
   
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
@@ -27,19 +24,16 @@ struct RecommendMemeImagesView: View {
       ScrollView(.horizontal) {
         LazyHStack {
           ForEach(memes, id: \.self) { meme in
-            MemeImageView(imageUrl: meme.imageUrlString)
-              .overlay {
-                if let currentViewingMeme, currentViewingMeme != meme  {
-                  RoundedRectangle(cornerRadius: 20)
-                    .foregroundStyle(Color.Background.dimmer)
-                }
-              }
-              .animation(.smooth, value: currentViewingMeme)
-              .scrollTransition { content, phase in
-                content
-                  .scaleEffect(phase.isIdentity ? 1.0 : 0.9)
-                  .blur(radius: phase.isIdentity ? 0 : 1)
-              }
+            MemeImageView(
+              imageUrl: meme.imageUrlString,
+              isDimmed: meme.id != currentMeme?.id
+            )
+            .animation(.smooth, value: meme)
+            .scrollTransition { content, phase in
+              content
+                .scaleEffect(phase.isIdentity ? 1.0 : 0.9)
+                .blur(radius: phase.isIdentity ? 0 : 1)
+            }
           }
         }
         .frame(height: 310)
@@ -47,33 +41,41 @@ struct RecommendMemeImagesView: View {
       }
       .scrollIndicators(.never)
       .scrollTargetBehavior(.viewAligned)
-      .scrollPosition(id: $currentViewingMeme)
+      .scrollPosition(id: $currentMeme)
       .contentMargins(.horizontal, 60.0)
       .padding(.top, 36)
       .padding(.bottom, 20)
-      .onChange(of: currentViewingMeme) { oldValue, newValue in
-        if let newValue {
-          self.currentViewingMemeId = newValue.id
-          self.currentViewingMemeReaction = newValue.reaction
-        }
-      }
       
-      if let currentViewingMeme, isTagHidden == false {
-        HashTagView(keywords: currentViewingMeme.keywords)
+      if let currentMeme, isTagHidden == false {
+        HashTagView(keywords: currentMeme.keywords)
       }
     }
     .onAppear {
-      self.currentViewingMeme = self.memes.first
-      self.currentViewingMemeId = self.currentViewingMeme?.id
-      self.currentViewingMemeReaction = self.currentViewingMeme?.reaction
+      currentMeme = memes.first
+    }
+    .onChange(of: memes) { _, value in
+      let current = value.first(where: {
+        $0.id == currentMeme?.id
+      })
+      currentMeme = current
     }
   }
 }
 
 #Preview {
   RecommendMemeImagesView(
-    currentViewingMemeId: .constant("668a44950289555e368174a6"),
-    currentViewingMemeReaction: .constant(0),
+    currentMeme: .constant(
+      MemeDetail(
+        id: "668a44950289555e368174a6",
+        title: "심란한 명수옹",
+        keywords: ["공부", "학생", "시험기간"],
+        imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+        source: "깃허브",
+        isTodayMeme: true,
+        reaction: 4,
+        isFarmemed: false
+      )
+    ),
     memes: [
       MemeDetail(
         id: "668a44950289555e368174a6",
@@ -82,7 +84,7 @@ struct RecommendMemeImagesView: View {
         imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
         source: "깃허브",
         isTodayMeme: true,
-        reaction: 4, 
+        reaction: 4,
         isFarmemed: false
       ),
       MemeDetail(

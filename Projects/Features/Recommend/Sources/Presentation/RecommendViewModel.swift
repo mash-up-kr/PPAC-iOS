@@ -22,8 +22,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     case initializeView
     case showRecommendMeme(memeId: String?)
     case likeButtonTapped(memeId: String?)
-    case copyButtonTapped(memeId: String?)
-    case shareButtonTapped(memeId: String?)
+    case copyButtonTapped(memeImageUrl: String?)
+    case shareButtonTapped(memeImageUrl: String?)
     case farmemeButtonTapped(memeId: String?)
   }
   
@@ -72,10 +72,10 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
         await postShownMeme(memeId: memeId)
       case .likeButtonTapped(let memeId):
         await postReaction(memeId: memeId)
-      case .copyButtonTapped(let memeId):
-        await copyImage(memeId: memeId)
-      case .shareButtonTapped(let memeId):
-        await showShareSheet(memeId: memeId)
+      case .copyButtonTapped(let memeImageUrl):
+        await copyImage(memeImageUrl: memeImageUrl)
+      case .shareButtonTapped(let memeImageUrl):
+        await showShareSheet(memeImageUrl: memeImageUrl)
       case .farmemeButtonTapped(let memeId):
         await saveMeme(memeId: memeId)
       }
@@ -101,7 +101,10 @@ private extension RecommendViewModel {
   func postShownMeme(memeId: String?) async {
     guard let memeId else { return }
     do {
-      try await watchMemeUseCase.execute(memeId: memeId, type: "reommend")
+      try await watchMemeUseCase.execute(memeId: memeId, type: "recommend")
+      let user = try await getUserInfoUseCase.get()
+      self.state.userLevel = user.level
+      self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
     } catch {
       print("Failed show recommnedMeme : \(error)")
     }
@@ -120,15 +123,10 @@ private extension RecommendViewModel {
     }
   }
   
-  func copyImage(memeId: String?) async {
-    guard let memeId else { return }
-    guard let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) else {
-      return
-    }
+  func copyImage(memeImageUrl: String?) async {
+    guard let memeImageUrl else { return }
     
-    guard let url = URL(string: self.state.recommendMemes[index].imageUrlString) else {
-      return
-    }
+    guard let url = URL(string: memeImageUrl) else { return }
     
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
@@ -142,13 +140,10 @@ private extension RecommendViewModel {
     }
   }
   
-  func showShareSheet(memeId: String?) async {
-    guard let memeId else { return }
-    guard let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) else {
-      return
-    }
+  func showShareSheet(memeImageUrl: String?) async {
+    guard let memeImageUrl else { return }
     
-    guard let url = URL(string: self.state.recommendMemes[index].imageUrlString) else {
+    guard let url = URL(string: memeImageUrl) else {
       print("invalid url")
       return
     }

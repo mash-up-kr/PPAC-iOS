@@ -10,12 +10,14 @@ import SwiftUI
 import ResourceKit
 import DesignSystem
 
+import PPACModels
+
 import Lottie
 
 struct RecommendMemeButtonView : View {
   @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
   
-  @Binding var reactionCount: Int?
+  @Binding var meme: MemeDetail?
   
   let reactionButtonTapped: () -> Void
   let copyButtonTapped: () -> Void
@@ -25,8 +27,13 @@ struct RecommendMemeButtonView : View {
   public var body: some View  {
     HStack {
       LikeButton(
-        reactionCount: $reactionCount,
-        didTapped: reactionButtonTapped
+        reactionCount: meme?.reaction,
+        didTapped: {
+          playbackMode = .playing(
+            .fromProgress(0, toProgress: 1, loopMode: .playOnce)
+          )
+          self.reactionButtonTapped()
+        }
       )
       .overlay(content: {
         LottieView(animation: AnimationAsset.kkEffect.animation)
@@ -84,11 +91,11 @@ func saveButton(_ saveAction: @escaping () -> Void) -> some View {
 }
 
 #Preview {
-  @State var count: Int? = 1
+  @State var meme: MemeDetail? = .mock
   
   return RecommendMemeButtonView(
-    reactionCount: $count,
-    reactionButtonTapped: { print("reaction~~") },
+    meme: $meme,
+    reactionButtonTapped: { meme?.reaction += 1 },
     copyButtonTapped: { print("copy~~") },
     shareButtonTapped: { print("share~~") },
     saveButtonTapped: { print("save!!") }

@@ -10,13 +10,8 @@ import Kingfisher
 import ResourceKit
 
 struct MemeImageView: View {
-  private let imageUrl: String
-  
-  public init(
-    imageUrl: String
-  ) {
-    self.imageUrl = imageUrl
-  }
+  let imageUrl: String
+  let isDimmed: Bool
   
   public var body: some View {
     KFImage(URL(string: imageUrl))
@@ -24,6 +19,10 @@ struct MemeImageView: View {
       .frame(width: 270, height: 310)
       .cornerRadius(20)
       .overlay {
+        if isDimmed {
+          RoundedRectangle(cornerRadius: 20)
+            .foregroundStyle(Color.Background.dimmer)
+        }
         RoundedRectangle(cornerRadius: 20)
           .inset(by: 1)
           .stroke(Color.Border.primary, lineWidth: 2)
