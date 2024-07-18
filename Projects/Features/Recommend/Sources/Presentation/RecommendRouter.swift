@@ -59,7 +59,7 @@ public final class RecommendRouter: Router, RecommendRouting {
         reactToMemeUseCase: reactToMemeUseCase,
         bookmarkMemeUseCase: bookmarkMemeUseCase
       )
-    )
+    ).tabBar(selectedTab: selectedTab)
     
     setRootView(recommendView)
   }

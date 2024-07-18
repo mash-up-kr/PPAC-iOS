@@ -12,6 +12,7 @@ import PPACModels
 import PPACDomain
 import PPACData
 import PPACNetwork
+import DesignSystem
 
 public struct RecommendView: View {
   
@@ -91,6 +92,8 @@ public struct RecommendView: View {
       .onReadSize { size in
         zstackHeight = size.height
       }
+      
+      Spacer(minLength: 98)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(
@@ -103,6 +106,7 @@ public struct RecommendView: View {
         endPoint: .bottom
       )
     )
+    .edgesIgnoringSafeArea(.bottom)
     .onChange(of: currentMeme) {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
@@ -112,6 +116,15 @@ public struct RecommendView: View {
 }
 
 #Preview {
+  var selectedTab: MainTab = .recommend
+  
+  var selectedTabBinding: Binding<MainTab> {
+    Binding(
+      get: { selectedTab },
+      set: { selectedTab = $0 }
+    )
+  }
+  
   let networkService = NetworkService()
   let memeRepository = MemeRepositoryImpl(networkservice: networkService)
   let userRepository = UserRepositoryImpl(networkservice: networkService)
@@ -123,7 +136,6 @@ public struct RecommendView: View {
   let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
   let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
   
-  
   return RecommendView(
     RecommendViewModel(
       router: nil,
@@ -134,4 +146,5 @@ public struct RecommendView: View {
       bookmarkMemeUseCase: bookmarkMemeUseCase
     )
   )
+  .tabBar(selectedTab: selectedTabBinding)
 }
