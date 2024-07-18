@@ -12,13 +12,25 @@ import Kingfisher
 
 public struct MemeItemView: View {
   private let memeDetail: MemeDetail
+  private let memeClickHandler: ((MemeDetail) -> ())?
+  private let memeCopyHandler: ((MemeDetail) -> ())?
   
-  public init(memeDetail: MemeDetail) {
+  public init(
+    memeDetail: MemeDetail,
+    memeClickHandler: ((MemeDetail) -> ())? = nil,
+    memeCopyHandler: ((MemeDetail) -> ())? = nil
+  ) {
     self.memeDetail = memeDetail
+    self.memeClickHandler = memeClickHandler
+    self.memeCopyHandler = memeCopyHandler
   }
+  
   public var body: some View {
     VStack {
-      MemeItemViewWithButton(imageUrlString: memeDetail.imageUrlString)
+      MemeItemViewWithButton(memeDetail: memeDetail, memeCopyHandler: memeCopyHandler)
+        .onTapGesture {
+          memeClickHandler?(memeDetail)
+        }
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
     .padding(.bottom, 20)
@@ -26,12 +38,19 @@ public struct MemeItemView: View {
 }
 
 struct MemeItemViewWithButton: View {
-  let imageUrlString: String
   @State private var imageHeight: CGFloat = .zero
+  private let memeCopyHandler: ((MemeDetail) -> ())?
+  private let memeDetail: MemeDetail
+  
+  init(memeDetail: MemeDetail, memeCopyHandler: ((MemeDetail) -> ())?) {
+    self.memeDetail = memeDetail
+    self.memeCopyHandler = memeCopyHandler
+  }
+  
   var body: some View {
     ZStack(alignment: .bottomLeading) {
       VStack {
-        ResizableMemeImageView(imageUrlString: imageUrlString, imageHeight: $imageHeight)
+        ResizableMemeImageView(imageUrlString: memeDetail.imageUrlString, imageHeight: $imageHeight)
       }
       .frame(height: imageHeight)
       HStack {
@@ -81,6 +100,7 @@ struct MemeItemInfoView: View {
     HStack {
       VStack(alignment: .leading, spacing: 6) {
         Text(memeName)
+          .font(Font.Body.Medium.medium)
           .lineLimit(2)
         if reaction > 0 {
           memeReactionView

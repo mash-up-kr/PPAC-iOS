@@ -12,9 +12,9 @@ import PPACModels
 public enum UserEndpoint: Requestable {
   
   case create(deviceId: String)
-  case userDetail(deviceId: String)
-  case savedMeme(deviceId: String)
-  case lastSeenMeme(deviceId: String)
+  case userDetail
+  case savedMeme
+  case lastSeenMeme
   
   public var url: String {
     return "https://ppac-server.run.goorm.io/api"
@@ -34,27 +34,18 @@ public enum UserEndpoint: Requestable {
   }
   
   public var headers: [String : String]? {
-    switch self {
-    case .create(let deviceId):
-      return ["x-device-id": deviceId]
-    case .userDetail(let deviceId):
-      return ["x-device-id": deviceId]
-    case .savedMeme(let deviceId):
-      return ["x-device-id": deviceId]
-    case .lastSeenMeme(let deviceId):
-      return ["x-device-id": deviceId]
-    }
+    return nil
   }
   
   public var path: String? {
     switch self {
     case .create(_):
       return "/user"
-    case .userDetail(_):
+    case .userDetail:
       return "/user"
-    case .savedMeme(_):
+    case .savedMeme:
       return "/user/saved-memes"
-    case .lastSeenMeme(_):
+    case .lastSeenMeme:
       return "/user/recent-memes"
     }
   }
@@ -64,11 +55,7 @@ public enum UserEndpoint: Requestable {
     case .create(let deviceId):
       let createDeviceRequest = CreateUserRequestDTO(deviceId: deviceId)
       return .body(createDeviceRequest)
-    case .userDetail(_):
-      return nil
-    case .savedMeme(_):
-      return nil
-    case .lastSeenMeme(_):
+    default:
       return nil
     }
   }

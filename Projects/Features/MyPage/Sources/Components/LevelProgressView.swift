@@ -67,5 +67,5 @@ struct LevelProgressView: View {
 
 
 #Preview {
-  LevelProgressView(level: .level1, conditionCount: 10)
+  LevelProgressView(level: .level1, conditionCount: 20)
 }
