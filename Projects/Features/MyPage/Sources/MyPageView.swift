@@ -32,7 +32,7 @@ public struct MyPageView: View {
         memeCopyHandler: viewModel.handler.memeCopyHandler,
         onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
       )
-      Spacer(minLength: 70)
+      Spacer(minLength: 80)
     }
     .onAppear {
       viewModel.dispatch(type: .onAppearMyPageView)

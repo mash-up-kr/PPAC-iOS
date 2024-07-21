@@ -37,7 +37,7 @@ struct SavedMemeListView: View {
         memeCopyHandler: memeCopyHandler,
         onAppearLastMemeHandler: onAppearLastMemeHandler
       )
-        .padding(.horizontal, 20)
+      .padding(.horizontal, 20)
     }
   }
   
