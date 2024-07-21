@@ -80,9 +80,9 @@ public struct MemeListView: View {
         }
       }
       // FIXME: pull to refresh 했을 때 onAppear가 호출되지 않아서 onChange로 임시 호출, 수정필요
-      .onChange(of: memeDetailList) {
-        onAppearLastMemeHandler?()
-      }
+//      .onChange(of: memeDetailList) {
+//        onAppearLastMemeHandler?()
+//      }
       .frame(maxWidth: .infinity)
     }
     .scrollTargetBehavior(.viewAligned)

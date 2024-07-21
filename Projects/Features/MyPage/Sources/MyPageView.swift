@@ -74,8 +74,11 @@ public struct MyPageView: View {
         .frame(width: 20, height: 20, alignment: .center)
         .padding(.vertical, 15)
         .padding(.trailing, 20)
+        .onTapGesture {
+          viewModel.dispatch(type: .settingButtonTapped)
+        }
     }
-    .padding(.top, 30)
+    .padding(.top, 40)
   }
   
   var levelTitleTextView: some View {

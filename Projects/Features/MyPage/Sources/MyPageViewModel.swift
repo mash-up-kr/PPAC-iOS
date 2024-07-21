@@ -18,9 +18,10 @@ public protocol MyPageRouting: AnyObject {
 
 final public class MyPageViewModel: ViewModelType, ObservableObject {
   
-  public enum Action { 
+  public enum Action {
     case onAppearMyPageView
     case pullToRefresh
+    case settingButtonTapped
   }
   
   public struct Handler {
@@ -105,6 +106,8 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         await self.fetchUserMemes()
       case .pullToRefresh:
         await self.refreshUserMemes()
+      case .settingButtonTapped:
+        router?.showSettingView()
       }
     }
   }
