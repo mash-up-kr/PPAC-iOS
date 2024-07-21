@@ -29,7 +29,8 @@ public struct MyPageView: View {
       SavedMemeListView(
         memeDetailList: $viewModel.state.savedMemeList,
         memeClickHandler: viewModel.handler.memeClickHandler,
-        memeCopyHandler: viewModel.handler.memeCopyHandler
+        memeCopyHandler: viewModel.handler.memeCopyHandler,
+        onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
       )
       Spacer(minLength: 70)
     }

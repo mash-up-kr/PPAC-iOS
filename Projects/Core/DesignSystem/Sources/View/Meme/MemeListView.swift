@@ -15,15 +15,22 @@ public struct MemeListView: View {
                                                   alignment: .center),count: 2)
   private let memeClickHandler: ((MemeDetail) -> ())?
   private let memeCopyHandler: ((MemeDetail) -> ())?
+  private let onAppearLastMemeHandler: (() -> ())?
+  
+  private var lastMemeId: String {
+    return memeDetailList.last?.id ?? ""
+  }
   
   public init(
     memeDetailList: [MemeDetail],
     memeClickHandler: ((MemeDetail) -> ())? = nil,
-    memeCopyHandler: ((MemeDetail) -> ())? = nil
+    memeCopyHandler: ((MemeDetail) -> ())? = nil,
+    onAppearLastMemeHandler: (() -> ())? = nil
   ) {
     self.memeDetailList = memeDetailList
     self.memeClickHandler = memeClickHandler
     self.memeCopyHandler = memeCopyHandler
+    self.onAppearLastMemeHandler = onAppearLastMemeHandler
   }
   
   var oddIndexedItems: [MemeDetail] {
@@ -41,7 +48,7 @@ public struct MemeListView: View {
   
   public var body: some View {
     ScrollView {
-      HStack {
+      HStack(alignment: .top) {
         LazyVStack {
           ForEach(oddIndexedItems) { memeDetail in
             MemeItemView(
@@ -49,6 +56,11 @@ public struct MemeListView: View {
               memeClickHandler: memeClickHandler,
               memeCopyHandler: memeCopyHandler
             )
+            .onAppear {
+              if memeDetail.id == lastMemeId {
+                onAppearLastMemeHandler?()
+              }
+            }
           }
         }
         
@@ -59,6 +71,11 @@ public struct MemeListView: View {
               memeClickHandler: memeClickHandler,
               memeCopyHandler: memeCopyHandler
             )
+            .onAppear {
+              if memeDetail.id == lastMemeId {
+                onAppearLastMemeHandler?()
+              }
+            }
           }
         }
       }

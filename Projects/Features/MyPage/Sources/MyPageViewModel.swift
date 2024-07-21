@@ -26,7 +26,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   public struct Handler {
     var memeClickHandler: ((MemeDetail) -> ())?
     var memeCopyHandler: ((MemeDetail) -> ())?
-    
+    var onAppearLastMemeHandler: (() -> ())?
     static let none = Handler()
   }
   
@@ -34,7 +34,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var userDetail: UserDetail
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
+    var savedMemePagination: MemeListWithPagination.Pagination
     var isRefreshCompleted: Bool
+    
     var memeLevel: MemeLevelType {
       return MemeLevelType(rawValue: userDetail.level) ?? .level1
     }
@@ -51,6 +53,10 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         userDetail.save
       }
     }
+    
+    var hasNextPageOfSavedMeme: Bool {
+      return savedMemePagination.currentPage < savedMemePagination.totalPages
+    }
   }
   
   // MARK: - Properties
@@ -63,6 +69,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let copyImageUseCase: CopyImageUseCase
   public var handler: Handler = .none
   
+  private var currentPage: Int = 1
+  private let savedMemeCountPerPage: Int = 2
+  
   // MARK: - Initializers
   
   public init(
@@ -74,7 +83,11 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     copyImageUseCase: CopyImageUseCase
   ) {
     self.router = router
-    self.state = State(userDetail: userDetail, lastSeenMemeList: [], savedMemeList: [], isRefreshCompleted: true)
+    self.state = State(userDetail: userDetail,
+                       lastSeenMemeList: [],
+                       savedMemeList: [],
+                       savedMemePagination: .none,
+                       isRefreshCompleted: true)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
@@ -94,27 +107,6 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         await self.refreshUserMemes()
       }
     }
-  }
-  
-  @MainActor
-  private func fetchUserMemes() async {
-    do {
-      let userDetail = try await self.getUserDetailUseCase.execute()
-      let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
-      let savedMemeList = try await self.getSavedMemeUseCase.execute()
-      self.state = State(userDetail: userDetail,
-                         lastSeenMemeList: lastSeenMemeList,
-                         savedMemeList: savedMemeList,
-                         isRefreshCompleted: true)
-    } catch(let error) {
-      print("fetchUserMemes error = \(error)")
-    }
-  }
-  
-  @MainActor
-  private func refreshUserMemes() async {
-    self.state.isRefreshCompleted = false
-    await fetchUserMemes()
   }
   
   private func initHandler() {
@@ -137,6 +129,59 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       }
     }
     
-    self.handler = Handler(memeClickHandler: memeClickHandler, memeCopyHandler: memeCopyHandler)
+    let onAppearLastMemeHandler: (() -> ()) = { [weak self] in
+      guard let self else { return }
+      Task {
+        await self.fetchNextPageSavedMeme()
+      }
+    }
+    
+    self.handler = Handler(
+      memeClickHandler: memeClickHandler,
+      memeCopyHandler: memeCopyHandler,
+      onAppearLastMemeHandler: onAppearLastMemeHandler
+    )
   }
+  
+  @MainActor
+  private func fetchUserMemes() async {
+    do {
+      let userDetail = try await self.getUserDetailUseCase.execute()
+      let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
+      let savedMemeListWithPagination = try await self.getSavedMemeUseCase.execute(page: 1,
+                                                                     size: self.savedMemeCountPerPage)
+      self.state = State(userDetail: userDetail,
+                         lastSeenMemeList: lastSeenMemeList,
+                         savedMemeList: savedMemeListWithPagination.memeList,
+                         savedMemePagination: savedMemeListWithPagination.pagination,
+                         isRefreshCompleted: true)
+    } catch(let error) {
+      print("fetchUserMemes error = \(error)")
+    }
+  }
+  
+  @MainActor
+  private func refreshUserMemes() async {
+    self.state.isRefreshCompleted = false
+    await fetchUserMemes()
+  }
+  
+  @MainActor
+  private func fetchNextPageSavedMeme() async {
+    guard state.hasNextPageOfSavedMeme else { return }
+    
+    do {
+      let savedMemeListWithPagination = try await self.getSavedMemeUseCase
+        .execute(
+          page: state.savedMemePagination.currentPage + 1,
+          size: self.savedMemeCountPerPage
+        )
+      
+      self.state.savedMemeList += savedMemeListWithPagination.memeList
+      self.state.savedMemePagination = savedMemeListWithPagination.pagination
+    } catch(let error) {
+      print("fetchNextPageSavedMeme error = \(error)")
+    }
+  }
+
 }

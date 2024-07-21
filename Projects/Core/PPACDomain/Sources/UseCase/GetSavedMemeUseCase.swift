@@ -9,7 +9,7 @@ import Foundation
 import PPACModels
 
 public protocol GetSavedMemeUseCase {
-  func execute() async throws -> [MemeDetail]
+  func execute(page: Int, size: Int) async throws -> MemeListWithPagination
 }
 
 public class GetSavedMemeUseCaseImpl: GetSavedMemeUseCase {
@@ -19,7 +19,7 @@ public class GetSavedMemeUseCaseImpl: GetSavedMemeUseCase {
     self.userRepository = userRepository
   }
   
-  public func execute() async throws -> [MemeDetail] {
-    return try await self.userRepository.getSavedMeme()
+  public func execute(page: Int, size: Int) async throws -> MemeListWithPagination {
+    return try await self.userRepository.getSavedMeme(page: page, size: size)
   }
 }
