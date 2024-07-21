@@ -19,6 +19,7 @@ public struct MyPageView: View {
   
   public var body: some View {
     ScrollView {
+      MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
       levelView
       divider
       RecentlyMemeListView(
@@ -34,6 +35,9 @@ public struct MyPageView: View {
     }
     .onAppear {
       viewModel.dispatch(type: .onAppearMyPageView)
+    }
+    .refreshable {
+      viewModel.dispatch(type: .pullToRefresh)
     }
     .background {
       gradientBackgroundView
@@ -86,6 +90,8 @@ public struct MyPageView: View {
       .padding(.bottom, 20)
   }
 }
+
+
 
 
 //#Preview {

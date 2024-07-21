@@ -20,6 +20,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   
   public enum Action { 
     case onAppearMyPageView
+    case pullToRefresh
   }
   
   public struct Handler {
@@ -33,7 +34,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var userDetail: UserDetail
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
-    
+    var isRefreshCompleted: Bool
     var memeLevel: MemeLevelType {
       return MemeLevelType(rawValue: userDetail.level) ?? .level1
     }
@@ -73,7 +74,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     copyImageUseCase: CopyImageUseCase
   ) {
     self.router = router
-    self.state = State(userDetail: userDetail, lastSeenMemeList: [], savedMemeList: [])
+    self.state = State(userDetail: userDetail, lastSeenMemeList: [], savedMemeList: [], isRefreshCompleted: true)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
@@ -89,6 +90,8 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       switch type {
       case .onAppearMyPageView:
         await self.fetchUserMemes()
+      case .pullToRefresh:
+        await self.refreshUserMemes()
       }
     }
   }
@@ -96,14 +99,22 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   @MainActor
   private func fetchUserMemes() async {
     do {
+      let userDetail = try await self.getUserDetailUseCase.execute()
       let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
       let savedMemeList = try await self.getSavedMemeUseCase.execute()
-      self.state = State(userDetail: state.userDetail,
+      self.state = State(userDetail: userDetail,
                          lastSeenMemeList: lastSeenMemeList,
-                         savedMemeList: savedMemeList)
+                         savedMemeList: savedMemeList,
+                         isRefreshCompleted: true)
     } catch(let error) {
       print("fetchUserMemes error = \(error)")
     }
+  }
+  
+  @MainActor
+  private func refreshUserMemes() async {
+    self.state.isRefreshCompleted = false
+    await fetchUserMemes()
   }
   
   private func initHandler() {
