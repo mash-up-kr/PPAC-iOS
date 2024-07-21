@@ -1,25 +1,27 @@
 //
 //  Project.swift
-//  PPACDomain
+//  Setting
 //
-//  Created by kimchansoo on 2024/07/06
+//  Created by hyeryeong on 7/21/24
 //
 
 import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project(
-    name: "PPACDomain",
+    name: "Setting",
     targets: [
         .configure(
-            name: "PPACDomain",
+            name: "Setting",
             product: .framework,
             infoPlist: .default,
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
-              .Core.PPACModels,
-              .Core.PPACNetwork
+              .ThirdParty.Dependency,
+              .ResourceKit,
+              .Core.DesignSystem,
+              .Core.PPACUtil
             ]
         )
     ]
