@@ -23,6 +23,25 @@ struct MemeWithPaginationResponseDTO: Decodable {
   }
 }
 
+extension MemeWithPaginationResponseDTO {
+  func toModel() -> MemeListWithPagination {
+    let pagination = MemeListWithPagination
+      .Pagination(
+        totalPages: self.pagination.totalPages,
+        totalMemes: self.pagination.total,
+        perPageOfMemes: self.pagination.perPage,
+        currentPage: self.pagination.currentPage
+      )
+    let memeList = memeList.map { $0.toModel() }
+    
+    return MemeListWithPagination(
+      pagination: pagination,
+      memeList: memeList
+    )
+  }
+}
+
+
 struct MemeResponseDTO: Decodable {
   let _id: String
   let title: String

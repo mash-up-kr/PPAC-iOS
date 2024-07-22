@@ -16,6 +16,7 @@ import PPACData
 
 import MemeDetail
 import DesignSystem
+import Setting
 
 public final class MyPageRouter: Router, MyPageRouting {
   
@@ -61,7 +62,11 @@ public final class MyPageRouter: Router, MyPageRouting {
     router.start()
   }
   
-  public func showSettingView() { }
+  public func showSettingView() { 
+    let router = SettingRouter(navigationController: self.navigationController)
+    self.childRouters.append(router)
+    router.start()
+  }
   
 }
 

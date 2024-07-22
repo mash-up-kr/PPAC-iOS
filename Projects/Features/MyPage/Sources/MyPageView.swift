@@ -19,6 +19,7 @@ public struct MyPageView: View {
   
   public var body: some View {
     ScrollView {
+      MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
       levelView
       divider
       RecentlyMemeListView(
@@ -28,12 +29,16 @@ public struct MyPageView: View {
       SavedMemeListView(
         memeDetailList: $viewModel.state.savedMemeList,
         memeClickHandler: viewModel.handler.memeClickHandler,
-        memeCopyHandler: viewModel.handler.memeCopyHandler
+        memeCopyHandler: viewModel.handler.memeCopyHandler,
+        onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
       )
-      Spacer(minLength: 70)
+      Spacer(minLength: 80)
     }
     .onAppear {
       viewModel.dispatch(type: .onAppearMyPageView)
+    }
+    .refreshable {
+      viewModel.dispatch(type: .pullToRefresh)
     }
     .background {
       gradientBackgroundView
@@ -69,8 +74,11 @@ public struct MyPageView: View {
         .frame(width: 20, height: 20, alignment: .center)
         .padding(.vertical, 15)
         .padding(.trailing, 20)
+        .onTapGesture {
+          viewModel.dispatch(type: .settingButtonTapped)
+        }
     }
-    .padding(.top, 30)
+    .padding(.top, 40)
   }
   
   var levelTitleTextView: some View {
@@ -86,6 +94,8 @@ public struct MyPageView: View {
       .padding(.bottom, 20)
   }
 }
+
+
 
 
 //#Preview {
