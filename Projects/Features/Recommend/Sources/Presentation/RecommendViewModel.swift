@@ -19,7 +19,7 @@ public protocol RecommendRouting: AnyObject {
 public final class RecommendViewModel: ViewModelType, ObservableObject {
   
   public enum Action {
-    case initializeView
+    case viewInitialized
     case showRecommendMeme(memeId: String?)
     case likeButtonTapped(memeId: String?)
     case copyButtonTapped(memeImageUrl: String?)
@@ -29,6 +29,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   
   public struct State {
     var recommendMemes: [MemeDetail]
+    var recommendMemeSize: Int
     var userLevel: Int
     var memeRecommendWatchCount: Int
   }
@@ -58,6 +59,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     self.bookmarkMemeUseCase = bookmarkMemeUseCase
     self.state = State(
       recommendMemes: [],
+      recommendMemeSize: 0,
       userLevel: 0,
       memeRecommendWatchCount: 0
     )
@@ -66,7 +68,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   public func dispatch(type: Action) {
     Task { @MainActor in
       switch(type) {
-      case .initializeView:
+      case .viewInitialized:
         await getRecommendAndUser()
       case .showRecommendMeme(let memeId):
         await postShownMeme(memeId: memeId)
@@ -86,15 +88,17 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
 private extension RecommendViewModel {
   func getRecommendAndUser() async {
     do {
-      let recommendMemes = try await getRecommendMemesUseCase.execute(size: 5)
-      let user = try await getUserInfoUseCase.get()
+      let recommendMemeSize = 5
+      let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
+      let user = try await getUserInfoUseCase.execute()
       
       self.state.recommendMemes = recommendMemes
+      self.state.recommendMemeSize = recommendMemes.count
       self.state.userLevel = user.level
       self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
       
     } catch {
-      print("Failed get recommend memes : \(error)")
+      debugPrint("Failed get recommend memes : \(error)")
     }
   }
   
@@ -102,11 +106,11 @@ private extension RecommendViewModel {
     guard let memeId else { return }
     do {
       try await watchMemeUseCase.execute(memeId: memeId, type: "recommend")
-      let user = try await getUserInfoUseCase.get()
+      let user = try await getUserInfoUseCase.execute()
       self.state.userLevel = user.level
       self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
     } catch {
-      print("Failed show recommnedMeme : \(error)")
+      debugPrint("Failed show recommnedMeme : \(error)")
     }
   }
   
@@ -119,7 +123,7 @@ private extension RecommendViewModel {
         self.state.recommendMemes[index].reaction += 1
       }
     } catch {
-      print("Failed post recation : \(error)")
+      debugPrint("Failed post recation : \(error)")
     }
   }
   
@@ -136,7 +140,7 @@ private extension RecommendViewModel {
 
       UIPasteboard.general.image = image
     } catch {
-      print("Failed to load image data: \(error)")
+      debugPrint("Failed to load image data: \(error)")
     }
   }
   
@@ -144,38 +148,38 @@ private extension RecommendViewModel {
     guard let memeImageUrl else { return }
     
     guard let url = URL(string: memeImageUrl) else {
-      print("invalid url")
+      debugPrint("invalid url")
       return
     }
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
       guard let image = UIImage(data: data) else {
-        print("invalid image data")
+        debugPrint("invalid image data")
         return
       }
       await self.router?.showShareView(items: [image])
     } catch {
-      print("Failed to load image data: \(error)")
+      debugPrint("Failed to load image data: \(error)")
     }
   }
   
   func saveMeme(memeId: String?) async {
     guard let memeId else { return }
-    guard let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) else {
-      print("not found meme. memeId: \(memeId)")
+    guard var meme = self.state.recommendMemes.first(where: { $0.id == memeId }) else {
+      debugPrint("not found meme. memeId: \(memeId)")
       return
     }
     
-    if self.state.recommendMemes[index].isFarmemed {
-      print("already farmeme.")
+    if meme.isFarmemed {
+      debugPrint("already farmeme.")
       return
     }
     
     do {
-      try await bookmarkMemeUseCase.execute(memeId: self.state.recommendMemes[index].id)
-      self.state.recommendMemes[index].isFarmemed = true
+      try await bookmarkMemeUseCase.execute(memeId: meme.id)
+      meme.isFarmemed = true
     } catch {
-      print("Failed save meme : \(error)")
+      debugPrint("Failed save meme : \(error)")
     }
   }
 }

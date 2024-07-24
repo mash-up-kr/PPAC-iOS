@@ -11,7 +11,7 @@ import PPACModels
 import PPACUtil
 
 public protocol GetUserInfoUseCase {
-  func get() async throws -> UserDetail
+  func execute() async throws -> UserDetail
 }
 
 final public class GetUserInfoUseCaseImpl: GetUserInfoUseCase {
@@ -21,7 +21,7 @@ final public class GetUserInfoUseCaseImpl: GetUserInfoUseCase {
     self.userRepository = userRepository
   }
   
-  public func get() async throws -> UserDetail {
+  public func execute() async throws -> UserDetail {
     return try await self.userRepository.getUserDetail()
   }
   

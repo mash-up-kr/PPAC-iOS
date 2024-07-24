@@ -41,7 +41,7 @@ final public class NetworkService: NetworkServiceable {
         let decodedData = try decoder.decode(T.self, from: data)
         return .success(decodedData)
       } catch {
-        print("Decode fail reason: \(error)")
+        debugPrint("Decode fail reason: \(error)")
       }
       error = .dataDecodingError
     case 400..<500:
@@ -59,7 +59,7 @@ final public class NetworkService: NetworkServiceable {
     if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []),
        let prettyData = try? JSONSerialization.data(withJSONObject: jsonObject, options: [.prettyPrinted]),
        let prettyString = String(data: prettyData, encoding: .utf8) {
-      print("Response JSON:\n\(prettyString)")
+      debugPrint("Response JSON:\n\(prettyString)")
     }
   }
 }

@@ -27,7 +27,7 @@ public struct RecommendView: View {
     _ viewModel: RecommendViewModel
   ) {
     self.viewModel = viewModel
-    viewModel.dispatch(type: .initializeView)
+    viewModel.dispatch(type: .viewInitialized)
   }
   
   public var body: some View {
@@ -35,7 +35,8 @@ public struct RecommendView: View {
       Spacer()
       RecommendHeaderView(
         userLevel: $viewModel.state.userLevel,
-        seenMemeCount: $viewModel.state.memeRecommendWatchCount
+        seenMemeCount: $viewModel.state.memeRecommendWatchCount,
+        recommendMemeSize: $viewModel.state.recommendMemeSize
       )
       
       ZStack {
