@@ -8,6 +8,7 @@
 import SwiftUI
 import ResourceKit
 import DesignSystem
+import Lottie
 
 struct MemeLevelConditionCheckView: View {
   let memeLevel: MemeLevelType
@@ -17,7 +18,6 @@ struct MemeLevelConditionCheckView: View {
   }
   
   private let horizantalPadding: CGFloat = 36.0
-  private let checkImageSize: CGSize = CGSize(width: 24, height: 24)
   
   var body: some View {
     VStack {
@@ -115,7 +115,7 @@ struct levelStepView: View {
     } else if levelType == currentLevel {
       return AnyView(currentLevelCircleView)
     } else {
-      return AnyView(nextLevelCircleView)
+      return AnyView(defaultCircleView)
     }
   }
   
@@ -126,20 +126,18 @@ struct levelStepView: View {
   
   var currentLevelCircleView: some View {
     ZStack {
-      Circle()
-        .foregroundStyle(Color.Background.assistive)
-        .frame(width: 20, height: 20, alignment: .center)
-      Circle()
-        .foregroundStyle(Color.Text.assistive)
-        .frame(width: 8, height: 8, alignment: .center)
+      LottieView(animation: AnimationAsset.mypageLevelCircle.animation)
+        .looping()
+      defaultCircleView
     }
   }
   
-  var nextLevelCircleView: some View {
+  var defaultCircleView: some View {
     Circle()
       .foregroundStyle(Color.Text.assistive)
       .frame(width: 8, height: 8, alignment: .center)
   }
+  
 }
 
 struct DottedLine: Shape {
@@ -161,6 +159,6 @@ struct DottedLine: Shape {
 }
 
 #Preview {
-  MemeLevelConditionCheckView(memeLevel: .level3)
+  MemeLevelConditionCheckView(memeLevel: .level1)
 }
 

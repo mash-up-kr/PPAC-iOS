@@ -71,6 +71,19 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable, Comparable {
       return ResourceKitAsset.Icon.level4Character.swiftUIImage
     }
   }
+    
+  public var levelBadgeImage: Image {
+    switch self {
+    case .level1:
+      return ResourceKitAsset.Icon.level1.swiftUIImage
+    case .level2:
+      return ResourceKitAsset.Icon.level2.swiftUIImage
+    case .level3:
+      return ResourceKitAsset.Icon.level3.swiftUIImage
+    case .level4:
+      return ResourceKitAsset.Icon.level4.swiftUIImage
+    }
+  }
   
   // MARK: Comparable
   public static func < (lhs: MemeLevelType, rhs: MemeLevelType) -> Bool {
