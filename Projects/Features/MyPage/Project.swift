@@ -23,6 +23,7 @@ let project = Project(
                 .Core.DesignSystem,
                 .Core.PPACModels,
                 .Feature.MemeDetail,
+                .Feature.Setting
             ]
         )
     ]

@@ -54,17 +54,17 @@ public final class UserRepositoryImpl: UserRepository {
     }
   }
   
-  public func getSavedMeme() async throws -> [MemeDetail] {
+  public func getSavedMeme(page: Int, size: Int) async throws -> MemeListWithPagination {
     let result = await networkservice
       .request(
-        UserEndpoint.savedMeme,
+        UserEndpoint.savedMeme(page: page, size: size),
         dataType: BaseDTO<MemeWithPaginationResponseDTO>.self
       )
     
     switch result {
     case .success(let data):
-      guard let memeResponseDTOList = data.data?.memeList else { throw NetworkError.dataDecodingError }
-      return memeResponseDTOList.map { $0.toModel() }
+      guard let memeWithPaginationResponseDTO = data.data else { throw NetworkError.dataDecodingError }
+      return memeWithPaginationResponseDTO.toModel()
     case .failure(let error):
       throw error
     }

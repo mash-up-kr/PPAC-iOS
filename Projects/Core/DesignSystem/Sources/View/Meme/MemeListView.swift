@@ -15,15 +15,22 @@ public struct MemeListView: View {
                                                   alignment: .center),count: 2)
   private let memeClickHandler: ((MemeDetail) -> ())?
   private let memeCopyHandler: ((MemeDetail) -> ())?
+  private let onAppearLastMemeHandler: (() -> ())?
+  
+  private var lastMemeId: String {
+    return memeDetailList.last?.id ?? ""
+  }
   
   public init(
     memeDetailList: [MemeDetail],
     memeClickHandler: ((MemeDetail) -> ())? = nil,
-    memeCopyHandler: ((MemeDetail) -> ())? = nil
+    memeCopyHandler: ((MemeDetail) -> ())? = nil,
+    onAppearLastMemeHandler: (() -> ())? = nil
   ) {
     self.memeDetailList = memeDetailList
     self.memeClickHandler = memeClickHandler
     self.memeCopyHandler = memeCopyHandler
+    self.onAppearLastMemeHandler = onAppearLastMemeHandler
   }
   
   var oddIndexedItems: [MemeDetail] {
@@ -41,7 +48,7 @@ public struct MemeListView: View {
   
   public var body: some View {
     ScrollView {
-      HStack {
+      HStack(alignment: .top) {
         LazyVStack {
           ForEach(oddIndexedItems) { memeDetail in
             MemeItemView(
@@ -49,6 +56,11 @@ public struct MemeListView: View {
               memeClickHandler: memeClickHandler,
               memeCopyHandler: memeCopyHandler
             )
+            .onAppear {
+              if memeDetail.id == lastMemeId {
+                onAppearLastMemeHandler?()
+              }
+            }
           }
         }
         
@@ -59,9 +71,18 @@ public struct MemeListView: View {
               memeClickHandler: memeClickHandler,
               memeCopyHandler: memeCopyHandler
             )
+            .onAppear {
+              if memeDetail.id == lastMemeId {
+                onAppearLastMemeHandler?()
+              }
+            }
           }
         }
       }
+      // FIXME: pull to refresh 했을 때 onAppear가 호출되지 않아서 onChange로 임시 호출, 수정필요
+//      .onChange(of: memeDetailList) {
+//        onAppearLastMemeHandler?()
+//      }
       .frame(maxWidth: .infinity)
     }
     .scrollTargetBehavior(.viewAligned)

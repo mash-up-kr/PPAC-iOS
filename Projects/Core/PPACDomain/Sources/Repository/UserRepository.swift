@@ -12,6 +12,6 @@ import PPACModels
 public protocol UserRepository {
   func create(deviceId: String) async throws -> UserDetail
   func getUserDetail() async throws -> UserDetail
-  func getSavedMeme() async throws -> [MemeDetail]
+  func getSavedMeme(page: Int, size: Int) async throws -> MemeListWithPagination
   func getLastSeenMeme() async throws -> [MemeDetail]
 }
