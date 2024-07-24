@@ -43,12 +43,7 @@ public enum MemeEndpoint: Requestable {
   }
   
   public var headers: [String : String]? {
-    switch self {
-    case .getSearchKeywordMemeList:
-      return ["x-device-id": UserInfo.shared.deviceId]
-    default:
-      return nil
-    }
+    return nil
   }
   
   public var path: String? {

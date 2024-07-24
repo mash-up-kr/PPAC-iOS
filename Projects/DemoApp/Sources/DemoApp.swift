@@ -18,17 +18,17 @@ import PPACData
 struct DemoApp: App {
 	
 	enum Views: String, CaseIterable, Identifiable {
-//		case MemeDetail
+		case MemeDetail
 		case SearchResult
 		
 		var id: String { self.rawValue }
 		
-		var view: some View {
+		var view: AnyView {
 			switch self {
-//			case .MemeDetail:
-//				getMemeDetailView()
-				case .SearchResult:
-					getSearchResultView()
+			case .MemeDetail:
+				AnyView(getMemeDetailView())
+			case .SearchResult:
+				AnyView(getSearchResultView())
 			}
 		}
 	}
@@ -51,16 +51,18 @@ struct DemoApp: App {
 }
 
 private extension DemoApp.Views {
-//	func getMemeDetailView() -> some View {
-//		return MemeDetailView(
-//			viewModel: MemeDetailViewModel(
-//				meme: .mock,
-//				router: nil,
-//				copyImageUseCase: CopyImageUseCaseImpl(),
-//				postLikeUseCase: PostLikeUseCaseImpl()
-//			)
-//		)
-//	}
+	func getMemeDetailView() -> some View {
+		return MemeDetailView(
+			viewModel: MemeDetailViewModel(
+				meme: .mock,
+				router: nil,
+				bookmarkMemeUseCase: BookmarkMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				shareMemeUseCase: ShareMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				watchMemeUseCase: WatchMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				reactToMemeUseCase: ReactToMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService()))
+			)
+		)
+	}
 	
 	func getSearchResultView() -> some View {
 		return SearchResultView(
