@@ -86,6 +86,19 @@ struct MemeResponseDTO: Decodable {
   }
 }
 
+struct MemeKeywordResponseDTO: Decodable {
+  let _id: String
+  let name: String
+  
+  public init(
+    _id: String,
+    name: String
+  ) {
+    self._id = _id
+    self.name = name
+  }
+}
+
 extension MemeResponseDTO {
   
   func toModel() -> MemeDetail {

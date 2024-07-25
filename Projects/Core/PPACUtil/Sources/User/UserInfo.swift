@@ -19,5 +19,5 @@ public class UserInfo {
   @UserDefault(key:"deviceId", defaultValue: "")
   public var deviceId: String
  
-  public let testDeviceId: String = "abcdefgh"
+  public let testDeviceId: String = "uni-test"
 }

@@ -8,41 +8,93 @@
 import SwiftUI
 import ResourceKit
 
+import PPACModels
+import PPACDomain
+import PPACData
+import PPACNetwork
+import DesignSystem
+
 public struct RecommendView: View {
+  
+  @ObservedObject private var viewModel: RecommendViewModel
+  
   @State private var memeImageHeight: CGFloat = 0
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
+  @State private var currentMeme: MemeDetail?
   
-  public init() { }
+  public init(
+    _ viewModel: RecommendViewModel
+  ) {
+    self.viewModel = viewModel
+    viewModel.dispatch(type: .viewInitialized)
+  }
   
   public var body: some View {
     VStack {
       Spacer()
-      RecommendHeaderView()
+      RecommendHeaderView(
+        userLevel: $viewModel.state.userLevel,
+        seenMemeCount: $viewModel.state.memeRecommendWatchCount,
+        recommendMemeSize: $viewModel.state.recommendMemeSize
+      )
       
       ZStack {
         VStack {
           let isOverlapView = memeImageHeight + buttonHeight > zstackHeight
-          RecommendMemeImageView(isTagHidden: isOverlapView)
+          
+          if viewModel.state.recommendMemes.count > 0 {
+            RecommendMemeImagesView(
+              currentMeme: $currentMeme,
+              memes: viewModel.state.recommendMemes,
+              isTagHidden: isOverlapView
+            )
             .onReadSize { size in
               memeImageHeight = size.height
             }
+          }
+          
           Spacer()
         }
         .zIndex(1)
         
         VStack {
           Spacer()
-          RecommendMemeButtonView()
-            .onReadSize { size in
-              buttonHeight = size.height
+          
+          RecommendMemeButtonView(
+            meme: $currentMeme,
+            reactionButtonTapped: {
+              viewModel.dispatch(
+                type: .likeButtonTapped(memeId: currentMeme?.id)
+              )
+            },
+            copyButtonTapped: {
+              viewModel.dispatch(
+                type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+              )
+            },
+            shareButtonTapped : {
+              viewModel.dispatch(
+                type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+              )
+            },
+            saveButtonTapped : {
+              viewModel.dispatch(
+                type: .farmemeButtonTapped(memeId: currentMeme?.id)
+              )
             }
+          )
+          .onReadSize { size in
+            buttonHeight = size.height
+          }
         }
         .zIndex(2)
       }
       .onReadSize { size in
         zstackHeight = size.height
       }
+      
+      Spacer(minLength: 98)
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(
@@ -55,32 +107,45 @@ public struct RecommendView: View {
         endPoint: .bottom
       )
     )
+    .edgesIgnoringSafeArea(.bottom)
+    .onChange(of: currentMeme) {
+      if let currentMeme {
+        viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
+      }
+    }
   }
 }
 
 #Preview {
-  RecommendView()
-}
-
-extension View {
-  @ViewBuilder
-  func onReadSize(_ perform: @escaping (CGSize) -> Void) -> some View {
-    self.customBackground {
-      GeometryReader { geometryProxy in
-        Color.clear
-          .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
-      }
-    }
-    .onPreferenceChange(SizePreferenceKey.self, perform: perform)
+  var selectedTab: MainTab = .recommend
+  
+  var selectedTabBinding: Binding<MainTab> {
+    Binding(
+      get: { selectedTab },
+      set: { selectedTab = $0 }
+    )
   }
   
-  @ViewBuilder
-  func customBackground<V: View>(alignment: Alignment = .center, @ViewBuilder content: () -> V) -> some View {
-    self.background(alignment: alignment, content: content)
-  }
-}
-
-struct SizePreferenceKey: PreferenceKey {
-  static var defaultValue: CGSize = .zero
-  static func reduce(value: inout CGSize, nextValue: () -> CGSize) { }
+  let networkService = NetworkService()
+  let memeRepository = MemeRepositoryImpl(networkservice: networkService)
+  let userRepository = UserRepositoryImpl(networkservice: networkService)
+  let getRecommendMemesUseCase = GetRecommendMemesUseCaseImpl(
+    repository: memeRepository
+  )
+  let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
+  let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
+  let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
+  let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
+  
+  return RecommendView(
+    RecommendViewModel(
+      router: nil,
+      getRecommendMemesUseCase: getRecommendMemesUseCase,
+      getUserInfoUseCase: getUserInfoUseCase,
+      watchMemeUseCase: watchMemeUseCase,
+      reactToMemeUseCase: reactToMemeUseCase,
+      bookmarkMemeUseCase: bookmarkMemeUseCase
+    )
+  )
+  .tabBar(selectedTab: selectedTabBinding)
 }

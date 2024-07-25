@@ -51,7 +51,7 @@ public enum MemeEndpoint: Requestable {
   public var path: String? {
     switch self {
     case .recommendMeme:
-      return "/meme/recomment-memes"
+      return "/meme/recommend-memes"
     case .meme(let memeId):
       return "/meme/\(memeId)"
     case .bookmark(let memeId):

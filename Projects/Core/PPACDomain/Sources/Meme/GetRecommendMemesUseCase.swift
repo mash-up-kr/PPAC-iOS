@@ -8,19 +8,20 @@
 import Foundation
 
 import PPACModels
+import PPACUtil
 
 public protocol GetRecommendMemesUseCase {
-    func execute(size: Int) async throws -> [MemeDetail]
+  func execute(size: Int) async throws -> [MemeDetail]
 }
 
 public class GetRecommendMemesUseCaseImpl: GetRecommendMemesUseCase {
-    private let repository: MemeRepository
-
-    public init(repository: MemeRepository) {
-        self.repository = repository
-    }
-
-    public func execute(size: Int) async throws -> [MemeDetail] {
-        return try await repository.getRecommendMemes(size: size)
-    }
+  private let repository: MemeRepository
+  
+  public init(repository: MemeRepository) {
+    self.repository = repository
+  }
+  
+  public func execute(size: Int) async throws -> [MemeDetail] {
+    return try await repository.getRecommendMemes(size: size)
+  }
 }
