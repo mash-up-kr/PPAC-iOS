@@ -32,6 +32,7 @@ extension TargetDependency {
     public static let Lottie = TargetDependency.external(name: "Lottie")
     public static let Dependency = TargetDependency.external(name: "Dependencies")
     public static let Kingfisher = TargetDependency.external(name: "Kingfisher")
+    public static let PopupView = TargetDependency.external(name: "PopupView")
   }
   
   public static let ResourceKit = TargetDependency.project(

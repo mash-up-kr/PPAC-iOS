@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PopupView
+
 import ResourceKit
 
 import PPACModels
@@ -22,6 +24,11 @@ public struct RecommendView: View {
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
   @State private var currentMeme: MemeDetail?
+  
+  @State var isActiveCopyPopup: Bool = false
+  
+  @State var isFaremed: Bool = false
+  @State var isActiveFarmemePopup: Bool = false
   
   public init(
     _ viewModel: RecommendViewModel
@@ -72,6 +79,7 @@ public struct RecommendView: View {
               viewModel.dispatch(
                 type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
               )
+              isActiveCopyPopup = true
             },
             shareButtonTapped : {
               viewModel.dispatch(
@@ -82,6 +90,11 @@ public struct RecommendView: View {
               viewModel.dispatch(
                 type: .farmemeButtonTapped(memeId: currentMeme?.id)
               )
+              currentMeme?.isFarmemed.toggle()
+              isActiveFarmemePopup = true
+              if let currentMeme {
+                isFaremed = currentMeme.isFarmemed
+              }
             }
           )
           .onReadSize { size in
@@ -113,6 +126,11 @@ public struct RecommendView: View {
         viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
       }
     }
+    .copyPopup(isActive: $isActiveCopyPopup)
+    .farmemePopup(
+      isActive: $isActiveFarmemePopup,
+      isFarmeme: $isFaremed
+    )
   }
 }
 

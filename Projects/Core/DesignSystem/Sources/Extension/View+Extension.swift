@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension View {
-  public func cornerRadius(
+  func rnerRadius(
     _ radius: CGFloat,
     corners: UIRectCorner
   ) -> some View {
@@ -16,4 +16,15 @@ public extension View {
   }
 }
 
-
+public extension View {
+  func copyPopup(isActive: Binding<Bool>) -> some View {
+    self.modifier(CopyPopupModifier(isActive: isActive))
+  }
+  
+  func farmemePopup(
+    isActive: Binding<Bool>,
+    isFarmeme: Binding<Bool>
+  ) -> some View {
+    self.modifier(FarmemePopupModifier(isActive: isActive, isFarmemed: isFarmeme))
+  }
+}
