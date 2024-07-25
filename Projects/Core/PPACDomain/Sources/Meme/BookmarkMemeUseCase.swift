@@ -10,17 +10,22 @@ import Foundation
 import PPACModels
 
 public protocol BookmarkMemeUseCase {
-    func execute(memeId: String) async throws
+  func execute(memeId: String) async throws
+  func delete(memeId: String) async throws
 }
 
 public class BookmarkMemeUseCaseImpl: BookmarkMemeUseCase {
-    private let repository: MemeRepository
-
-    public init(repository: MemeRepository) {
-        self.repository = repository
-    }
-
-    public func execute(memeId: String) async throws {
-        try await repository.bookmarkMeme(memeId: memeId)
-    }
+  private let repository: MemeRepository
+  
+  public init(repository: MemeRepository) {
+    self.repository = repository
+  }
+  
+  public func execute(memeId: String) async throws {
+    try await repository.bookmarkMeme(memeId: memeId)
+  }
+  
+  public func delete(memeId: String) async throws {
+    try await repository.deleteBookmarkMeme(memeId: memeId)
+  }
 }

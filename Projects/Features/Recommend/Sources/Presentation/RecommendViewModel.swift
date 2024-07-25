@@ -171,15 +171,19 @@ private extension RecommendViewModel {
     }
     
     if meme.isFarmemed {
-      debugPrint("already farmeme.")
-      return
-    }
-    
-    do {
-      try await bookmarkMemeUseCase.execute(memeId: meme.id)
-      meme.isFarmemed = true
-    } catch {
-      debugPrint("Failed save meme : \(error)")
+      do {
+        try await bookmarkMemeUseCase.delete(memeId: meme.id)
+        meme.isFarmemed = false
+      } catch {
+        debugPrint("Faild delete meme : \(error)")
+      }
+    } else {
+      do {
+        try await bookmarkMemeUseCase.execute(memeId: meme.id)
+        meme.isFarmemed = true
+      } catch {
+        debugPrint("Failed save meme : \(error)")
+      }
     }
   }
 }

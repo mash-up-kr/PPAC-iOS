@@ -19,6 +19,7 @@ public enum MemeEndpoint: Requestable {
   case recommendMeme(size: Int)
   case meme(memeId: String)
   case bookmark(memeId: String)
+  case deleteBookmark(memeId: String)
   case share(memeId: String)
   case watch(memeId: String, type: String)
   case reaction(memeId: String)
@@ -35,6 +36,8 @@ public enum MemeEndpoint: Requestable {
       return .get
     case .bookmark:
       return .post
+    case .deleteBookmark:
+      return .delete
     case .share:
       return .post
     case .watch:
@@ -56,6 +59,8 @@ public enum MemeEndpoint: Requestable {
       return "/meme/\(memeId)"
     case .bookmark(let memeId):
       return "/meme/\(memeId)/save"
+    case .deleteBookmark(let memeId):
+      return "/meme/\(memeId)/save"
     case .share(let memeId):
       return "/meme/\(memeId)/share"
     case .watch(let memeId, let type):
@@ -70,6 +75,8 @@ public enum MemeEndpoint: Requestable {
     case .recommendMeme(let size):
       return .query(["size": String(size)])
     case .bookmark:
+      return nil
+    case .deleteBookmark:
       return nil
     case .share:
       return nil
