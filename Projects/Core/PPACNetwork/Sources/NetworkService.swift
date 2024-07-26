@@ -32,7 +32,7 @@ final public class NetworkService: NetworkServiceable {
       return .failure(.invalidResponse)
     }
     
-//    NetworkLogger.logResponse(httpResponse, data: data)
+    NetworkLogger.logResponse(httpResponse, data: data)
     let error: NetworkError
     switch httpResponse.statusCode {
     case 200..<300:

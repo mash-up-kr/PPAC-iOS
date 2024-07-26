@@ -76,6 +76,7 @@ public struct RecommendView: View {
               )
             },
             copyButtonTapped: {
+              if isActiveCopyPopup || isActiveFarmemePopup { return }
               viewModel.dispatch(
                 type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
               )
@@ -87,6 +88,7 @@ public struct RecommendView: View {
               )
             },
             saveButtonTapped : {
+              if isActiveCopyPopup || isActiveFarmemePopup { return }
               viewModel.dispatch(
                 type: .farmemeButtonTapped(memeId: currentMeme?.id)
               )
