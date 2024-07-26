@@ -70,34 +70,10 @@ public struct RecommendView: View {
           
           RecommendMemeButtonView(
             meme: $currentMeme,
-            reactionButtonTapped: {
-              viewModel.dispatch(
-                type: .likeButtonTapped(memeId: currentMeme?.id)
-              )
-            },
-            copyButtonTapped: {
-              if isActiveCopyPopup || isActiveFarmemePopup { return }
-              viewModel.dispatch(
-                type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
-              )
-              isActiveCopyPopup = true
-            },
-            shareButtonTapped : {
-              viewModel.dispatch(
-                type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
-              )
-            },
-            saveButtonTapped : {
-              if isActiveCopyPopup || isActiveFarmemePopup { return }
-              viewModel.dispatch(
-                type: .farmemeButtonTapped(memeId: currentMeme?.id)
-              )
-              currentMeme?.isFarmemed.toggle()
-              isActiveFarmemePopup = true
-              if let currentMeme {
-                isFaremed = currentMeme.isFarmemed
-              }
-            }
+            reactionButtonTapped: reactionButtonTap,
+            copyButtonTapped: copyButtonTap,
+            shareButtonTapped : shareButtonTap,
+            saveButtonTapped : saveButtonTap
           )
           .onReadSize { size in
             buttonHeight = size.height
@@ -133,6 +109,38 @@ public struct RecommendView: View {
       isActive: $isActiveFarmemePopup,
       isFarmeme: $isFaremed
     )
+  }
+  
+  private func reactionButtonTap() {
+    viewModel.dispatch(
+      type: .likeButtonTapped(memeId: currentMeme?.id)
+    )
+  }
+  
+  private func copyButtonTap() {
+    if isActiveCopyPopup || isActiveFarmemePopup { return }
+    viewModel.dispatch(
+      type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+    )
+    isActiveCopyPopup = true
+  }
+  
+  private func shareButtonTap() {
+    viewModel.dispatch(
+      type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+    )
+  }
+  
+  private func saveButtonTap() {
+    if isActiveCopyPopup || isActiveFarmemePopup { return }
+    viewModel.dispatch(
+      type: .farmemeButtonTapped(memeId: currentMeme?.id)
+    )
+    currentMeme?.isFarmemed.toggle()
+    isActiveFarmemePopup = true
+    if let currentMeme {
+      isFaremed = currentMeme.isFarmemed
+    }
   }
 }
 
