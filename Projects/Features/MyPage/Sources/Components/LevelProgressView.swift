@@ -59,13 +59,13 @@ struct LevelProgressView: View {
       .stroke(Color.Border.secondary, lineWidth: 1, fill: Color.Background.assistive)
   }
   
-  private func getCurrentLevelWidth(_ wiewWidth: CGFloat) -> CGFloat {
-    let width = wiewWidth / 20.0 * CGFloat(conditionCount)
+  private func getCurrentLevelWidth(_ viewWidth: CGFloat) -> CGFloat {
+    let width = viewWidth / 20.0 * CGFloat(conditionCount)
     return width < minimumWidth ? minimumWidth : width
   }
 }
 
 
 #Preview {
-  LevelProgressView(level: .level1, conditionCount: 20)
+  LevelProgressView(level: .level1, conditionCount: 1)
 }

@@ -6,15 +6,47 @@
 //
 
 import SwiftUI
+
 import ResourceKit
+import DesignSystem
+
+import PPACModels
+
+import Lottie
 
 struct RecommendMemeButtonView : View {
+  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
+  
+  @Binding var meme: MemeDetail?
+  
+  let reactionButtonTapped: () -> Void
+  let copyButtonTapped: () -> Void
+  let shareButtonTapped: () -> Void
+  let saveButtonTapped: () -> Void
+  
   public var body: some View  {
     HStack {
-      likeButton
-      copyButton
-      shareButton
-      saveButton
+      LikeButton(
+        reactionCount: meme?.reaction,
+        didTapped: {
+          playbackMode = .playing(
+            .fromProgress(0, toProgress: 1, loopMode: .playOnce)
+          )
+          self.reactionButtonTapped()
+        }
+      )
+      .overlay(content: {
+        LottieView(animation: AnimationAsset.kkEffect.animation)
+          .playbackMode(playbackMode)
+          .animationDidFinish { _ in
+            playbackMode = .paused(at: .progress(100))
+          }
+          .offset(y: -50)
+      })
+      
+      copyButton(copyButtonTapped)
+      shareButton(shareButtonTapped)
+      saveButton(saveButtonTapped)
     }
     .padding(.vertical, 30)
     .padding(.horizontal, 32)
@@ -31,53 +63,41 @@ struct RecommendMemeButtonView : View {
   }
 }
 
-var likeButton: some View {
-  Button(action: {
-    print("i like it!")
-  }) {
-    RoundedRectangle(cornerRadius: 40)
-      .foregroundStyle(.white)
-      .frame(width: 156 ,height: 50)
-      .overlay {
-        HStack {
-          ResourceKitAsset.Icon.ㅋ.swiftUIImage
-          Text("개웃겨")
-            .font(Font.Family2.outLine)
-            .foregroundStyle(Color.Icon.primary)
-        }
-      }
-  }
+func copyButton(_ copyAction: @escaping () -> Void) -> some View {
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.copy.swiftUIImage,
+    action: copyAction
+  )
 }
 
-var copyButton: some View {
-  Button(action: {
-    print("Copy~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.copy.swiftUIImage)
-  })
+func shareButton(_ shareAction: @escaping () -> Void) -> some View {
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.share.swiftUIImage,
+    action: shareAction
+  )
 }
 
-var shareButton: some View {
-  Button(action: {
-    print("Share~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.share.swiftUIImage)
-  })
+func saveButton(_ saveAction: @escaping () -> Void) -> some View {
+  CircleButton(
+    width: 50,
+    height: 50,
+    image: ResourceKitAsset.Icon.stroke.swiftUIImage,
+    action: saveAction
+  )
 }
 
-var saveButton: some View {
-  Button(action: {
-    print("Save~")
-  }, label: {
-    smallButton(image : ResourceKitAsset.Icon.stroke.swiftUIImage)
-  })
-}
-
-private func smallButton(image: SwiftUI.Image) -> some View {
-  Circle()
-    .foregroundStyle(.white)
-    .frame(width: 50, height: 50)
-    .overlay {
-      image
-    }
+#Preview {
+  @State var meme: MemeDetail? = .mock
+  
+  return RecommendMemeButtonView(
+    meme: $meme,
+    reactionButtonTapped: { meme?.reaction += 1 },
+    copyButtonTapped: { print("copy~~") },
+    shareButtonTapped: { print("share~~") },
+    saveButtonTapped: { print("save!!") }
+  )
 }

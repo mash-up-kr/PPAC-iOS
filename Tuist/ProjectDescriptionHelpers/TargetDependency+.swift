@@ -16,6 +16,7 @@ extension TargetDependency {
     public static let Search = project(moduleName: "Search")
     public static let MyPage = project(moduleName: "MyPage")
     public static let MemeDetail = project(moduleName: "MemeDetail")
+    public static let Setting = project(moduleName: "Setting")
   }
   
   public struct Core {

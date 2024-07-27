@@ -23,6 +23,25 @@ struct MemeWithPaginationResponseDTO: Decodable {
   }
 }
 
+extension MemeWithPaginationResponseDTO {
+  func toModel() -> MemeListWithPagination {
+    let pagination = MemeListWithPagination
+      .Pagination(
+        totalPages: self.pagination.totalPages,
+        totalMemes: self.pagination.total,
+        perPageOfMemes: self.pagination.perPage,
+        currentPage: self.pagination.currentPage
+      )
+    let memeList = memeList.map { $0.toModel() }
+    
+    return MemeListWithPagination(
+      pagination: pagination,
+      memeList: memeList
+    )
+  }
+}
+
+
 struct MemeResponseDTO: Decodable {
   let _id: String
   let title: String
@@ -64,6 +83,19 @@ struct MemeResponseDTO: Decodable {
     self.updatedAt = updatedAt
     self.isSaved = isSaved
     self.watch = watch
+  }
+}
+
+struct MemeKeywordResponseDTO: Decodable {
+  let _id: String
+  let name: String
+  
+  public init(
+    _id: String,
+    name: String
+  ) {
+    self._id = _id
+    self.name = name
   }
 }
 

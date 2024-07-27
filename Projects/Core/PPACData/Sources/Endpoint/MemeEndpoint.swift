@@ -49,7 +49,7 @@ public enum MemeEndpoint: Requestable {
   public var path: String? {
     switch self {
     case .recommendMeme:
-      return "/meme/recomment-memes"
+      return "/meme/recommend-memes"
     case let .getSearchKeywordMemeList(keyword):
       return "/meme/search/\(keyword)"
     case .meme(let memeId):

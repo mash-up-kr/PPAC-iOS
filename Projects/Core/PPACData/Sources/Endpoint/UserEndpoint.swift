@@ -13,7 +13,7 @@ public enum UserEndpoint: Requestable {
   
   case create(deviceId: String)
   case userDetail
-  case savedMeme
+  case savedMeme(page: Int, size: Int)
   case lastSeenMeme
   
   public var url: String {
@@ -55,6 +55,12 @@ public enum UserEndpoint: Requestable {
     case .create(let deviceId):
       let createDeviceRequest = CreateUserRequestDTO(deviceId: deviceId)
       return .body(createDeviceRequest)
+    case .savedMeme(let page, let size):
+      let parameters: [String: String] = [
+        "page" : "\(page)",
+        "size" : "\(size)"
+      ]
+      return .query(parameters)
     default:
       return nil
     }

@@ -15,6 +15,7 @@ struct SavedMemeListView: View {
   @Binding var memeDetailList: [MemeDetail]
   var memeClickHandler: ((MemeDetail) -> ())?
   var memeCopyHandler: ((MemeDetail) -> ())?
+  var onAppearLastMemeHandler: (() -> ())?
   
   var body: some View {
     VStack {
@@ -33,9 +34,10 @@ struct SavedMemeListView: View {
       MemeListView(
         memeDetailList: $memeDetailList,
         memeClickHandler: memeClickHandler,
-        memeCopyHandler: memeCopyHandler
+        memeCopyHandler: memeCopyHandler,
+        onAppearLastMemeHandler: onAppearLastMemeHandler
       )
-        .padding(.horizontal, 20)
+      .padding(.horizontal, 20)
     }
   }
   
