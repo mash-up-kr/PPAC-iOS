@@ -27,7 +27,7 @@ public struct RecommendView: View {
   
   @State var isActiveCopyPopup: Bool = false
   
-  @State var isFaremed: Bool = false
+  @State var isFarmemed: Bool = false
   @State var isActiveFarmemePopup: Bool = false
   
   public init(
@@ -104,10 +104,15 @@ public struct RecommendView: View {
         viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
       }
     }
-    .copyPopup(isActive: $isActiveCopyPopup)
-    .farmemePopup(
+    .popup(
+      isActive: $isActiveCopyPopup,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
+    .popup(
       isActive: $isActiveFarmemePopup,
-      isFarmeme: $isFaremed
+      image: isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
+      text: isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
     )
   }
   
@@ -139,7 +144,7 @@ public struct RecommendView: View {
     currentMeme?.isFarmemed.toggle()
     isActiveFarmemePopup = true
     if let currentMeme {
-      isFaremed = currentMeme.isFarmemed
+      isFarmemed = currentMeme.isFarmemed
     }
   }
 }
