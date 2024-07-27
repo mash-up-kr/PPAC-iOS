@@ -18,6 +18,7 @@ let project = Project(
             resources: "Resources/**",
             dependencies: [
                 .ResourceKit,
+                .ThirdParty.PopupView,
                 .Core.PPACModels
             ]
         )
