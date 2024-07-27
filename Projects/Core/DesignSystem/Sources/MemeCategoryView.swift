@@ -1,5 +1,5 @@
 //
-//  MimCategoryView.swift
+//  MemeCategoryView.swift
 //  DesignSystem
 //
 //  Created by 리나 on 2024/06/30.
@@ -8,19 +8,25 @@
 import SwiftUI
 import ResourceKit
 
-public struct MimCategoryView: View {
-  public let title: String
-  public let categories: [String]
+public struct MemeCategoryView: View {
+  public let category: String
+  public let keywords: [String]
+  public let onTapHandler: ((String) -> ())?
   
-  public init(title: String, categories: [String]) {
-    self.title = title
-    self.categories = categories
+  public init(
+    category: String,
+    keywords: [String],
+    onTapHandler: ((String) -> ())?
+  ) {
+    self.category = category
+    self.keywords = keywords
+    self.onTapHandler = onTapHandler
   }
   
   public var body: some View {
     VStack(spacing: 0) {
       HStack {
-        Text(title)
+        Text(category)
           .font(Font.Body.Small.semiBold)
           .foregroundColor(Color.Text.tertiary)
         
@@ -30,7 +36,7 @@ public struct MimCategoryView: View {
       .padding(.bottom, 16)
       .padding(.horizontal, 20)
       
-      CategoryTagView(categories: categories)
+      KeywordsTagView(keywords: keywords, onTapHandler: onTapHandler)
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
     }

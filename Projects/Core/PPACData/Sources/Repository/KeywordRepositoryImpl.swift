@@ -23,9 +23,8 @@ public final class KeywordRepositoryImpl: KeywordRepository {
   // MARK: - Methods
   
   public func getHotKeywords() async throws -> [HotKeyword] {
-    let result = await self.networkService
-      .request(KeywordEndPoint.getTopKeywords,
-               dataType: BaseDTO<[TopKeywordResponseDTO]>.self)
+    let endPoint = KeywordEndPoint.getTopKeywords
+    let result = await self.networkService.request(endPoint, dataType: BaseDTO<[TopKeywordResponseDTO]>.self)
     switch result {
     case .success(let data):
       guard let hotKeywordData = data.data else { throw NetworkError.dataDecodingError }
@@ -37,16 +36,15 @@ public final class KeywordRepositoryImpl: KeywordRepository {
     }
   }
   
-  public func getMimCategorys()  async throws -> [MimCategory] {
-    let result = await self.networkService
-      .request(KeywordEndPoint.getRecommendKeywords,
-               dataType: BaseDTO<[RecommendKeywordResponseDTO]>.self)
+  public func getMemeCategorys()  async throws -> [MemeCategory] {
+    let endPoint = KeywordEndPoint.getRecommendKeywords
+    let result = await self.networkService.request(endPoint, dataType: BaseDTO<[RecommendKeywordResponseDTO]>.self)
     switch result {
     case .success(let data):
-      guard let mimCategoryData = data.data else { throw NetworkError.dataDecodingError }
-      let mimCategorys = mimCategoryData
-        .compactMap { MimCategory(title: $0.category, categories: $0.keywords.map {$0.name }) }
-      return mimCategorys
+      guard let memeCategoryData = data.data else { throw NetworkError.dataDecodingError }
+      let memeCategorys = memeCategoryData
+        .compactMap { MemeCategory(category: $0.category, keywords: $0.keywords.map { $0.name }) }
+      return memeCategorys
     case .failure(let error):
       throw error
     }
