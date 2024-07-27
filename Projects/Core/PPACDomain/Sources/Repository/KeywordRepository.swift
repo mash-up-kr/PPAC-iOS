@@ -10,5 +10,5 @@ import PPACModels
 
 public protocol KeywordRepository {
   func getHotKeywords() async throws -> [HotKeyword]
-  func getMimCategorys() async throws -> [MimCategory]
+  func getMemeCategorys() async throws -> [MemeCategory]
 }

@@ -21,6 +21,8 @@ let project = Project(
               .ResourceKit,
               .Core.DesignSystem,
               .Core.PPACModels,
+              .Core.PPACData,
+              .Core.PPACNetwork,
               .ThirdParty.Dependency,
               .ThirdParty.Kingfisher,
             ]

@@ -27,10 +27,9 @@ struct RecentlyMemeListView: View {
     }
   }
   
-  
   var memeListView: some View {
     VStack {
-      HorizontalMimScrollView<MemeDetail, MemeSimpleItemView>(
+      HorizontalMemeScrollView<MemeDetail, MemeSimpleItemView>(
         items: $memeDetailList,
         itemClickHandler: memeClickHandler
       )
@@ -42,12 +41,11 @@ struct RecentlyMemeListView: View {
   var emptyView: some View {
     MemeListEmptyView(description: "최근 본 밈이 없어요")
   }
-  
 }
 
-extension MemeDetail: HorizontalMimItemProtocol {}
+extension MemeDetail: HorizontalMemeItemProtocol {}
 
-struct MemeSimpleItemView: View, HorizontalMimItemViewProtocol {
+struct MemeSimpleItemView: View, HorizontalMemeItemViewProtocol {
   typealias Item = MemeDetail
   let memeDetail: MemeDetail
   

@@ -1,22 +1,18 @@
-////
-////  MemeEndpoint.swift
-////  PPACData
-////
-////  Created by kimchansoo on 7/6/24.
-////
 //
-//import Foundation
+//  MemeEndpoint.swift
+//  PPACData
 //
-//import PPACNetwork
+//  Created by kimchansoo on 7/6/24.
 //
 
 import Foundation
 
 import PPACNetwork
+import PPACUtil
 
 public enum MemeEndpoint: Requestable {
-  
   case recommendMeme(size: Int)
+  case getSearchKeywordMemeList(keyword: String)
   case meme(memeId: String)
   case bookmark(memeId: String)
   case share(memeId: String)
@@ -30,6 +26,8 @@ public enum MemeEndpoint: Requestable {
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
     case .recommendMeme:
+      return .get
+    case .getSearchKeywordMemeList:
       return .get
     case .meme:
       return .get
@@ -52,6 +50,8 @@ public enum MemeEndpoint: Requestable {
     switch self {
     case .recommendMeme:
       return "/meme/recommend-memes"
+    case let .getSearchKeywordMemeList(keyword):
+      return "/meme/search/\(keyword)"
     case .meme(let memeId):
       return "/meme/\(memeId)"
     case .bookmark(let memeId):
@@ -69,6 +69,8 @@ public enum MemeEndpoint: Requestable {
     switch self {
     case .recommendMeme(let size):
       return .query(["size": String(size)])
+    case .getSearchKeywordMemeList:
+      return nil
     case .bookmark:
       return nil
     case .share:

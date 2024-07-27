@@ -57,10 +57,9 @@ public final class MainTabRouter: Router, ObservableObject {
       childRouters.append(recommendRouter)
       recommendRouter.start()
     case .search:
-      // sample
-      let detailRouter = MemeDetailRouter(self.navigationController, meme: .mock)
-      childRouters.append(detailRouter)
-      detailRouter.start()
+      let searchRouter = SearchRouter(self.navigationController, selectedTab: selectedTabBinding)
+      childRouters.append(searchRouter)
+      searchRouter.start()
     case .mypage:
       let myPageRouter = MyPageRouter(navigationController: self.navigationController,
                                       selectedTab: selectedTabBinding,

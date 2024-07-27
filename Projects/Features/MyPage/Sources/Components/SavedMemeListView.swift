@@ -32,7 +32,7 @@ struct SavedMemeListView: View {
   var memeListView: some View {
     VStack {
       MemeListView(
-        memeDetailList: memeDetailList,
+        memeDetailList: $memeDetailList,
         memeClickHandler: memeClickHandler,
         memeCopyHandler: memeCopyHandler,
         onAppearLastMemeHandler: onAppearLastMemeHandler
