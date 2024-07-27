@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension View {
-  func rnerRadius(
+  func cornerRadius(
     _ radius: CGFloat,
     corners: UIRectCorner
   ) -> some View {
