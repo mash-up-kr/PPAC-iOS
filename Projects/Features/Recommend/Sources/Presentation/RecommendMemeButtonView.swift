@@ -26,29 +26,32 @@ struct RecommendMemeButtonView : View {
   
   public var body: some View  {
     HStack {
-      LikeButton(
-        reactionCount: meme?.reaction,
-        didTapped: {
-          playbackMode = .playing(
-            .fromProgress(0, toProgress: 1, loopMode: .playOnce)
-          )
-          self.reactionButtonTapped()
-        }
-      )
-      .overlay(content: {
-        LottieView(animation: AnimationAsset.kkEffect.animation)
-          .playbackMode(playbackMode)
-          .animationDidFinish { _ in
-            playbackMode = .paused(at: .progress(100))
+      if let meme {
+        LikeButton(
+          reactionCount: meme.reaction,
+          didTapped: {
+            playbackMode = .playing(
+              .fromProgress(0, toProgress: 1, loopMode: .playOnce)
+            )
+            self.reactionButtonTapped()
           }
-          .offset(y: -50)
-      })
-      
-      copyButton(copyButtonTapped)
-      shareButton(shareButtonTapped)
-      saveButton(isFarmemed: meme?.isFarmemed ?? false) {
-        meme?.isFarmemed.toggle()
-        saveButtonTapped()
+        )
+        .overlay(content: {
+          LottieView(animation: AnimationAsset.kkEffect.animation)
+            .playbackMode(playbackMode)
+            .animationDidFinish { _ in
+              playbackMode = .paused(at: .progress(100))
+            }
+            .offset(y: -50)
+        })
+        
+        copyButton(copyButtonTapped)
+        
+        shareButton(shareButtonTapped)
+        
+        saveButton(isFarmemed: meme.isFarmemed) {
+          saveButtonTapped()
+        }
       }
     }
     .padding(.vertical, 30)
@@ -102,7 +105,7 @@ func saveButton(
     title: "안녕하세요!",
     keywords: ["웃김", "재미", "신나"],
     imageUrlString: "https://host.com/asdf",
-    source: "종난", 
+    source: "종난",
     isTodayMeme: true,
     reaction: 130,
     isFarmemed: true

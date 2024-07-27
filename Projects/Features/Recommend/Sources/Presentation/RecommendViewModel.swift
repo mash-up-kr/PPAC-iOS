@@ -165,22 +165,24 @@ private extension RecommendViewModel {
   
   func saveMeme(memeId: String?) async {
     guard let memeId else { return }
-    guard var meme = self.state.recommendMemes.first(where: { $0.id == memeId }) else {
+    
+    guard let memeIdx = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) else {
       debugPrint("not found meme. memeId: \(memeId)")
       return
     }
+    let meme = self.state.recommendMemes[memeIdx]
     
     if meme.isFarmemed {
       do {
         try await bookmarkMemeUseCase.delete(memeId: meme.id)
-        meme.isFarmemed = false
+        self.state.recommendMemes[memeIdx].isFarmemed = false
       } catch {
         debugPrint("Faild delete meme : \(error)")
       }
     } else {
       do {
         try await bookmarkMemeUseCase.execute(memeId: meme.id)
-        meme.isFarmemed = true
+        self.state.recommendMemes[memeIdx].isFarmemed = true
       } catch {
         debugPrint("Failed save meme : \(error)")
       }
