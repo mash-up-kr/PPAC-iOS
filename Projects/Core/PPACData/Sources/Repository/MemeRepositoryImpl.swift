@@ -10,7 +10,7 @@ import PPACDomain
 import PPACNetwork
 import PPACModels
 
-public class MemeRepositoryImpl: MemeRepository {
+public class MemeRepositoryImpl: MemeRepository {  
   
   // MARK: - Properties
   
@@ -65,25 +65,36 @@ public class MemeRepositoryImpl: MemeRepository {
   }
   
   public func bookmarkMeme(memeId: String) async throws {
-      let endpoint = MemeEndpoint.bookmark(memeId: memeId)
-      let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
-      switch result {
-      case .success:
-          return
-      case .failure(let failure):
-          throw failure
-      }
+    let endpoint = MemeEndpoint.bookmark(memeId: memeId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    switch result {
+    case .success:
+      return
+    case .failure(let failure):
+      throw failure
+    }
   }
-
+  
+  public func deleteBookmarkMeme(memeId: String) async throws {
+    let endpoint = MemeEndpoint.deleteBookmark(memeId: memeId)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    
+    switch result {
+    case .success:
+      return
+    case .failure(let failure):
+      throw failure
+    }
+  }
   
   public func shareMeme(memeId: String) async throws {
     let endpoint = MemeEndpoint.share(memeId: memeId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
-        return
+      return
     case .failure(let failure):
-        throw failure
+      throw failure
     }
   }
   
@@ -92,9 +103,9 @@ public class MemeRepositoryImpl: MemeRepository {
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
-        return
+      return
     case .failure(let failure):
-        throw failure
+      throw failure
     }
   }
   
@@ -103,9 +114,9 @@ public class MemeRepositoryImpl: MemeRepository {
     let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
     switch result {
     case .success:
-        return
+      return
     case .failure(let failure):
-        throw failure
+      throw failure
     }
   }
 }
