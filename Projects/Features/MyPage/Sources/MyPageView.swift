@@ -19,6 +19,12 @@ public struct MyPageView: View {
   
   public var body: some View {
     ZStack(alignment: .top) {
+      Rectangle()
+        .frame(height: 51)
+        .foregroundStyle(Color.clear)
+        .background(.ultraThinMaterial)
+        .blur(radius: 0)
+        .zIndex(1)
       ScrollView {
         MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
         levelView
@@ -41,11 +47,6 @@ public struct MyPageView: View {
       .refreshable {
         viewModel.dispatch(type: .pullToRefresh)
       }
-      Rectangle()
-        .frame(height: 51)
-        .foregroundStyle(Color.clear)
-        .background(.ultraThinMaterial)
-    }
     .edgesIgnoringSafeArea(.all)
   }
 
