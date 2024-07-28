@@ -18,6 +18,10 @@ let project = Project.configure(
             product: .app,
             bundleId: "ppac.farmeme.App",
             infoPlist: .extendingDefault(with: [
+              "CFBundleIconName": "AppIcon",
+              "CFBundleDevelopmentRegion": "ko_KR",
+              "CFBundleShortVersionString": "1.1.1",
+              "CFBundleVersion": "1",
               "UILaunchStoryboardName": "launch"
           ]),
             sources: "Sources/**",
@@ -41,8 +45,8 @@ let project = Project.configure(
                     "CODE_SIGN_STYLE": "Manual",
                     "PROVISIONING_PROFILE_SPECIFIER": "match AppStore ppac.farmeme.App",
                     "CODE_SIGN_IDENTITY": "Apple Distribution: Chansoo Kim (4NV4Z6BW27)"
-                ]
-//                defaultSettings: .recommended(excluding: [])
+                ],
+                defaultSettings: .recommended(excluding: [])
             )
         ),
         .configure(
@@ -72,8 +76,8 @@ let project = Project.configure(
                     "CODE_SIGN_STYLE": "Manual",
                     "PROVISIONING_PROFILE_SPECIFIER": "match Development ppac.farmeme.App",
                     "CODE_SIGN_IDENTITY": "Apple Development: Chansoo Kim (T7MYKWLF92)"
-                ]
-//                defaultSettings: .recommended(excluding: [])
+                ],
+                defaultSettings: .recommended(excluding: [])
             )
         ),
     ]
