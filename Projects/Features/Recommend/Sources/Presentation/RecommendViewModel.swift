@@ -32,6 +32,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     var recommendMemeSize: Int
     var userLevel: Int
     var memeRecommendWatchCount: Int
+    var isSuccessFetch: Bool
   }
   
   weak var router: RecommendRouter?
@@ -61,7 +62,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
       recommendMemes: [],
       recommendMemeSize: 0,
       userLevel: 0,
-      memeRecommendWatchCount: 0
+      memeRecommendWatchCount: 0,
+      isSuccessFetch: false
     )
   }
   
@@ -86,17 +88,22 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
 }
 
 private extension RecommendViewModel {
+  
   func getRecommendAndUser() async {
     do {
+      debugPrint("before: \(self.state.isSuccessFetch)")
       let recommendMemeSize = 5
       let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
       let user = try await getUserInfoUseCase.execute()
       
-      self.state.recommendMemes = recommendMemes
-      self.state.recommendMemeSize = recommendMemes.count
-      self.state.userLevel = user.level
-      self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
-      
+      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        self.state.recommendMemes = recommendMemes
+        self.state.recommendMemeSize = recommendMemes.count
+        self.state.userLevel = user.level
+        self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
+        self.state.isSuccessFetch = true
+        debugPrint("after: \(self.state.isSuccessFetch)")
+      }
     } catch {
       debugPrint("Failed get recommend memes : \(error)")
     }
