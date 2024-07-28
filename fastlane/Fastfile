@@ -51,6 +51,12 @@ platform :ios do
   # end
 
   lane :local do
+
+    	#testflight에 등록된 최신 빌드버전을 가져와 +1을 해준다.
+	  increment_build_number({
+	    build_number: latest_testflight_build_number + 1
+	  })
+
     build_app(
       scheme: "App",
       workspace: "PPACIOS.xcworkspace",
