@@ -91,7 +91,6 @@ private extension RecommendViewModel {
   
   func getRecommendAndUser() async {
     do {
-      debugPrint("before: \(self.state.isSuccessFetch)")
       let recommendMemeSize = 5
       let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
       let user = try await getUserInfoUseCase.execute()
@@ -102,7 +101,6 @@ private extension RecommendViewModel {
         self.state.userLevel = user.level
         self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
         self.state.isSuccessFetch = true
-        debugPrint("after: \(self.state.isSuccessFetch)")
       }
     } catch {
       debugPrint("Failed get recommend memes : \(error)")
