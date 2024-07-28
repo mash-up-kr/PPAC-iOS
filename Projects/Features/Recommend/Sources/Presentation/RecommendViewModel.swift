@@ -86,6 +86,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
 }
 
 private extension RecommendViewModel {
+  
+  @MainActor
   func getRecommendAndUser() async {
     do {
       let recommendMemeSize = 5
@@ -102,6 +104,7 @@ private extension RecommendViewModel {
     }
   }
   
+  @MainActor
   func postShownMeme(memeId: String?) async {
     guard let memeId else { return }
     do {
