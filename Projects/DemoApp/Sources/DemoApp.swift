@@ -9,19 +9,26 @@
 import SwiftUI
 import Home
 import MemeDetail
+import Search
+import PPACDomain
+import PPACNetwork
+import PPACData
 
 @main
 struct DemoApp: App {
 	
 	enum Views: String, CaseIterable, Identifiable {
 		case MemeDetail
+		case SearchResult
 		
 		var id: String { self.rawValue }
 		
-		var view: some View {
+		var view: AnyView {
 			switch self {
 			case .MemeDetail:
-				getMemeDetailView()
+				AnyView(getMemeDetailView())
+			case .SearchResult:
+				AnyView(getSearchResultView())
 			}
 		}
 	}
@@ -49,8 +56,22 @@ private extension DemoApp.Views {
 			viewModel: MemeDetailViewModel(
 				meme: .mock,
 				router: nil,
-				copyImageUseCase: CopyImageUseCaseImpl(),
-				postLikeUseCase: PostLikeUseCaseImpl()
+				bookmarkMemeUseCase: BookmarkMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				shareMemeUseCase: ShareMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				watchMemeUseCase: WatchMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService())),
+				reactToMemeUseCase: ReactToMemeUseCaseImpl(repository: MemeRepositoryImpl(networkservice: NetworkService()))
+			)
+		)
+	}
+	
+	func getSearchResultView() -> some View {
+		return SearchResultView(
+			viewModel: SearchResultViewModel(
+				keyword: "긁",
+				router: nil,
+				searchKeywordUseCase: SearchKeywordUseCaseImpl(
+					repository: MemeRepositoryImpl(networkservice: NetworkService())
+				), copyImageUseCase: CopyImageUseCaseImpl()
 			)
 		)
 	}

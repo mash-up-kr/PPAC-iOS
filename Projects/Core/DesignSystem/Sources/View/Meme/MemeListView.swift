@@ -9,10 +9,14 @@ import SwiftUI
 import PPACModels
 
 public struct MemeListView: View {
-  private let memeDetailList: [MemeDetail]
-  private let columns = Array(repeating: GridItem(.flexible(),
-                                                  spacing: 12,
-                                                  alignment: .center),count: 2)
+  @Binding var memeDetailList: [MemeDetail]
+  private let columns = Array(
+    repeating: GridItem(
+      .flexible(),
+      spacing: 12,
+      alignment: .center
+    ), count: 2
+  )
   private let memeClickHandler: ((MemeDetail) -> ())?
   private let memeCopyHandler: ((MemeDetail) -> ())?
   private let onAppearLastMemeHandler: (() -> ())?
@@ -22,12 +26,12 @@ public struct MemeListView: View {
   }
   
   public init(
-    memeDetailList: [MemeDetail],
+    memeDetailList: Binding<[MemeDetail]>,
     memeClickHandler: ((MemeDetail) -> ())? = nil,
     memeCopyHandler: ((MemeDetail) -> ())? = nil,
     onAppearLastMemeHandler: (() -> ())? = nil
   ) {
-    self.memeDetailList = memeDetailList
+    self._memeDetailList = memeDetailList
     self.memeClickHandler = memeClickHandler
     self.memeCopyHandler = memeCopyHandler
     self.onAppearLastMemeHandler = onAppearLastMemeHandler
@@ -44,7 +48,6 @@ public struct MemeListView: View {
       return index % 2 != 0 ? element : nil
     }
   }
-  
   
   public var body: some View {
     ScrollView {
@@ -96,11 +99,11 @@ public struct MemeListView: View {
                        
                        "https://images.unsplash.com/photo-1507146426996-ef05306b995a?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" ]
   
-  let memeDetailList = (0..<20)
+  @State var memeDetailList = (0..<20)
     .map { MemeDetail(id: "\($0)", title: MemeDetail.mock.title,
                       keywords: MemeDetail.mock.keywords,
                       imageUrlString: mockImageList[$0 % 4],
                       source: MemeDetail.mock.source,
                       isTodayMeme: true, reaction: $0 % 4, isFarmemed: true) }
-  return MemeListView(memeDetailList: memeDetailList)
+  return MemeListView(memeDetailList: $memeDetailList)
 }

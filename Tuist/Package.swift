@@ -8,7 +8,8 @@ import PackageDescription
         productTypes: [
             "swift-dependencies": .framework,
             "Lottie": .framework,
-            "Kingfisher": .framework
+            "Kingfisher": .framework,
+            "PopupView": .framework
         ]
     )
 #endif
@@ -19,6 +20,6 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-dependencies", exact: "1.3.0"),
         .package(url: "https://github.com/airbnb/lottie-ios.git", from: "4.4.3"),
         .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0"),
-        
+        .package(url: "https://github.com/exyte/PopupView.git", from: "3.0.4")
     ]
 )

@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PopupView
+
 import ResourceKit
 
 import PPACModels
@@ -22,6 +24,11 @@ public struct RecommendView: View {
   @State private var zstackHeight: CGFloat = 0
   @State private var buttonHeight: CGFloat = 0
   @State private var currentMeme: MemeDetail?
+  
+  @State var isActiveCopyPopup: Bool = false
+  
+  @State var isFarmemed: Bool = false
+  @State var isActiveFarmemePopup: Bool = false
   
   public init(
     _ viewModel: RecommendViewModel
@@ -63,26 +70,10 @@ public struct RecommendView: View {
           
           RecommendMemeButtonView(
             meme: $currentMeme,
-            reactionButtonTapped: {
-              viewModel.dispatch(
-                type: .likeButtonTapped(memeId: currentMeme?.id)
-              )
-            },
-            copyButtonTapped: {
-              viewModel.dispatch(
-                type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
-              )
-            },
-            shareButtonTapped : {
-              viewModel.dispatch(
-                type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
-              )
-            },
-            saveButtonTapped : {
-              viewModel.dispatch(
-                type: .farmemeButtonTapped(memeId: currentMeme?.id)
-              )
-            }
+            reactionButtonTapped: reactionButtonTap,
+            copyButtonTapped: copyButtonTap,
+            shareButtonTapped : shareButtonTap,
+            saveButtonTapped : saveButtonTap
           )
           .onReadSize { size in
             buttonHeight = size.height
@@ -112,6 +103,48 @@ public struct RecommendView: View {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
       }
+    }
+    .popup(
+      isActive: $isActiveCopyPopup,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
+    .popup(
+      isActive: $isActiveFarmemePopup,
+      image: isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
+      text: isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
+    )
+  }
+  
+  private func reactionButtonTap() {
+    viewModel.dispatch(
+      type: .likeButtonTapped(memeId: currentMeme?.id)
+    )
+  }
+  
+  private func copyButtonTap() {
+    if isActiveCopyPopup || isActiveFarmemePopup { return }
+    viewModel.dispatch(
+      type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+    )
+    isActiveCopyPopup = true
+  }
+  
+  private func shareButtonTap() {
+    viewModel.dispatch(
+      type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+    )
+  }
+  
+  private func saveButtonTap() {
+    if isActiveCopyPopup || isActiveFarmemePopup { return }
+    viewModel.dispatch(
+      type: .farmemeButtonTapped(memeId: currentMeme?.id)
+    )
+    currentMeme?.isFarmemed.toggle()
+    isActiveFarmemePopup = true
+    if let currentMeme {
+      isFarmemed = currentMeme.isFarmemed
     }
   }
 }

@@ -20,6 +20,7 @@ let project = Project(
       dependencies: [
         .ThirdParty.Dependency,
         .ThirdParty.Kingfisher,
+        .ThirdParty.PopupView,
         .ThirdParty.Lottie,
         .ResourceKit,
         .Core.DesignSystem,

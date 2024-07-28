@@ -7,8 +7,10 @@
 
 import SwiftUI
 
+import ResourceKit
+
 public extension View {
-  public func cornerRadius(
+  func cornerRadius(
     _ radius: CGFloat,
     corners: UIRectCorner
   ) -> some View {
@@ -16,4 +18,14 @@ public extension View {
   }
 }
 
-
+public extension View {
+  func popup(
+    isActive: Binding<Bool>,
+    image: SwiftUI.Image?,
+    text: String
+  ) -> some View {
+    self.modifier(
+      PopupModifier(isActive: isActive, image: image, text: text)
+    )
+  }
+}
