@@ -136,6 +136,8 @@ public struct RecommendView: View {
         .onChanged({ value in
           if viewModel.state.recommendMemes.isEmpty { return }
           
+          if value.translation.height < 0 { return }
+          
           withAnimation(.spring()) {
             currentOffsetY = value.translation.height > 180 ? 180 : value.translation.height
           }
