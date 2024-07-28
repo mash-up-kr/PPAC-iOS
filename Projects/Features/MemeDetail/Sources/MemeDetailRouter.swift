@@ -11,8 +11,8 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 import PPACDomain
-import PPACData
 import PPACNetwork
+import PPACData
 
 public final class MemeDetailRouter: Router, MemeDetailRouting {
   

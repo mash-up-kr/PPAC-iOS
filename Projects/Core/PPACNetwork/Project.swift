@@ -16,6 +16,7 @@ let project = Project(
         .configure(
             name: "PPACNetwork",
             product: .framework,
+            infoPlist: .default,
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [

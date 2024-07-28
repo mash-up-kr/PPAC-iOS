@@ -20,10 +20,13 @@ let project = Project(
             dependencies: [
                 .ThirdParty.Dependency,
                 .ThirdParty.Kingfisher,
+                .ThirdParty.Lottie,
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACModels,
                 .Core.PPACUtil,
+                .Core.PPACDomain,
+                .Core.PPACData,
             ]
         )
     ]
