@@ -18,30 +18,33 @@ public struct MyPageView: View {
   }
   
   public var body: some View {
-    ScrollView {
-      MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
-      levelView
-      divider
-      RecentlyMemeListView(
-        memeDetailList: $viewModel.state.lastSeenMemeList,
-        memeClickHandler: viewModel.handler.memeClickHandler
-      )
-      SavedMemeListView(
-        memeDetailList: $viewModel.state.savedMemeList,
-        memeClickHandler: viewModel.handler.memeClickHandler,
-        memeCopyHandler: viewModel.handler.memeCopyHandler,
-        onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
-      )
-      Spacer(minLength: 80)
-    }
-    .onAppear {
-      viewModel.dispatch(type: .onAppearMyPageView)
-    }
-    .refreshable {
-      viewModel.dispatch(type: .pullToRefresh)
-    }
-    .background {
-      gradientBackgroundView
+    ZStack(alignment: .top) {
+      ScrollView {
+        MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
+        levelView
+        divider
+        RecentlyMemeListView(
+          memeDetailList: $viewModel.state.lastSeenMemeList,
+          memeClickHandler: viewModel.handler.memeClickHandler
+        )
+        SavedMemeListView(
+          memeDetailList: $viewModel.state.savedMemeList,
+          memeClickHandler: viewModel.handler.memeClickHandler,
+          memeCopyHandler: viewModel.handler.memeCopyHandler,
+          onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
+        )
+        Spacer(minLength: 80)
+      }
+      .onAppear {
+        viewModel.dispatch(type: .onAppearMyPageView)
+      }
+      .refreshable {
+        viewModel.dispatch(type: .pullToRefresh)
+      }
+      Rectangle()
+        .frame(height: 51)
+        .foregroundStyle(Color.clear)
+        .background(.ultraThinMaterial)
     }
     .edgesIgnoringSafeArea(.all)
   }
@@ -64,6 +67,9 @@ public struct MyPageView: View {
                         conditionCount: viewModel.state.conditionCount)
       MemeLevelConditionView(level: viewModel.state.memeLevel,
                              conditionCount: viewModel.state.conditionCount)
+    }
+    .background {
+      gradientBackgroundView
     }
   }
   
