@@ -64,7 +64,17 @@ public final class UserRepositoryImpl: UserRepository {
     switch result {
     case .success(let data):
       guard let memeWithPaginationResponseDTO = data.data else { throw NetworkError.dataDecodingError }
-      return memeWithPaginationResponseDTO.toModel()
+      var result = memeWithPaginationResponseDTO.toModel()
+      let memeList = result.memeList
+        .map {
+          var meme = $0
+          meme.reaction = 0
+          return meme
+        }
+      return MemeListWithPagination(
+        pagination: result.pagination,
+        memeList: memeList
+      )
     case .failure(let error):
       throw error
     }
