@@ -56,7 +56,8 @@ public final class MyPageRouter: Router, MyPageRouting {
     self.setRootView(myPageView)
   }
   
-  public func showMemeDetail(memeDetail: MemeDetail) {
+  public func showMemeDetail(memeDetail: MemeDetail?) {
+    guard let memeDetail else { return }
     let router = MemeDetailRouter(self.navigationController, meme: memeDetail)
     self.childRouters.append(router)
     router.start()

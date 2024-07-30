@@ -31,13 +31,21 @@ public struct MyPageView: View {
         divider
         RecentlyMemeListView(
           memeDetailList: $viewModel.state.lastSeenMemeList,
-          memeClickHandler: viewModel.handler.memeClickHandler
+          memeClickHandler: { meme in
+            viewModel.dispatch(type: .onTappedMeme, memeDetail: meme)
+          }
         )
         SavedMemeListView(
           memeDetailList: $viewModel.state.savedMemeList,
-          memeClickHandler: viewModel.handler.memeClickHandler,
-          memeCopyHandler: viewModel.handler.memeCopyHandler,
-          onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
+          memeClickHandler: { meme in
+            viewModel.dispatch(type: .onTappedMeme, memeDetail: meme)
+          },
+          memeCopyHandler: { meme in
+            viewModel.dispatch(type: .onTappedCopyButton, memeDetail: meme)
+          },
+          onAppearLastMemeHandler: {
+            viewModel.dispatch(type: .onAppearLastMeme)
+          }
         )
         Spacer(minLength: 80)
       }

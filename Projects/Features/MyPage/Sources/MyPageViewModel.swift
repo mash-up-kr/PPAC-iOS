@@ -13,15 +13,19 @@ import PPACModels
 @MainActor
 public protocol MyPageRouting: AnyObject {
   func showSettingView()
-  func showMemeDetail(memeDetail: MemeDetail)
+  func showMemeDetail(memeDetail: MemeDetail?)
 }
 
 final public class MyPageViewModel: ViewModelType, ObservableObject {
+  
   
   public enum Action {
     case onAppearMyPageView
     case pullToRefresh
     case settingButtonTapped
+    case onTappedMeme
+    case onTappedCopyButton
+    case onAppearLastMeme
   }
   
   public struct Handler {
@@ -99,7 +103,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   }
   
   // MARK: - Methods
-  public func dispatch(type: Action) {
+  public func dispatch(type: Action) { }
+  
+  public func dispatch(type: Action, memeDetail: MemeDetail? = nil) {
     Task { @MainActor in
       switch type {
       case .onAppearMyPageView:
@@ -108,6 +114,12 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         await self.refreshUserMemes()
       case .settingButtonTapped:
         router?.showSettingView()
+      case .onTappedMeme:
+        await self.router?.showMemeDetail(memeDetail: memeDetail)
+      case .onTappedCopyButton:
+        await self.copyMemeImage(with: memeDetail?.imageUrlString)
+      case .onAppearLastMeme:
+        await self.fetchNextPageSavedMeme()
       }
     }
   }
@@ -184,6 +196,16 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
     } catch(let error) {
       print("fetchNextPageSavedMeme error = \(error)")
+    }
+  }
+  
+  @MainActor
+  private func copyMemeImage(with url: String?) async {
+    do {
+      //guard let url else { }
+      try await self.copyImageUseCase.execute(url: url ?? "")
+    } catch {
+      print("복사 실패")
     }
   }
 
