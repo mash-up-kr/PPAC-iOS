@@ -21,6 +21,7 @@ let project = Project(
         .ThirdParty.Dependency,
         .ThirdParty.Kingfisher,
         .ThirdParty.PopupView,
+        .ThirdParty.Lottie,
         .ResourceKit,
         .Core.DesignSystem,
         .Core.PPACModels,

@@ -43,7 +43,7 @@ final class SplashViewModel: ViewModelType, ObservableObject {
   public func dispatch(type: Action) { }
   
   private func fetchUserInfo() {
-    Task {
+    Task { @MainActor in
       do {
         let userDetail = try await self.checkUserInfoUseCase.execute()
         self.updateMemeLevel(to: userDetail.level)

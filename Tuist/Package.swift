@@ -10,11 +10,6 @@ import PackageDescription
             "Lottie": .framework,
             "Kingfisher": .framework,
             "PopupView": .framework
-//            "xctest-dynamic-overlay": .framework,
-//            "swift-syntax": .framework,
-//            "swift-concurrency-extras": .framework,
-//            "swift-clocks": .framework,
-//            "combine-schedulers": .framework,
         ]
     )
 #endif

@@ -24,7 +24,7 @@ extension Target {
         settings: Settings? = nil,
         environmentVariables: [String: EnvironmentVariable] = [:],
         buildRules: [BuildRule] = [],
-        mergedBinaryType: MergedBinaryType = .automatic,
+        mergedBinaryType: MergedBinaryType = .disabled,
         mergeable: Bool = false
     ) -> Target {
         return .target(

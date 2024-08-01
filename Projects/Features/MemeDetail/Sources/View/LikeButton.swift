@@ -8,7 +8,7 @@
 import SwiftUI
 
 import ResourceKit
-
+import DesignSystem
 import Lottie
 
 public struct LikeButton: View {

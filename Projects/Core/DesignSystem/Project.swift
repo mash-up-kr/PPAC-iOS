@@ -19,6 +19,7 @@ let project = Project(
             dependencies: [
                 .ResourceKit,
                 .ThirdParty.PopupView,
+                .ThirdParty.Kingfisher,
                 .Core.PPACModels
             ]
         )
