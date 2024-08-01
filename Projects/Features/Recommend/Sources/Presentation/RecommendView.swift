@@ -30,6 +30,8 @@ public struct RecommendView: View {
   @State var isFarmemed: Bool = false
   @State var isActiveFarmemePopup: Bool = false
   
+  @State private var currentOffsetY: CGFloat = 0
+  
   public init(
     _ viewModel: RecommendViewModel
   ) {
@@ -38,8 +40,17 @@ public struct RecommendView: View {
   }
   
   public var body: some View {
-    VStack {
+    VStack(spacing: 0) {
       Spacer()
+      
+      if viewModel.state.recommendMemeSize > 0 &&
+          !viewModel.state.isSuccessFetch
+      {
+        ProgressView()
+          .frame(width: 30, height: 30, alignment: .center)
+          .padding(.bottom, 20)
+      }
+      
       RecommendHeaderView(
         userLevel: $viewModel.state.userLevel,
         seenMemeCount: $viewModel.state.memeRecommendWatchCount,
@@ -48,7 +59,7 @@ public struct RecommendView: View {
       
       ZStack {
         VStack {
-          let isOverlapView = memeImageHeight + buttonHeight > zstackHeight
+          let isOverlapView = memeImageHeight + buttonHeight > zstackHeight + 30
           
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
@@ -87,6 +98,7 @@ public struct RecommendView: View {
       
       Spacer(minLength: 98)
     }
+    .offset(y: currentOffsetY)
     .frame(maxWidth: .infinity, maxHeight: .infinity)
     .background(
       LinearGradient(
@@ -99,6 +111,11 @@ public struct RecommendView: View {
       )
     )
     .edgesIgnoringSafeArea(.bottom)
+    .onChange(of: viewModel.state.isSuccessFetch) {
+      withAnimation(.spring()) {
+        currentOffsetY = viewModel.state.isSuccessFetch ? .zero : 20
+      }
+    }
     .onChange(of: currentMeme) {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
@@ -113,6 +130,30 @@ public struct RecommendView: View {
       isActive: $isActiveFarmemePopup,
       image: isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
       text: isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
+    )
+    .gesture(
+      DragGesture()
+        .onChanged({ value in
+          if viewModel.state.recommendMemes.isEmpty { return }
+          
+          if value.translation.height < 0 { return }
+          
+          withAnimation(.spring()) {
+            currentOffsetY = value.translation.height > 180 ? 180 : value.translation.height
+          }
+        })
+        .onEnded({ value in
+          if viewModel.state.recommendMemes.isEmpty { return }
+          
+          if value.translation.height > 160 {
+            viewModel.state.isSuccessFetch = false
+            viewModel.dispatch(type: .viewInitialized)
+          } else {
+            withAnimation(.spring()) {
+              currentOffsetY = .zero
+            }
+          }
+        })
     )
   }
   
