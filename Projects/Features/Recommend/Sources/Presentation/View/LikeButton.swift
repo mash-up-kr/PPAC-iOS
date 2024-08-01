@@ -39,6 +39,10 @@ public struct LikeButton: View {
     .frame(width: 156 ,height: 50, alignment: .center)
     .background(Color.Background.white)
     .cornerRadius(40)
+    .shadow(
+      color: Color.Background.primary.opacity(0.05),
+      radius: 20
+    )
     .clipped(antialiased: true)
     .onTapGesture {
       playbackMode = .playing(
