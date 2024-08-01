@@ -77,8 +77,8 @@ private func recommendProgressBar(
 
 private func recommendText(_ text: String) -> some View {
   Text(text)
-    .font(Font.Weight.semiBold)
-    .foregroundStyle(Color.Text.secondary)
+    .font(Font.Weight.medium)
+    .foregroundStyle(Color.Text.tertiary)
 }
 
 #Preview {
