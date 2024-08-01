@@ -15,7 +15,8 @@ import PPACModels
 import Lottie
 
 struct RecommendMemeButtonView : View {
-  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
+  @State var playbackMode: LottiePlaybackMode = .paused
+  @State var isTapLikeButton: Bool = false
   
   @Binding var meme: MemeDetail?
   
@@ -30,20 +31,25 @@ struct RecommendMemeButtonView : View {
         LikeButton(
           reactionCount: meme.reaction,
           didTapped: {
+            self.isTapLikeButton = true
             playbackMode = .playing(
-              .fromProgress(0, toProgress: 1, loopMode: .playOnce)
+              .fromProgress(0, toProgress: 0.7, loopMode: .playOnce)
             )
             self.reactionButtonTapped()
           }
         )
-        .overlay(content: {
+        .disabled(self.isTapLikeButton)
+        .overlay {
           LottieView(animation: AnimationAsset.kkEffect.animation)
             .playbackMode(playbackMode)
             .animationDidFinish { _ in
-              playbackMode = .paused(at: .progress(100))
+              self.isTapLikeButton = false
+              playbackMode = .paused
             }
-            .offset(y: -50)
-        })
+            .frame(width: 200, height: 200, alignment: .center)
+            .offset(y: -115)
+            .allowsHitTesting(false)
+        }
         
         copyButton(copyButtonTapped)
         
@@ -113,7 +119,7 @@ func saveButton(
   
   return RecommendMemeButtonView(
     meme: $meme,
-    reactionButtonTapped: { meme?.reaction += 1 },
+    reactionButtonTapped: {meme?.reaction += 1},
     copyButtonTapped: { print("copy~~") },
     shareButtonTapped: { print("share~~") },
     saveButtonTapped: {
