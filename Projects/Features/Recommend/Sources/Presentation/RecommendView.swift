@@ -20,16 +20,14 @@ public struct RecommendView: View {
   
   @ObservedObject private var viewModel: RecommendViewModel
   
+  @State private var memeContentsHeight: CGFloat = 0
   @State private var memeImageHeight: CGFloat = 0
-  @State private var zstackHeight: CGFloat = 0
-  @State private var buttonHeight: CGFloat = 0
+  @State private var buttonViewHeight: CGFloat = 0
+  
   @State private var currentMeme: MemeDetail?
-  
   @State var isActiveCopyPopup: Bool = false
-  
   @State var isFarmemed: Bool = false
   @State var isActiveFarmemePopup: Bool = false
-  
   @State private var currentOffsetY: CGFloat = 0
   
   public init(
@@ -59,7 +57,7 @@ public struct RecommendView: View {
       
       ZStack {
         VStack {
-          let isOverlapView = memeImageHeight + buttonHeight > zstackHeight + 30
+          let isOverlapView = memeImageHeight + buttonViewHeight > memeContentsHeight + 30
           
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
@@ -86,14 +84,16 @@ public struct RecommendView: View {
             shareButtonTapped : shareButtonTap,
             saveButtonTapped : saveButtonTap
           )
+          .padding(.bottom, 10)
           .onReadSize { size in
-            buttonHeight = size.height
+            print(size.height)
+            buttonViewHeight = size.height
           }
         }
         .zIndex(2)
       }
       .onReadSize { size in
-        zstackHeight = size.height
+        memeContentsHeight = size.height
       }
       
       Spacer(minLength: 98)
