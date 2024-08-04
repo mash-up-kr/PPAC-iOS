@@ -12,29 +12,54 @@ import DesignSystem
 public struct SettingView: View {
   @ObservedObject private var viewModel: SettingViewModel
   
+  @State private var tapType: SettingType?
+  
   public init(viewModel: SettingViewModel) {
     self.viewModel = viewModel
   }
   
   public var body: some View {
-    VStack{
-      Divider()
-        .padding(.top, 50)
-      memeLogoImage
-      appNameAndVersion
-        .padding(.bottom, 50)
-      Divider()
-        .padding(.horizontal, 10)
-        .padding(.bottom, 20)
-      settingListView
-      Spacer()
+    if let tapType {
+      VStack {
+        Divider()
+          .padding(.top, 50)
+    
+        WebView(url: URL(string: tapType.url))
+      }
+      .plainNavigationBar(
+        backHandler: {
+          self.tapType = nil
+        },
+        rightActionHandler: nil,
+        hasConfigureButton: false,
+        title: tapType.title
+      )
+    } else {
+      VStack{
+        Divider()
+          .padding(.top, 50)
+    
+        memeLogoImage
+        appNameAndVersion
+          .padding(.bottom, 50)
+        
+        Divider()
+          .padding(.horizontal, 10)
+          .padding(.bottom, 20)
+        
+        settingListView
+        
+        Spacer()
+      }
+      .plainNavigationBar(
+        backHandler: {
+          viewModel.dispatch(type: .naviBackButtonTapped)
+        },
+        rightActionHandler: nil,
+        hasConfigureButton: false,
+        title: "설정"
+      )
     }
-    .plainNavigationBar(
-      backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
-      rightActionHandler: nil,
-      hasConfigureButton: false,
-      title: "설정"
-    )
   }
   
   var memeLogoImage: some View {
@@ -58,17 +83,22 @@ public struct SettingView: View {
   
   var settingListView: some View {
     ForEach(viewModel.state.settingList) { settingType in
-      SettingListItemView(title: settingType.title)
+      SettingListItemView(
+        type: settingType,
+        tapType: $tapType
+      )
     }
   }
 }
 
 struct SettingListItemView: View {
-  let title: String
+  let type: SettingType
+  
+  @Binding var tapType: SettingType?
   
   var body: some View {
     HStack {
-      Text(title)
+      Text(type.title)
         .font(Font.Body.Xlarge.semiBold)
         .padding(.vertical, 20)
         .padding(.leading, 20)
@@ -79,6 +109,9 @@ struct SettingListItemView: View {
         .frame(width: 16, height: 16, alignment: .center)
         .foregroundStyle(Color.Icon.assistive)
         .padding(.trailing, 20)
+        .onTapGesture {
+          self.tapType = type
+        }
     }
   }
 }

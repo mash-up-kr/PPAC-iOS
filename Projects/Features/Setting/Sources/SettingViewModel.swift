@@ -25,20 +25,6 @@ final public class SettingViewModel: ViewModelType, ObservableObject {
     var settingList: [SettingType] = []
   }
   
-  struct SettingType: Identifiable {
-    let id = UUID()
-    let url: String
-    let title: String
-    
-    init(
-      url: String,
-      title: String
-    ) {
-      self.url = url
-      self.title = title
-    }
-  }
-  
   // MARK: - Properties
   weak var router: SettingRouting?
   @Published public var state: State
@@ -55,7 +41,10 @@ final public class SettingViewModel: ViewModelType, ObservableObject {
   private func initSettingList() {
     var settingList = [SettingType]()
     settingList.append(
-      SettingType(url: "https://www.google.com", title: "개인정보 처리 방침")
+      SettingType(
+        url: "https://snow-chestnut-45b.notion.site/03c44635666546718a4540874f824cd7?pvs=4",
+        title: "개인정보 처리 방침"
+      )
     )
     self.state.settingList = settingList
   }
@@ -95,5 +84,19 @@ final public class SettingViewModel: ViewModelType, ObservableObject {
 //    }
 //    return appStoreVersion
     return nil
+  }
+}
+
+public struct SettingType: Identifiable {
+  public let id = UUID()
+  public let url: String
+  public let title: String
+  
+  init(
+    url: String,
+    title: String
+  ) {
+    self.url = url
+    self.title = title
   }
 }
