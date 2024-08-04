@@ -41,7 +41,10 @@ final public class SettingViewModel: ViewModelType, ObservableObject {
   private func initSettingList() {
     var settingList = [SettingType]()
     settingList.append(
-      SettingType(url: "https://www.google.com", title: "개인정보 처리 방침")
+      SettingType(
+        url: "https://snow-chestnut-45b.notion.site/03c44635666546718a4540874f824cd7?pvs=4",
+        title: "개인정보 처리 방침"
+      )
     )
     self.state.settingList = settingList
   }
