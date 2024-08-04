@@ -16,15 +16,18 @@ public struct LikeButton: View {
   
   @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
   
+  private let isReaction: Bool
   private let reactionCount: Int
   private let didTapped: () -> Void
   
   // MARK: - Initializers
   
   public init(
+    isReaction: Bool?,
     reactionCount: Int?,
     didTapped: @escaping () -> Void
   ) {
+    self.isReaction = isReaction ?? false
     self.reactionCount = reactionCount ?? 0
     self.didTapped = didTapped
   }
@@ -39,11 +42,11 @@ public struct LikeButton: View {
     .frame(width: 156 ,height: 50, alignment: .center)
     .background(Color.Background.white)
     .cornerRadius(40)
+    .clipped(antialiased: true)
     .shadow(
       color: Color.Background.primary.opacity(0.05),
       radius: 20
     )
-    .clipped(antialiased: true)
     .onTapGesture {
       playbackMode = .playing(
         .fromProgress(0, toProgress: 1, loopMode: .playOnce)
@@ -58,12 +61,16 @@ public struct LikeButton: View {
     if reactionCount <= 0 {
       ResourceKitAsset.Icon.ㅋ.swiftUIImage
     } else {
-      LottieView(animation: AnimationAsset.kkButtonActive.animation)
-        .playbackMode(playbackMode)
-        .animationDidFinish { _ in
-          playbackMode = .paused(at: .progress(100))
-        }
-        .frame(width: 44, height: 22)
+      if isReaction {
+        LottieView(animation: AnimationAsset.kkButtonActive.animation)
+          .playbackMode(playbackMode)
+          .animationDidFinish { _ in
+            playbackMode = .paused(at: .progress(100))
+          }
+          .frame(width: 44, height: 22)
+      } else {
+        ResourceKitAsset.Icon.ㅋㅋ.swiftUIImage
+      }
     }
   }
   
@@ -74,13 +81,29 @@ public struct LikeButton: View {
         (reactionCount > 0) ? Font.Heading.Medium.bold :Font.Family2.outLine
       )
       .foregroundColor(
-        (reactionCount > 0) ? Color.Text.brand : Color.Text.primary
+        (isReaction) ? Color.Text.brand : Color.Text.primary
       )
   }
 }
 
 #Preview {
-  var count: Int = 0
+  var count: Int = 3
   
-  return LikeButton(reactionCount: count, didTapped: { })
+  return VStack {
+    LikeButton(
+      isReaction: false,
+      reactionCount: count,
+      didTapped: {
+        print("AA")
+      }
+    )
+    
+    LikeButton(
+      isReaction: true,
+      reactionCount: count,
+      didTapped: {
+        print("AA")
+      }
+    )
+  }
 }

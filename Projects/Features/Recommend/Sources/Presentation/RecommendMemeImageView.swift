@@ -16,23 +16,44 @@ import PPACModels
 struct RecommendMemeImagesView: View {
   @Binding var currentMeme: MemeDetail?
   
+  @State var value: CGFloat = 0
+  
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
   
   public var body: some View {
     VStack(spacing: 0) {
       ScrollView(.horizontal) {
-        LazyHStack {
-          ForEach(memes, id: \.self) { meme in
-            MemeImageView(
-              imageUrl: meme.imageUrlString,
-              isDimmed: meme.id != currentMeme?.id
-            )
-            .animation(.smooth, value: meme)
-            .scrollTransition { content, phase in
-              content
-                .scaleEffect(phase.isIdentity ? 1.0 : 0.9)
-                .blur(radius: phase.isIdentity ? 0 : 1)
+        ZStack {
+          // Image
+          LazyHStack(spacing: 0) {
+            ForEach(memes, id: \.self) { meme in
+              MemeImageView(
+                imageUrl: meme.imageUrlString,
+                isDimmed: meme.id != currentMeme?.id
+              )
+              .scrollTransition { content, phase in
+                content
+                  .offset(x: phase.value * -3)
+                  .scaleEffect(phase.isIdentity ? 1 : 0.9)
+                  .blur(radius: phase.isIdentity ? 0 : 1)
+              }
+              .animation(.smooth, value: meme)
+            }
+          }
+          
+          // Border
+          HStack(spacing: 0) {
+            ForEach(memes, id: \.self) { meme in
+              RoundedRectangle(cornerRadius: 20)
+                .inset(by: 1)
+                .stroke(Color.Border.primary, lineWidth: 2)
+                .scrollTransition { content, phase in
+                  content
+                    .offset(x: phase.value * -3)
+                    .scaleEffect(phase.isIdentity ? 1 : 0.905)
+                }
+                .animation(.smooth, value: meme)
             }
           }
         }
@@ -69,11 +90,12 @@ struct RecommendMemeImagesView: View {
         id: "668a44950289555e368174a6",
         title: "심란한 명수옹",
         keywords: ["공부", "학생", "시험기간"],
-        imageUrlString: "https://avatars.githubusercontent.com/u/26344479?s=64&v=4",
+        imageUrlString: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/17207014936770.png",
         source: "깃허브",
         isTodayMeme: true,
         reaction: 4,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       )
     ),
     memes: [
@@ -85,7 +107,8 @@ struct RecommendMemeImagesView: View {
         source: "깃허브",
         isTodayMeme: true,
         reaction: 4,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       ),
       MemeDetail(
         id: "2",
@@ -95,7 +118,8 @@ struct RecommendMemeImagesView: View {
         source: "깃허브",
         isTodayMeme: true,
         reaction: 1,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       ),
       MemeDetail(
         id: "3",
@@ -105,7 +129,8 @@ struct RecommendMemeImagesView: View {
         source: "깃허브",
         isTodayMeme: true,
         reaction: 0,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       ),
       MemeDetail(
         id: "4",
@@ -115,7 +140,8 @@ struct RecommendMemeImagesView: View {
         source: "깃허브",
         isTodayMeme: true,
         reaction: 4,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       ),
       MemeDetail(
         id: "5",
@@ -125,7 +151,8 @@ struct RecommendMemeImagesView: View {
         source: "깃허브",
         isTodayMeme: true,
         reaction: 4,
-        isFarmemed: false
+        isFarmemed: false,
+        isReaction: false
       )
     ],
     isTagHidden: false
