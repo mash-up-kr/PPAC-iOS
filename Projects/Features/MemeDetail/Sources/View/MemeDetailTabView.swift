@@ -75,9 +75,6 @@ struct MemeDetailTabBarView: View {
       HStack(alignment: .center) {
         ForEach(tabItems) { tab in
           Button {
-            if case .farmeme = tab {
-              isFarmemed.toggle()
-            }
             didTapDetailTab?(tab)
           } label: {
             TabItemView(tab: tab)

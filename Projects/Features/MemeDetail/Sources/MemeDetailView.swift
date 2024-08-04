@@ -53,6 +53,16 @@ public struct MemeDetailView: View {
       hasConfigureButton: false,
       title: viewModel.state.meme.title
     )
+    .popup(
+      isActive: $viewModel.state.isCopied,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
+    .popup(
+      isActive: $viewModel.state.isFarmemeChanged,
+      image: viewModel.state.meme.isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
+      text: viewModel.state.meme.isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
+    )
   }
   
   @MainActor

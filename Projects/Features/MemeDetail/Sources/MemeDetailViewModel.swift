@@ -31,6 +31,8 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   
   public struct State {
     var meme: MemeDetail
+    var isCopied: Bool = false
+    var isFarmemeChanged: Bool = false
   }
   
   // MARK: - Properties
@@ -79,7 +81,11 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
       case .shreButtonTapped:
         await showShareSheet()
       case .farmemeButtonTapped:
-        await postSavedFarmeme()
+        if state.meme.isFarmemed {
+          await postCancelFarmeme()
+        } else {
+          await postSavedFarmeme()
+        }
       case .naviBackButtonTapped:
         router?.popView()
       }
@@ -101,6 +107,7 @@ private extension MemeDetailViewModel {
     }
   }
   
+  @MainActor
   func copyImage() async {
     guard let url = URL(string: self.state.meme.imageUrlString) else {
       return
@@ -111,6 +118,7 @@ private extension MemeDetailViewModel {
         return
       }
       UIPasteboard.general.image = image
+      state.isCopied = true
     } catch {
       print("Failed to load image data: \(error)")
     }
@@ -123,7 +131,21 @@ private extension MemeDetailViewModel {
     do {
       try await bookmarkMemeUseCase.execute(memeId: state.meme.id)
       state.meme.isFarmemed = true
-      print("isFarmemed: \(state.meme.isFarmemed)")
+      state.isFarmemeChanged = true
+    } catch {
+      // TODO: - 에러처리
+      print(error)
+    }
+  }
+  
+  @MainActor
+  func postCancelFarmeme() async {
+    if !state.meme.isFarmemed { return }
+    
+    do {
+      try await bookmarkMemeUseCase.delete(memeId: state.meme.id)
+      state.meme.isFarmemed = false
+      state.isFarmemeChanged = true
     } catch {
       // TODO: - 에러처리
       print(error)
