@@ -11,10 +11,11 @@ import DesignSystem
 import Lottie
 
 struct MemeLevelConditionCheckView: View {
-  let memeLevel: MemeLevelType
+  let level: MemeLevelType
+  let conditionCount: Int
   
   private var pregressStepLevel: CGFloat {
-    return CGFloat(memeLevel.rawValue - 1)
+    return CGFloat(level.rawValue - 1)
   }
   
   private let horizantalPadding: CGFloat = 36.0
@@ -27,7 +28,7 @@ struct MemeLevelConditionCheckView: View {
     }
     .padding(.top, 40)
     .padding(.horizontal, 20)
-    .padding(.bottom, 30)
+    .padding(.bottom, 10)
     .background {
       RoundedCorners(radius: 20, corners: [.bottomLeft, .bottomRight])
         .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.white)
@@ -65,7 +66,11 @@ struct MemeLevelConditionCheckView: View {
   var stepCheckView: some View {
     HStack {
       ForEach(MemeLevelType.allCases) { type in
-        levelStepView(levelType: type, currentLevel: memeLevel)
+        levelStepView(
+          levelType: type,
+          currentLevel: level,
+          conditionCount: conditionCount
+        )
         if type != .level4 {
           Spacer()
         }
@@ -83,8 +88,23 @@ struct MemeLevelConditionCheckView: View {
 struct levelStepView: View {
   let levelType: MemeLevelType
   let currentLevel: MemeLevelType
+  let conditionCount: Int
   
+  var levelState: LevelState {
+    if currentLevel == .level4 && conditionCount > 20 {
+      return .completed
+    } else if levelType < currentLevel {
+      return .completed
+    } else if levelType == currentLevel {
+      return .inProgress
+    }
+    return .notStarted
+  }
  
+  var isCompletedLevel: Bool {
+    return levelState == .completed
+  }
+  
   var body: some View {
     VStack(alignment: .center, spacing: 10) {
       stepCheckImageView
@@ -99,23 +119,32 @@ struct levelStepView: View {
   
   var stepDescriptionChip: some View {
     Text(levelType.levelStepText)
-      .foregroundStyle(Color.Text.secondary)
+      .foregroundStyle(
+        isCompletedLevel
+        ? Color.Text.brand
+        : Color.Text.secondary
+      )
       .font(Font.Body.Small.semiBold)
       .padding(.vertical, 5)
       .padding(.horizontal, 10)
       .background {
         RoundedRectangle(cornerRadius: 25, style: .continuous)
-          .foregroundStyle(Color.Background.assistive)
+          .foregroundStyle(
+            isCompletedLevel
+            ? Color.Background.brandassistive
+            : Color.Background.assistive
+          )
       }
   }
-  
+
   var levelCircleView: some View {
-    if levelType < currentLevel {
-      return AnyView(completedLevelCircleView)
-    } else if levelType == currentLevel {
-      return AnyView(currentLevelCircleView)
-    } else {
-      return AnyView(defaultCircleView)
+    switch levelState {
+    case .inProgress:
+      AnyView(currentLevelCircleView)
+    case .notStarted:
+      AnyView(defaultCircleView)
+    case .completed:
+      AnyView(completedLevelCircleView)
     }
   }
   
@@ -159,6 +188,6 @@ struct DottedLine: Shape {
 }
 
 #Preview {
-  MemeLevelConditionCheckView(memeLevel: .level1)
+  MemeLevelConditionCheckView(level: .level1, conditionCount: 10)
 }
 

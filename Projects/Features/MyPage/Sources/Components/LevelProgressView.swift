@@ -60,7 +60,8 @@ struct LevelProgressView: View {
   }
   
   private func getCurrentLevelWidth(_ viewWidth: CGFloat) -> CGFloat {
-    let width = (viewWidth - minimumWidth) / 20.0 * CGFloat(conditionCount)
+    let count = conditionCount > 20 ? 20 : conditionCount
+    let width = (viewWidth - minimumWidth) / 20.0 * CGFloat(count)
     return width + minimumWidth
   }
 }

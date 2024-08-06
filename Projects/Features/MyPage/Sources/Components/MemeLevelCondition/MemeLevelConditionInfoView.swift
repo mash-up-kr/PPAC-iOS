@@ -10,13 +10,18 @@ import ResourceKit
 import DesignSystem
 
 struct MemeLevelConditionInfoView: View {
+  let level: MemeLevelType
   let conditionCount: Int
+  
+  var isCompletedLevel: Bool {
+    return level == .level4 && conditionCount > 20
+  }
   
   var body: some View {
     HStack(alignment: .top, spacing: 0) {
       confitionInfoView
       Spacer()
-      countChipView
+      conditionCountChipView
     }
     .padding(.horizontal, 20)
     .padding(.top, 16)
@@ -35,6 +40,14 @@ struct MemeLevelConditionInfoView: View {
     }
   }
   
+  var conditionCountChipView: some View {
+    if isCompletedLevel {
+      AnyView(completedChipview)
+    } else {
+      AnyView(countChipView)
+    }
+  }
+  
   var countChipView: some View {
     HStack {
       Text("\(conditionCount)")
@@ -47,15 +60,39 @@ struct MemeLevelConditionInfoView: View {
     .background {
       RoundedRectangle(cornerRadius: 30, style: .continuous)
         .foregroundStyle(Color.Background.white)
-        .frame(width: 56, height: 30)
+        .frame(width: 56, height: 27)
     }
     .font(Font.Body.Large.semiBold)
     .padding(.vertical, 5)
     .padding(.horizontal, 10)
   }
   
+  var completedChipview: some View {
+    HStack(alignment: .center) {
+      ResourceKitAsset.Icon.check.swiftUIImage
+        .resizable()
+        .renderingMode(.template)
+        .frame(width: 12, height: 12)
+        .padding(.trailing, -4)
+      Text("달성완료")
+        .font(Font.Body.Medium.semiBold)
+    }
+    .background {
+      RoundedRectangle(cornerRadius: 30, style: .continuous)
+        .foregroundStyle(Color.Background.white)
+        .frame(width: 85, height: 27)
+    }
+    .foregroundStyle(Color.Text.tertiary)
+    .padding(.vertical, 5)
+    .padding(.horizontal, 10)
+  }
+  
+  var titleText: String {
+    return level == .level4 ? "최종 레벨 달성 미션" : "레벨업하고 싶다면"
+  }
+  
   var titleLabel: some View {
-    Text("다음 레벨 달성 조건")
+    Text(titleText)
       .foregroundStyle(Color.Text.tertiary)
       .font(Font.Body.Medium.semiBold)
   }
@@ -68,5 +105,5 @@ struct MemeLevelConditionInfoView: View {
 }
 
 #Preview {
-  MemeLevelConditionInfoView(conditionCount: 15)
+  MemeLevelConditionInfoView(level: .level2, conditionCount: 12)
 }

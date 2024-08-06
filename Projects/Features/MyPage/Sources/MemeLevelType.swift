@@ -90,3 +90,11 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable, Comparable {
       return lhs.rawValue < rhs.rawValue
     }
 }
+
+// MARK: - levelState
+/// 각 레벨에 대한 진행상태를 표시하기 위한 enum
+enum LevelState {
+  case inProgress // 레벨 진행중
+  case notStarted // 레벨 시작 전
+  case completed // 레벨 달성 완료
+}

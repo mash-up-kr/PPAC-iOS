@@ -21,7 +21,6 @@ public struct MyPageView: View {
     ZStack(alignment: .top) {
       blurView
       ScrollView {
-        //MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
         levelView
         divider
         RecentlyMemeListView(
