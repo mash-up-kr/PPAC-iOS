@@ -43,6 +43,10 @@ public struct CircleButton: View {
           height: self.height,
           alignment: .center
         )
+        .shadow(
+          color: Color.Background.primary.opacity(0.05),
+          radius: 20
+        )
     }
   }
 }

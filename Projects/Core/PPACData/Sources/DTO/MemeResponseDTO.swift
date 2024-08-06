@@ -54,6 +54,7 @@ struct MemeResponseDTO: Decodable {
   let createdAt: String?
   let updatedAt: String
   let isSaved: Bool
+  let isReaction: Bool
   let watch: Int
   
   public init(
@@ -68,6 +69,7 @@ struct MemeResponseDTO: Decodable {
     createdAt: String?,
     updatedAt: String,
     isSaved: Bool,
+    isReaction: Bool,
     watch: Int
   )
   {
@@ -82,6 +84,7 @@ struct MemeResponseDTO: Decodable {
     self.createdAt = createdAt
     self.updatedAt = updatedAt
     self.isSaved = isSaved
+    self.isReaction = isReaction
     self.watch = watch
   }
 }
@@ -110,7 +113,8 @@ extension MemeResponseDTO {
       source: self.source,
       isTodayMeme: self.isTodayMeme,
       reaction: self.reaction,
-      isFarmemed: self.isSaved 
+      isFarmemed: self.isSaved,
+      isReaction: self.isReaction
     )
   }
 }

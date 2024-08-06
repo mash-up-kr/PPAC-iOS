@@ -18,6 +18,7 @@ public struct MemeDetail: Identifiable, Hashable {
   public let isTodayMeme: Bool
   public var reaction: Int
   public var isFarmemed: Bool
+  public var isReaction: Bool
   
   // MARK: - Initializers
   
@@ -29,7 +30,8 @@ public struct MemeDetail: Identifiable, Hashable {
     source: String,
     isTodayMeme: Bool,
     reaction: Int,
-    isFarmemed: Bool
+    isFarmemed: Bool,
+    isReaction: Bool
   ) {
     self.id = id
     self.title = title
@@ -39,6 +41,7 @@ public struct MemeDetail: Identifiable, Hashable {
     self.isTodayMeme = isTodayMeme
     self.reaction = reaction
     self.isFarmemed = isFarmemed
+    self.isReaction = isReaction
   }
 }
 
@@ -51,6 +54,7 @@ public extension MemeDetail {
     source: "깃허브",
     isTodayMeme: true,
     reaction: 4,
-    isFarmemed: false
+    isFarmemed: false,
+    isReaction: false
   )
 }

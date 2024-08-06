@@ -127,6 +127,7 @@ private extension RecommendViewModel {
       try await reactToMemeUseCase.execute(memeId: memeId)
       
       if let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) {
+        self.state.recommendMemes[index].isReaction = true
         self.state.recommendMemes[index].reaction += 1
       }
     } catch {
