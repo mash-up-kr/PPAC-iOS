@@ -10,13 +10,6 @@ import PPACModels
 
 public struct MemeListView: View {
   @Binding var memeDetailList: [MemeDetail]
-  private let columns = Array(
-    repeating: GridItem(
-      .flexible(),
-      spacing: 12,
-      alignment: .center
-    ), count: 2
-  )
   private let memeClickHandler: ((MemeDetail) -> ())?
   private let memeCopyHandler: ((MemeDetail) -> ())?
   private let onAppearLastMemeHandler: (() -> ())?
@@ -82,10 +75,13 @@ public struct MemeListView: View {
           }
         }
       }
-      // FIXME: pull to refresh 했을 때 onAppear가 호출되지 않아서 onChange로 임시 호출, 수정필요
-//      .onChange(of: memeDetailList) {
-//        onAppearLastMemeHandler?()
-//      }
+      .onChange(of: memeDetailList, initial: false) { oldList, newList in
+        // refresh되면서 newList가 oldList보다 작아진 순간에만 호출되도록
+        guard newList.count < oldList.count else { return }
+        if newList.contains(where: { $0.id == lastMemeId }) {
+          onAppearLastMemeHandler?()
+        }
+      }
       .frame(maxWidth: .infinity)
     }
     .scrollTargetBehavior(.viewAligned)
