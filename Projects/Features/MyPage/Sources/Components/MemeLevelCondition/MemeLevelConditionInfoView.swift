@@ -36,6 +36,7 @@ struct MemeLevelConditionInfoView: View {
   var confitionInfoView: some View {
     VStack(alignment: .leading, spacing: 4) {
       titleLabel
+        .padding(.top, 6)
       descriptionLabel
     }
   }
@@ -63,8 +64,6 @@ struct MemeLevelConditionInfoView: View {
         .frame(width: 56, height: 27)
     }
     .font(Font.Body.Large.semiBold)
-    .padding(.vertical, 5)
-    .padding(.horizontal, 10)
   }
   
   var completedChipview: some View {

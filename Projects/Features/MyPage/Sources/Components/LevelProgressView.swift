@@ -56,7 +56,7 @@ struct LevelProgressView: View {
   
   var backgroundProgressView: some View {
     RoundedRectangle(cornerRadius: 25, style: .circular)
-      .stroke(Color.Border.secondary, lineWidth: 1, fill: Color.Background.assistive)
+      .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.assistive)
   }
   
   private func getCurrentLevelWidth(_ viewWidth: CGFloat) -> CGFloat {
