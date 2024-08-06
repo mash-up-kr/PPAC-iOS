@@ -70,5 +70,6 @@ public struct Font {
 	
 	public struct Family2 {
 		public static let outLine = ResourceKitFontFamily.SandollSamliphopangche.outline.swiftUIFont(size: 24)
+		public static let xlarge = ResourceKitFontFamily.SandollSamliphopangche.outline.swiftUIFont(size: 20)
 	}
 }
