@@ -11,6 +11,8 @@ import PPACModels
 import ResourceKit
 import DesignSystem
 
+import PopupView
+
 public struct SearchResultView: View {
   @ObservedObject var viewModel: SearchResultViewModel
   
@@ -58,5 +60,10 @@ public struct SearchResultView: View {
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)
     }
+    .popup(
+      isActive: $viewModel.state.isActiveCopyPopup,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
   }
 }

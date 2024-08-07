@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+
 import DesignSystem
 import ResourceKit
 import PPACModels
+
+import PopupView
 
 public struct MyPageView: View {
   @ObservedObject private var viewModel: MyPageViewModel
