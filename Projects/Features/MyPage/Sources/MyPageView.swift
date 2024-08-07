@@ -52,6 +52,11 @@ public struct MyPageView: View {
       .padding(.top, 51)
       .edgesIgnoringSafeArea(.all)
     }
+    .popup(
+      isActive: $viewModel.state.isActiveCopyPopup,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
   }
 
   var blurView: some View {

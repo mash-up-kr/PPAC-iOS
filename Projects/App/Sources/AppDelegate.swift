@@ -9,7 +9,6 @@
 import UIKit
 import SwiftUI
 import Home
-import MemeDetail
 import PPACUtil
 
 @main
