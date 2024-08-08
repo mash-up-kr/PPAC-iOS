@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import ResourceKit
+import Lottie
 
 public enum MainTab: String, CaseIterable, Identifiable {
   case recommend
@@ -34,6 +36,17 @@ public enum MainTab: String, CaseIterable, Identifiable {
       return ResourceKitAsset.Icon.discoverActive.swiftUIImage
     case .mypage:
       return ResourceKitAsset.Icon.myActive.swiftUIImage
+    }
+  }
+  
+  public var lottieAnimation: LottieAnimation? {
+    switch self {
+    case .recommend:
+      AnimationAsset.tabRecommand.animation
+    case .search:
+      AnimationAsset.tabSearch.animation
+    case .mypage:
+      AnimationAsset.tabMy.animation
     }
   }
   

@@ -45,7 +45,7 @@ public struct MemeListView: View {
   public var body: some View {
     ScrollView {
       HStack(alignment: .top) {
-        LazyVStack {
+        LazyVStack(spacing: 20) {
           ForEach(oddIndexedItems) { memeDetail in
             MemeItemView(
               memeDetail: memeDetail,
@@ -60,7 +60,7 @@ public struct MemeListView: View {
           }
         }
         
-        LazyVStack {
+        LazyVStack(spacing: 20) {
           ForEach(evenIndexedItems) { memeDetail in
             MemeItemView(
               memeDetail: memeDetail,

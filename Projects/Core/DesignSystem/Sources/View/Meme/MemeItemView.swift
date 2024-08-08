@@ -32,8 +32,8 @@ public struct MemeItemView: View {
           memeClickHandler?(memeDetail)
         }
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
+        .padding(.top, 10)
     }
-    .padding(.bottom, 20)
   }
 }
 
@@ -117,7 +117,6 @@ struct MemeItemInfoView: View {
         }
         
       }
-      .padding(.bottom, 4)
       Spacer()
     }
   }
