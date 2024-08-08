@@ -44,7 +44,7 @@ public struct MyPageView: View {
             viewModel.dispatch(type: .onAppearLastMeme)
           }
         )
-        Spacer(minLength: 80)
+        Spacer(minLength: 100)
       }
       .onAppear {
         viewModel.dispatch(type: .onAppearMyPageView)
