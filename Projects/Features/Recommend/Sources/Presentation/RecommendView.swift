@@ -20,16 +20,14 @@ public struct RecommendView: View {
   
   @ObservedObject private var viewModel: RecommendViewModel
   
+  @State private var memeContentsHeight: CGFloat = 0
   @State private var memeImageHeight: CGFloat = 0
-  @State private var zstackHeight: CGFloat = 0
-  @State private var buttonHeight: CGFloat = 0
+  @State private var buttonViewHeight: CGFloat = 0
+  
   @State private var currentMeme: MemeDetail?
-  
   @State var isActiveCopyPopup: Bool = false
-  
   @State var isFarmemed: Bool = false
   @State var isActiveFarmemePopup: Bool = false
-  
   @State private var currentOffsetY: CGFloat = 0
   
   public init(
@@ -58,8 +56,8 @@ public struct RecommendView: View {
       )
       
       ZStack {
-        VStack {
-          let isOverlapView = memeImageHeight + buttonHeight > zstackHeight + 30
+        let isOverlapView = memeImageHeight + buttonViewHeight > memeContentsHeight + 30
+        VStack(spacing: 0) {
           
           if viewModel.state.recommendMemes.count > 0 {
             RecommendMemeImagesView(
@@ -76,27 +74,43 @@ public struct RecommendView: View {
         }
         .zIndex(1)
         
-        VStack {
+        VStack(spacing: 0) {
           Spacer()
           
           RecommendMemeButtonView(
-            meme: $currentMeme,
+            isReaction: currentMeme?.isReaction ?? false,
+            reactionCnt: currentMeme?.reaction ?? 0,
+            isFarmemed: currentMeme?.isFarmemed ?? false,
+            isOverlapView: isOverlapView,
             reactionButtonTapped: reactionButtonTap,
             copyButtonTapped: copyButtonTap,
             shareButtonTapped : shareButtonTap,
             saveButtonTapped : saveButtonTap
           )
           .onReadSize { size in
-            buttonHeight = size.height
+            print(size.height)
+            buttonViewHeight = size.height
           }
         }
         .zIndex(2)
       }
+      .frame(maxHeight: 490)
       .onReadSize { size in
-        zstackHeight = size.height
+        memeContentsHeight = size.height
       }
       
-      Spacer(minLength: 98)
+      Spacer()
+      
+      // 높이를 위한 가짜 탭뷰
+      Rectangle()
+        .frame(maxWidth: .infinity, maxHeight: 98)
+        .background(.white.opacity(0))
+        .clipShape(
+          .rect(
+            topLeadingRadius: 30,
+            topTrailingRadius: 30
+          )
+        )
     }
     .offset(y: currentOffsetY)
     .frame(maxWidth: .infinity, maxHeight: .infinity)

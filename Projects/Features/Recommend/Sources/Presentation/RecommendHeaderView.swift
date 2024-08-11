@@ -15,16 +15,20 @@ struct RecommendHeaderView: View {
   @Binding var recommendMemeSize: Int
   
   public var body: some View {
-    VStack {
+    VStack(spacing: 0) {
       ResourceKitAsset.Icon.homeLogo.swiftUIImage
+        .resizable()
+        .frame(width: 212, height: 45, alignment: .center)
         .padding(.bottom, 10)
       
       recommendTitle
+        .padding(.bottom, 16)
       
       recommendProgressBar(
         seenMemeCount: self.seenMemeCount,
         total: recommendMemeSize
       )
+      .padding(.bottom, 8)
       
       recommendText(getRecommendText())
     }
@@ -48,7 +52,7 @@ struct RecommendHeaderView: View {
 }
 
 private var recommendTitle : some View {
-  Text("이번주 이 밈 어때!")
+  Text("이번 주 이 밈 어때!")
     .font(Font.Heading.Large.semiBold)
     .padding(.bottom, 8)
 }
@@ -57,7 +61,7 @@ private func recommendProgressBar(
   seenMemeCount: Int,
   total: Int
 ) -> some View {
-  HStack {
+  HStack(spacing: 0) {
     ResourceKitAsset.Icon.squareCheck.swiftUIImage
     
     ProgressView(
@@ -77,7 +81,7 @@ private func recommendProgressBar(
 
 private func recommendText(_ text: String) -> some View {
   Text(text)
-    .font(Font.Weight.semiBold)
+    .font(Font.Body.Medium.medium)
     .foregroundStyle(Color.Text.secondary)
 }
 
