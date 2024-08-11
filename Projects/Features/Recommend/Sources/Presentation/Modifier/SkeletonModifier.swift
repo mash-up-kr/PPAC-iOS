@@ -23,8 +23,8 @@ struct SkeletonModifier: ViewModifier {
         animation: .linear(duration: 2, delay: 0, speed: 1),
         appearance: .gradient(
           .linear,
-          color: Color.Skeleton.home,
-          background: Color.Skeleton.homeback,
+          color: Color.Skeleton.beige,
+          background: Color.Skeleton.orange,
           radius: 1
         ),
         shape: .rounded(.radius(radius))
