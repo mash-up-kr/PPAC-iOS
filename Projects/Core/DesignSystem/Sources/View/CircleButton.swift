@@ -21,13 +21,13 @@ public struct CircleButton: View {
     width: CGFloat,
     height: CGFloat,
     image: SwiftUI.Image,
-    shadowColor: SwiftUI.Color? = Color.Shadow.primary,
+    shadowColor: SwiftUI.Color = Color.Shadow.primary,
     action: @escaping () -> Void
   ) {
     self.width = width
     self.height = height
     self.image = image
-    self.shadowColor = shadowColor ?? Color.Shadow.primary
+    self.shadowColor = shadowColor
     self.action = action
   }
   
