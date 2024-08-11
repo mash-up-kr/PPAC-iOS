@@ -20,7 +20,7 @@ let project = Project.configure(
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
-              .ThirdParty.Lottie,
+              .ThirdParty.Dependency
             ]
         )
     ],

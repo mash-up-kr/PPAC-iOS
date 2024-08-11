@@ -13,7 +13,7 @@ import PPACModels
 @MainActor
 public protocol MyPageRouting: AnyObject {
   func showSettingView()
-  func showMemeDetail(memeDetail: MemeDetail)
+  func showMemeDetail(memeDetail: MemeDetail?)
 }
 
 final public class MyPageViewModel: ViewModelType, ObservableObject {
@@ -22,15 +22,11 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     case onAppearMyPageView
     case pullToRefresh
     case settingButtonTapped
+    case onTappedMeme(meme: MemeDetail?)
+    case onTappedCopyButton(meme: MemeDetail?)
+    case onAppearLastMeme
   }
-  
-  public struct Handler {
-    var memeClickHandler: ((MemeDetail) -> ())?
-    var memeCopyHandler: ((MemeDetail) -> ())?
-    var onAppearLastMemeHandler: (() -> ())?
-    static let none = Handler()
-  }
-  
+
   public struct State {
     var userDetail: UserDetail
     var lastSeenMemeList: [MemeDetail]
@@ -68,7 +64,6 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let getLastSeenMemeUseCase: GetLastSeenMemeUseCase
   private let getSavedMemeUseCase: GetSavedMemeUseCase
   private let copyImageUseCase: CopyImageUseCase
-  public var handler: Handler = .none
   
   private var currentPage: Int = 1
   private let savedMemeCountPerPage: Int = 2
@@ -94,8 +89,6 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
     self.getSavedMemeUseCase = getSavedMemeUseCase
     self.copyImageUseCase = copyImageUseCase
-    
-    self.initHandler()
   }
   
   // MARK: - Methods
@@ -107,43 +100,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       case .pullToRefresh:
         await self.refreshUserMemes()
       case .settingButtonTapped:
-        router?.showSettingView()
-      }
-    }
-  }
-  
-  private func initHandler() {
-    let memeClickHandler: ((MemeDetail) -> ()) = { [weak self] memeDetail in
-      guard let self else { return }
-      Task {
-        await self.router?.showMemeDetail(memeDetail: memeDetail)
-      }
-    }
-    
-    let memeCopyHandler: ((MemeDetail) -> ()) = { [weak self] memeDetail in
-      guard let self else { return }
-      Task {
-        print("memeCopyHandler \(memeDetail.title)")
-        do {
-          try await self.copyImageUseCase.execute(url: memeDetail.imageUrlString)
-        } catch {
-          print("복사 실패")
-        }
-      }
-    }
-    
-    let onAppearLastMemeHandler: (() -> ()) = { [weak self] in
-      guard let self else { return }
-      Task {
+        self.router?.showSettingView()
+      case .onTappedMeme(let meme):
+        self.router?.showMemeDetail(memeDetail: meme)
+      case .onTappedCopyButton(let meme):
+        await self.copyMemeImage(with: meme?.imageUrlString)
+      case .onAppearLastMeme:
         await self.fetchNextPageSavedMeme()
       }
     }
-    
-    self.handler = Handler(
-      memeClickHandler: memeClickHandler,
-      memeCopyHandler: memeCopyHandler,
-      onAppearLastMemeHandler: onAppearLastMemeHandler
-    )
   }
   
   @MainActor
@@ -184,6 +149,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
     } catch(let error) {
       print("fetchNextPageSavedMeme error = \(error)")
+    }
+  }
+  
+  @MainActor
+  private func copyMemeImage(with url: String?) async {
+    do {
+      try await self.copyImageUseCase.execute(url: url ?? "")
+    } catch {
+      print("복사 실패")
     }
   }
 

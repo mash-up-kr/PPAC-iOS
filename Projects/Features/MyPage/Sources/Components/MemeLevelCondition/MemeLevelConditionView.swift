@@ -14,41 +14,18 @@ struct MemeLevelConditionView: View {
   
   var body: some View {
     VStack {
-      MemeLevelConditionInfoView(conditionCount: conditionCount)
-      MemeLevelConditionCheckView(memeLevel: level)
+      MemeLevelConditionInfoView(level: level, conditionCount: conditionCount)
+      MemeLevelConditionCheckView(level: level, conditionCount: conditionCount)
         .offset(x: 0, y: -10)
     }
     .padding(.top, 16)
     .padding(.bottom, 20)
   }
   
-  var divider: some View {
-    Rectangle()
-      .frame(width: .infinity, height: 2)
-      .foregroundStyle(Color.Border.secondary)
-  }
-  
-  var memeCountChipView: some View {
-    HStack {
-      Text("\(conditionCount)")
-        .foregroundStyle(Color.Text.brand)
-        .padding(.leading, 5)
-      Text("/20")
-        .foregroundStyle(Color.Text.tertiary)
-        .offset(x: -8, y: 0)
-    }.background {
-      RoundedRectangle(cornerRadius: 30, style: .continuous)
-        .foregroundStyle(Color.Background.white)
-        .frame(width: 56, height: 30)
-    }
-    .padding(.vertical, 5)
-    .padding(.horizontal, 10)
-  }
 }
 
 
 
 #Preview {
-  MemeLevelConditionView(level: .level3,conditionCount: 10)
-  //MemeLevelConditionView(conditionCount: 10)
+  MemeLevelConditionView(level: .level3, conditionCount: 10)
 }

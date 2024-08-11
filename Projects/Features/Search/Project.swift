@@ -25,7 +25,7 @@ let project = Project(
               .Core.PPACNetwork,
               .Feature.MemeDetail,
               .ThirdParty.Dependency,
-              .ThirdParty.Kingfisher,
+              .ThirdParty.Kingfisher
             ]
         )
     ]

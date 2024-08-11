@@ -71,9 +71,30 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable, Comparable {
       return ResourceKitAsset.Icon.level4Character.swiftUIImage
     }
   }
+    
+  public var levelBadgeImage: Image {
+    switch self {
+    case .level1:
+      return ResourceKitAsset.Icon.level1.swiftUIImage
+    case .level2:
+      return ResourceKitAsset.Icon.level2.swiftUIImage
+    case .level3:
+      return ResourceKitAsset.Icon.level3.swiftUIImage
+    case .level4:
+      return ResourceKitAsset.Icon.level4.swiftUIImage
+    }
+  }
   
   // MARK: Comparable
   public static func < (lhs: MemeLevelType, rhs: MemeLevelType) -> Bool {
       return lhs.rawValue < rhs.rawValue
     }
+}
+
+// MARK: - levelState
+/// 각 레벨에 대한 진행상태를 표시하기 위한 enum
+enum LevelState {
+  case inProgress // 레벨 진행중
+  case notStarted // 레벨 시작 전
+  case completed // 레벨 달성 완료
 }

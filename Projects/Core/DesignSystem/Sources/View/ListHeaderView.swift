@@ -18,17 +18,19 @@ public struct ListHeaderView: View {
   }
   
   public var body: some View {
-    HStack {
+    HStack(spacing: 8) {
       icon
+        .resizable()
         .frame(width: 20, height: 20, alignment: .center)
-        .padding(.leading, 20)
       Text(title)
         .font(Font.Heading.Small.semiBold)
       Spacer()
     }
+    .padding(.vertical, 18)
+    .padding(.horizontal, 20)
   }
 }
 
 #Preview {
-  ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage, title: "나의 파밈")
+  ListHeaderView(icon: ResourceKitAsset.Icon.successStoke.swiftUIImage, title: "나의 파밈")
 }

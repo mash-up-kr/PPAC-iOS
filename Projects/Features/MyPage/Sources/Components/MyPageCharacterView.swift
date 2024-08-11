@@ -32,7 +32,7 @@ struct SpeechBalloonView: View {
     Text(description)
       .font(Font.Body.Xlarge.semiBold)
       .padding(.horizontal, 20)
-      .padding(.vertical, 15)
+      .padding(.vertical, 12)
       .background {
         RoundedRectangle(cornerRadius: 25, style: .continuous)
           .foregroundStyle(Color.Background.primary)

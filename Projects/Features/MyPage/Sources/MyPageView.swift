@@ -18,41 +18,49 @@ public struct MyPageView: View {
   }
   
   public var body: some View {
-    ScrollView {
-      MyPagePregressView(isRefreshCompleted: $viewModel.state.isRefreshCompleted)
-      levelView
-      divider
-      RecentlyMemeListView(
-        memeDetailList: $viewModel.state.lastSeenMemeList,
-        memeClickHandler: viewModel.handler.memeClickHandler
-      )
-      SavedMemeListView(
-        memeDetailList: $viewModel.state.savedMemeList,
-        memeClickHandler: viewModel.handler.memeClickHandler,
-        memeCopyHandler: viewModel.handler.memeCopyHandler,
-        onAppearLastMemeHandler: viewModel.handler.onAppearLastMemeHandler
-      )
-      Spacer(minLength: 80)
+    ZStack(alignment: .top) {
+      blurView
+      ScrollView {
+        levelView
+        divider
+        RecentlyMemeListView(
+          memeDetailList: $viewModel.state.lastSeenMemeList,
+          memeClickHandler: { meme in
+            viewModel.dispatch(type: .onTappedMeme(meme: meme))
+          }
+        )
+        SavedMemeListView(
+          memeDetailList: $viewModel.state.savedMemeList,
+          memeClickHandler: { meme in
+            viewModel.dispatch(type: .onTappedMeme(meme: meme))
+          },
+          memeCopyHandler: { meme in
+            viewModel.dispatch(type: .onTappedCopyButton(meme: meme))
+          },
+          onAppearLastMemeHandler: {
+            viewModel.dispatch(type: .onAppearLastMeme)
+          }
+        )
+        Spacer(minLength: 80)
+      }
+      .onAppear {
+        viewModel.dispatch(type: .onAppearMyPageView)
+      }
+      .refreshable {
+        viewModel.dispatch(type: .pullToRefresh)
+      }
+      .padding(.top, 51)
+      .edgesIgnoringSafeArea(.all)
     }
-    .onAppear {
-      viewModel.dispatch(type: .onAppearMyPageView)
-    }
-    .refreshable {
-      viewModel.dispatch(type: .pullToRefresh)
-    }
-    .background {
-      gradientBackgroundView
-    }
-    .edgesIgnoringSafeArea(.all)
   }
 
-  var gradientBackgroundView: some View {
-    LinearGradient(
-      gradient: Gradient(
-        colors: [Color.Background.brandassistive, Color.Background.white]
-      ),
-      startPoint: .top, endPoint: .bottom
-    )
+  var blurView: some View {
+    Rectangle()
+      .frame(height: 0)
+      .foregroundStyle(Color.clear)
+      .background(.ultraThinMaterial)
+      .blur(radius: 0)
+      .zIndex(1)
   }
   
   var levelView: some View {
@@ -65,6 +73,18 @@ public struct MyPageView: View {
       MemeLevelConditionView(level: viewModel.state.memeLevel,
                              conditionCount: viewModel.state.conditionCount)
     }
+    .background {
+      gradientBackgroundView
+    }
+  }
+  
+  var gradientBackgroundView: some View {
+    LinearGradient(
+      gradient: Gradient(
+        colors: [Color.Background.brandassistive, Color.Background.white]
+      ),
+      startPoint: .top, endPoint: .bottom
+    )
   }
   
   var settingHeaderView: some View {
@@ -78,7 +98,7 @@ public struct MyPageView: View {
           viewModel.dispatch(type: .settingButtonTapped)
         }
     }
-    .padding(.top, 40)
+    .padding(.top, 10)
   }
   
   var levelTitleTextView: some View {

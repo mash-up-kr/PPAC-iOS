@@ -50,7 +50,10 @@ struct MemeItemViewWithButton: View {
   var body: some View {
     ZStack(alignment: .bottomLeading) {
       VStack {
-        ResizableMemeImageView(imageUrlString: memeDetail.imageUrlString, imageHeight: $imageHeight)
+        ResizableMemeImageView(
+          imageUrlString: memeDetail.imageUrlString,
+          imageHeight: $imageHeight
+        )
       }
       .frame(height: imageHeight)
       HStack {
@@ -60,10 +63,10 @@ struct MemeItemViewWithButton: View {
           height: 42,
           image: ResourceKitAsset.Icon.copy.swiftUIImage,
           action: {
-            print("Copy~~")
+            memeCopyHandler?(memeDetail)
           }
         )
-        .padding(20)
+        .padding(10)
       }
     }
   }
@@ -82,7 +85,14 @@ struct ResizableMemeImageView: View {
           .cacheMemoryOnly()
           .onSuccess { result in
             let ratio = geometry.size.width / result.image.size.width
-            imageHeight = result.image.size.height * ratio
+            let newHeight = result.image.size.height * ratio
+            if newHeight < 80 {
+              imageHeight = 80
+            } else if newHeight > 300 {
+              imageHeight = 300
+            } else {
+              imageHeight = newHeight
+            }
           }
           .cornerRadius(12)
           .frame(height: imageHeight)
@@ -115,8 +125,9 @@ struct MemeItemInfoView: View {
   var memeReactionView: some View {
     HStack {
       Text("ㅋㅋ")
-        .font(Font.Family2.outLine)
+        .font(Font.Family2.xlarge)
       Text("\(reaction)")
+        .font(Font.Body.Small.medium)
     }
     .foregroundStyle(Color.Text.tertiary)
   }

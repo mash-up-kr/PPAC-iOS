@@ -17,7 +17,7 @@ struct RecentlyMemeListView: View {
   
   var body: some View {
     VStack {
-      ListHeaderView(icon: ResourceKitAsset.Icon.check.swiftUIImage,
+      ListHeaderView(icon: ResourceKitAsset.Icon.successStoke.swiftUIImage,
                      title: "최근 본 밈")
       if memeDetailList.count > 0 {
         memeListView

@@ -33,7 +33,7 @@ struct LevelProgressView: View {
   
   var levelView: some View {
     HStack {
-      ResourceKitAsset.Icon.level1.swiftUIImage
+      level.levelBadgeImage
         .padding(.leading, 12)
       Text("LV.\(level.rawValue)")
         .font(Font.Body.Xlarge.semiBold)
@@ -49,23 +49,24 @@ struct LevelProgressView: View {
         RoundedRectangle(cornerRadius: 25, style: .circular)
           .stroke(Color.Border.primary, lineWidth: 2, fill: Color.Background.brand)
           .frame(width: isAnimation ? currnetlevelWidth : minimumWidth)
-          .animation(.easeInOut(duration: 1), value: isAnimation)
+          .animation(.easeInOut(duration: 1.5), value: isAnimation)
       }
     }
   }
   
   var backgroundProgressView: some View {
     RoundedRectangle(cornerRadius: 25, style: .circular)
-      .stroke(Color.Border.secondary, lineWidth: 1, fill: Color.Background.assistive)
+      .stroke(Color.Border.tertiary, lineWidth: 1, fill: Color.Background.assistive)
   }
   
   private func getCurrentLevelWidth(_ viewWidth: CGFloat) -> CGFloat {
-    let width = viewWidth / 20.0 * CGFloat(conditionCount)
-    return width < minimumWidth ? minimumWidth : width
+    let count = conditionCount > 20 ? 20 : conditionCount
+    let width = (viewWidth - minimumWidth) / 20.0 * CGFloat(count)
+    return width + minimumWidth
   }
 }
 
 
 #Preview {
-  LevelProgressView(level: .level1, conditionCount: 1)
+  LevelProgressView(level: .level3, conditionCount: 5)
 }
