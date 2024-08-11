@@ -44,17 +44,15 @@ public struct TabItemView: View {
   @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
   @State var isAnimationFinished: Bool = false
   
-  var tabImage: Image {
-    return isSelected ? tab.selectedImage : tab.image
-  }
-  
   var color: SwiftUI.Color {
     return isSelected ? Color.Text.brand : Color.Text.assistive
   }
   
   public var body: some View {
     VStack {
-      tabImageView
+      tabItemImageView
+        .frame(width: 24, height: 24)
+        .padding(.bottom, 6)
       Text(tab.title)
         .font(Font.Weight.medium)
     }
@@ -62,26 +60,32 @@ public struct TabItemView: View {
     .padding(40)
   }
   
-  var tabImageView: some View {
-    ZStack {
-      if !isAnimationFinished && isSelected {
-        LottieView(animation: tab.lottieAnimation)
-          .playing()
-          .animationDidFinish { _ in
-            isAnimationFinished = true
-          }
-          .resizable()
-          .frame(width: 24, height: 24)
-      } else {
-        tabImage
-          .resizable()
-          .frame(width: 24, height: 24)
-          
-      }
-    }
-    .padding(.bottom, 6)
+  var needPlayLottieView: Bool {
+    return !isAnimationFinished && isSelected
   }
-   
+  
+  var tabItemImageView: some View {
+    needPlayLottieView ? tabLottieView : tabImageView
+  }
+  
+  var tabLottieView: AnyView {
+    AnyView(
+     LottieView(animation: tab.lottieAnimation)
+       .playing()
+       .animationDidFinish { _ in
+         isAnimationFinished = true
+       }
+       .resizable()
+   )
+  }
+  
+  var tabImageView: AnyView {
+    AnyView(
+      (isSelected ? tab.selectedImage : tab.image)
+        .resizable()
+    )
+  }
+  
 }
 
 struct TabBarModifier: ViewModifier {
