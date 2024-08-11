@@ -43,10 +43,7 @@ public struct LikeButton: View {
     .background(Color.Background.white)
     .cornerRadius(40)
     .clipped(antialiased: true)
-    .shadow(
-      color: Color.Background.primary.opacity(0.05),
-      radius: 20
-    )
+    .shadow(color: Color.Shadow.orange, radius: 20)
     .onTapGesture {
       playbackMode = .playing(
         .fromProgress(0, toProgress: 1, loopMode: .playOnce)

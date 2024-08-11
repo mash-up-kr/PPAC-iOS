@@ -81,6 +81,7 @@ func copyButton(_ copyAction: @escaping () -> Void) -> some View {
     width: 50,
     height: 50,
     image: ResourceKitAsset.Icon.copy.swiftUIImage,
+    shadowColor: Color.Shadow.orange,
     action: copyAction
   )
 }
@@ -90,6 +91,7 @@ func shareButton(_ shareAction: @escaping () -> Void) -> some View {
     width: 50,
     height: 50,
     image: ResourceKitAsset.Icon.share.swiftUIImage,
+    shadowColor: Color.Shadow.orange,
     action: shareAction
   )
 }
@@ -102,6 +104,7 @@ func saveButton(
     width: 50,
     height: 50,
     image: isFarmemed ? ResourceKitAsset.Icon.filled.swiftUIImage : ResourceKitAsset.Icon.stroke.swiftUIImage,
+    shadowColor: Color.Shadow.orange,
     action: saveAction
   )
 }

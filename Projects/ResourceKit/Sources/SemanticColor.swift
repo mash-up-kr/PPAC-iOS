@@ -53,4 +53,8 @@ public struct Color {
 		public static let homeback = ResourceKitAsset.PrimaryColor.skeleton100.swiftUIColor
 	}
 	
+	public struct Shadow {
+		public static let primary = ResourceKitAsset.PrimaryColor.neutral90.swiftUIColor.opacity(0.05)
+		public static let orange = ResourceKitAsset.PrimaryColor.orange50.swiftUIColor.opacity(0.2)
+	}
 }
