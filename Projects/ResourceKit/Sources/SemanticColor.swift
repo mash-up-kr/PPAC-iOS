@@ -49,6 +49,8 @@ public struct Color {
 	public struct Skeleton {
 		public static let primary = ResourceKitAsset.PrimaryColor.neutral10.swiftUIColor
 		public static let secondary = ResourceKitAsset.PrimaryColor.neutral20.swiftUIColor
+		public static let home = ResourceKitAsset.PrimaryColor.skeleton50.swiftUIColor
+		public static let homeback = ResourceKitAsset.PrimaryColor.skeleton100.swiftUIColor
 	}
 	
 }

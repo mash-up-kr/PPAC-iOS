@@ -62,7 +62,7 @@ struct RecommendMemeButtonView : View {
       }
     }
     .frame(maxWidth: .infinity)
-    .frame(height: 110, alignment: .center)
+    .padding(.vertical, 30)
     .background(
       LinearGradient(
         colors: [
