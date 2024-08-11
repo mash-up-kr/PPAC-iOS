@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+
 import DesignSystem
 import ResourceKit
 import PPACModels
+
+import PopupView
 
 public struct MyPageView: View {
   @ObservedObject private var viewModel: MyPageViewModel
@@ -41,7 +44,7 @@ public struct MyPageView: View {
             viewModel.dispatch(type: .onAppearLastMeme)
           }
         )
-        Spacer(minLength: 80)
+        Spacer(minLength: 100)
       }
       .onAppear {
         viewModel.dispatch(type: .onAppearMyPageView)
@@ -52,6 +55,11 @@ public struct MyPageView: View {
       .padding(.top, 51)
       .edgesIgnoringSafeArea(.all)
     }
+    .popup(
+      isActive: $viewModel.state.isActiveCopyPopup,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
   }
 
   var blurView: some View {

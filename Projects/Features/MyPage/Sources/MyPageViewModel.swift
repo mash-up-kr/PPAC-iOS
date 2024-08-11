@@ -32,7 +32,8 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
     var savedMemePagination: MemeListWithPagination.Pagination
-    var isRefreshCompleted: Bool
+    var isRefreshCompleted: Bool = true
+    var isActiveCopyPopup: Bool = false
     
     var memeLevel: MemeLevelType {
       return MemeLevelType(rawValue: userDetail.level) ?? .level1
@@ -82,8 +83,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.state = State(userDetail: userDetail,
                        lastSeenMemeList: [],
                        savedMemeList: [],
-                       savedMemePagination: .none,
-                       isRefreshCompleted: true)
+                       savedMemePagination: .none)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
@@ -121,8 +121,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       self.state = State(userDetail: userDetail,
                          lastSeenMemeList: lastSeenMemeList,
                          savedMemeList: savedMemeListWithPagination.memeList,
-                         savedMemePagination: savedMemeListWithPagination.pagination,
-                         isRefreshCompleted: true)
+                         savedMemePagination: savedMemeListWithPagination.pagination)
     } catch(let error) {
       print("fetchUserMemes error = \(error)")
     }
@@ -156,6 +155,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private func copyMemeImage(with url: String?) async {
     do {
       try await self.copyImageUseCase.execute(url: url ?? "")
+      self.state.isActiveCopyPopup = true
     } catch {
       print("복사 실패")
     }

@@ -33,6 +33,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   public struct State {
     var keyword: String
     var memeList: [MemeDetail]
+    var isActiveCopyPopup: Bool = false
   }
   
   // MARK: - Properties
@@ -89,6 +90,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   private func copyImage(urlString: String) async {
     do {
       try await copyImageUseCase.execute(url: urlString)
+      state.isActiveCopyPopup = true
     } catch(let error) {
       debugPrint("error = \(error)")
     }

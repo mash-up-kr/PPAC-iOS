@@ -26,14 +26,13 @@ public struct MemeItemView: View {
   }
   
   public var body: some View {
-    VStack {
+    VStack(spacing: 10) {
       MemeItemViewWithButton(memeDetail: memeDetail, memeCopyHandler: memeCopyHandler)
         .onTapGesture {
           memeClickHandler?(memeDetail)
         }
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
-    .padding(.bottom, 20)
   }
 }
 
@@ -117,13 +116,13 @@ struct MemeItemInfoView: View {
         }
         
       }
-      .padding(.bottom, 4)
       Spacer()
     }
+    .padding(.horizontal, 4)
   }
   
   var memeReactionView: some View {
-    HStack {
+    HStack(spacing: 4) {
       Text("ㅋㅋ")
         .font(Font.Family2.xlarge)
       Text("\(reaction)")

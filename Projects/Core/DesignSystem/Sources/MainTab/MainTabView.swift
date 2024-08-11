@@ -6,7 +6,9 @@
 //
 
 import SwiftUI
+
 import ResourceKit
+import Lottie
 
 public struct CustomTabBarView: View {
   @Binding public var selectedTab: MainTab
@@ -23,7 +25,7 @@ public struct CustomTabBarView: View {
       }
       Spacer(minLength: 20)
     }
-    .frame(maxWidth: .infinity, maxHeight: 98)
+    .frame(maxWidth: .infinity, maxHeight: 88)
     .background(.white)
     .clipShape(
       .rect(
@@ -37,13 +39,10 @@ public struct CustomTabBarView: View {
 
 
 public struct TabItemView: View {
-  
   let tab: MainTab
   let isSelected: Bool
-  
-  var tabImage: Image {
-    return isSelected ? tab.selectedImage : tab.image
-  }
+  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
+  @State var isAnimationFinished: Bool = false
   
   var color: SwiftUI.Color {
     return isSelected ? Color.Text.brand : Color.Text.assistive
@@ -51,16 +50,42 @@ public struct TabItemView: View {
   
   public var body: some View {
     VStack {
-      tabImage
+      tabItemImageView
         .frame(width: 24, height: 24)
-        .padding(.bottom, 2)
-      
+        .padding(.bottom, 6)
       Text(tab.title)
-        .font(Font.Weight.semiBold)
+        .font(Font.Weight.medium)
     }
     .foregroundStyle(color)
     .padding(40)
   }
+  
+  var needPlayLottieView: Bool {
+    return !isAnimationFinished && isSelected
+  }
+  
+  var tabItemImageView: some View {
+    needPlayLottieView ? tabLottieView : tabImageView
+  }
+  
+  var tabLottieView: AnyView {
+    AnyView(
+     LottieView(animation: tab.lottieAnimation)
+       .playing()
+       .animationDidFinish { _ in
+         isAnimationFinished = true
+       }
+       .resizable()
+   )
+  }
+  
+  var tabImageView: AnyView {
+    AnyView(
+      (isSelected ? tab.selectedImage : tab.image)
+        .resizable()
+    )
+  }
+  
 }
 
 struct TabBarModifier: ViewModifier {
