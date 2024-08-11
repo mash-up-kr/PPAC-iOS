@@ -103,8 +103,8 @@ public struct RecommendView: View {
       
       // 높이를 위한 가짜 탭뷰
       Rectangle()
-        .frame(maxWidth: .infinity, maxHeight: 98)
-        .background(.white.opacity(0))
+        .frame(maxWidth: .infinity, maxHeight: 88)
+        .foregroundColor(.black.opacity(0))
         .clipShape(
           .rect(
             topLeadingRadius: 30,
