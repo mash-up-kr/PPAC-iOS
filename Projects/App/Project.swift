@@ -38,6 +38,8 @@ let project = Project.configure(
                 .Core.PPACUtil,
                 .ThirdParty.Lottie,
                 .ThirdParty.Dependency,
+                .ThirdParty.FirebaseAnalytics,
+                .ThirdParty.FirebaseCrashlytics
             ],
             settings: .settings(
                 base: [
@@ -69,6 +71,8 @@ let project = Project.configure(
                 .Core.PPACNetwork,
                 .Core.PPACUtil,
                 .ThirdParty.Dependency,
+                .ThirdParty.FirebaseAnalytics,
+                .ThirdParty.FirebaseCrashlytics
             ],
             settings: .settings(
                 base: [
