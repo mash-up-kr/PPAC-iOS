@@ -48,15 +48,48 @@ extension MemeDetail: HorizontalMemeItemProtocol {}
 struct MemeSimpleItemView: View, HorizontalMemeItemViewProtocol {
   typealias Item = MemeDetail
   let memeDetail: MemeDetail
+  @State private var isImageLoaded: Bool = false
   
   init(item memeDetail: MemeDetail) {
     self.memeDetail = memeDetail
   }
   
-  var body: some View {
-    MemeImageView(imageUrlString: memeDetail.imageUrlString)
+  public var body: some View {
+    ZStack {
+      KFImage(URL(string: memeDetail.imageUrlString))
+        .resizable()
+        .loadDiskFileSynchronously()
+        .cacheMemoryOnly()
+        .onSuccess { _ in
+          isImageLoaded = true
+        }
+        .aspectRatio(contentMode: .fill)
+        .frame(width: 120, height: 120, alignment: .center)
+        .cornerRadius(12)
+        .opacity(isImageLoaded ? 1 : 0) // 이미지 로드 완료 전에 투명하게 처리
+      
+      if !isImageLoaded {
+        skeletonView
+      }
+    }
+  }
+  
+  var skeletonView: some View {
+    EmptyView()
+      .skeleton(
+        with: !isImageLoaded,
+        animation: .linear(duration: 2, delay: 0, speed: 1),
+        appearance: .gradient(
+          .linear,
+          color: Color.Skeleton.secondary,
+          background: Color.Skeleton.primary,
+          radius: 1
+        ),
+        shape: .rounded(.radius(12))
+      )
       .frame(width: 120, height: 120, alignment: .center)
   }
+
 }
 
 //#Preview {
