@@ -29,3 +29,16 @@ struct SizePreferenceKey: PreferenceKey {
   static var defaultValue: CGSize = .zero
   static func reduce(value: inout CGSize, nextValue: () -> CGSize) { }
 }
+
+extension View {
+  func recommendSkeleton(
+    isShow: Bool,
+    radius: CGFloat,
+    width: CGFloat? = nil,
+    height: CGFloat? = nil
+  ) -> some View {
+    self.modifier(
+      SkeletonModifier(isShow: isShow, radius: radius, width: width, height: height)
+    )
+  }
+}
