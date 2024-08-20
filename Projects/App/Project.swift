@@ -22,7 +22,8 @@ let project = Project.configure(
               "CFBundleDevelopmentRegion": "ko_KR",
               "CFBundleShortVersionString": "1.1.1",
               "CFBundleVersion": "1",
-              "UILaunchStoryboardName": "launch"
+              "UILaunchStoryboardName": "launch",
+              "UIUserInterfaceStyle": "Light"  // 다크모드 방지
           ]),
             sources: "Sources/**",
             resources: "Resources/**",
@@ -56,7 +57,8 @@ let project = Project.configure(
             product: .app,
             bundleId: "ppac.farmeme.App",
             infoPlist: .extendingDefault(with: [
-              "UILaunchStoryboardName": "launch"
+              "UILaunchStoryboardName": "launch",
+              "UIUserInterfaceStyle": "Light"  // 다크모드 방지
           ]),
             sources: "Sources/**",
             resources: "Resources/**",

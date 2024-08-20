@@ -18,6 +18,8 @@ struct RecommendMemeImagesView: View {
   
   @State var value: CGFloat = 0
   
+  @State var imageStatusList: [String : Bool] = [:]
+  
   var memes: [MemeDetail]
   var isTagHidden: Bool = false
   
@@ -30,14 +32,9 @@ struct RecommendMemeImagesView: View {
             ForEach(memes, id: \.self) { meme in
               MemeImageView(
                 imageUrl: meme.imageUrlString,
-                isDimmed: meme.id != currentMeme?.id
+                isDimmed: meme.id != currentMeme?.id,
+                isLoadingImage: binding(for: meme.id)
               )
-              .scrollTransition { content, phase in
-                content
-                  .offset(x: phase.value * -3)
-                  .scaleEffect(phase.isIdentity ? 1 : 0.9)
-                  .blur(radius: phase.isIdentity ? 0 : 1)
-              }
               .animation(.smooth, value: meme)
             }
           }
@@ -45,41 +42,59 @@ struct RecommendMemeImagesView: View {
           // Border
           HStack(spacing: 0) {
             ForEach(memes, id: \.self) { meme in
-              RoundedRectangle(cornerRadius: 20)
-                .inset(by: 1)
-                .stroke(Color.Border.primary, lineWidth: 2)
-                .scrollTransition { content, phase in
-                  content
-                    .offset(x: phase.value * -3)
-                    .scaleEffect(phase.isIdentity ? 1 : 0.905)
-                }
-                .animation(.smooth, value: meme)
+              MemeImageBorderView(
+                isLoadingImage: binding(for: meme.id)
+              )
+              .animation(.smooth, value: meme)
             }
           }
         }
-        .frame(height: 310)
         .scrollTargetLayout()
+        .recommendSkeleton(
+          isShow: memes.isEmpty,
+          radius: 20,
+          width: memes.isEmpty ? 270 : .infinity,
+          height: 310
+        )
       }
       .scrollIndicators(.never)
       .scrollTargetBehavior(.viewAligned)
       .scrollPosition(id: $currentMeme)
       .contentMargins(.horizontal, 60.0)
-      .padding(.top, 36)
       .padding(.bottom, 20)
       
       if let currentMeme, isTagHidden == false {
         HashTagView(keywords: currentMeme.keywords)
+      } else {
+        EmptyView()
+          .recommendSkeleton(isShow: true, radius: 4, width: 200, height: 16)
       }
     }
-    .onAppear {
-      currentMeme = memes.first
-    }
     .onChange(of: memes) { _, value in
-      let current = value.first(where: {
-        $0.id == currentMeme?.id
-      })
-      currentMeme = current
+      if let currentMeme {
+        let current = value.first(where: {
+          $0.id == currentMeme.id
+        })
+        self.currentMeme = current
+        
+      } else {
+        self.currentMeme = memes.first
+        memes.forEach { meme in
+          imageStatusList[meme.id] = false
+        }
+      }
     }
+  }
+  
+  func binding(for key: String) -> Binding<Bool> {
+    return Binding(
+      get: {
+        return self.imageStatusList[key] ?? false
+      },
+      set: {
+        self.imageStatusList[key] = $0
+      }
+    )
   }
 }
 
@@ -157,4 +172,16 @@ struct RecommendMemeImagesView: View {
     ],
     isTagHidden: false
   )
+  .frame(maxWidth: .infinity, maxHeight: .infinity)
+  .background(
+    LinearGradient(
+      colors: [
+        Color.Background.brandassistive,
+        Color.Background.brandsubassistive
+      ],
+      startPoint: .top,
+      endPoint: .bottom
+    )
+  )
+  .edgesIgnoringSafeArea(.bottom)
 }

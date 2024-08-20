@@ -22,6 +22,7 @@ let project = Project(
         .ThirdParty.Kingfisher,
         .ThirdParty.PopupView,
         .ThirdParty.Lottie,
+        .ThirdParty.SkeletonUI,
         .ResourceKit,
         .Core.DesignSystem,
         .Core.PPACModels,

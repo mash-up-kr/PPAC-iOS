@@ -9,6 +9,7 @@ import SwiftUI
 import ResourceKit
 import PPACModels
 import Kingfisher
+import SkeletonUI
 
 public struct MemeItemView: View {
   private let memeDetail: MemeDetail
@@ -31,6 +32,7 @@ public struct MemeItemView: View {
         .onTapGesture {
           memeClickHandler?(memeDetail)
         }
+        
       MemeItemInfoView(memeName: memeDetail.title, reaction: memeDetail.reaction)
     }
   }
@@ -40,6 +42,7 @@ struct MemeItemViewWithButton: View {
   @State private var imageHeight: CGFloat = .zero
   private let memeCopyHandler: ((MemeDetail) -> ())?
   private let memeDetail: MemeDetail
+  @State private var isImageLoaded: Bool = false
   
   init(memeDetail: MemeDetail, memeCopyHandler: ((MemeDetail) -> ())?) {
     self.memeDetail = memeDetail
@@ -74,15 +77,17 @@ struct MemeItemViewWithButton: View {
 struct ResizableMemeImageView: View {
   let imageUrlString: String
   @Binding var imageHeight: CGFloat
+  @State private var isImageLoaded: Bool = false
   
   var body: some View {
     GeometryReader { geometry in
-      VStack {
+      ZStack {
         KFImage(URL(string: imageUrlString))
           .resizable()
           .loadDiskFileSynchronously()
           .cacheMemoryOnly()
           .onSuccess { result in
+            guard result.image.size.width > 0 else { return }
             let ratio = geometry.size.width / result.image.size.width
             let newHeight = result.image.size.height * ratio
             if newHeight < 80 {
@@ -92,11 +97,35 @@ struct ResizableMemeImageView: View {
             } else {
               imageHeight = newHeight
             }
+            isImageLoaded = true
           }
           .cornerRadius(12)
           .frame(height: imageHeight)
+          .opacity(isImageLoaded ? 1 : 0) // 이미지 로드 완료 전에 투명하게 처리
+        
+        if !isImageLoaded {
+          skeletonView
+            .onAppear {
+              imageHeight = geometry.size.width
+            }
+        }
       }
     }
+  }
+  
+  var skeletonView: some View {
+    EmptyView()
+      .skeleton(
+        with: !isImageLoaded,
+        animation: .linear(duration: 2, delay: 0, speed: 1),
+        appearance: .gradient(
+          .linear,
+          color: Color.Skeleton.secondary,
+          background: Color.Skeleton.primary,
+          radius: 1
+        ),
+        shape: .rounded(.radius(12))
+      )
   }
 }
 

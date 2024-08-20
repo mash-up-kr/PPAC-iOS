@@ -35,6 +35,7 @@ extension TargetDependency {
     public static let PopupView = TargetDependency.external(name: "PopupView")
     public static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics")
     public static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
+    public static let SkeletonUI = TargetDependency.external(name: "SkeletonUI")
   }
   
   public static let ResourceKit = TargetDependency.project(

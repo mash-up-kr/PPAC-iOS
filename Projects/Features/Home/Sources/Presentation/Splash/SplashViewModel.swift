@@ -48,7 +48,7 @@ final class SplashViewModel: ViewModelType, ObservableObject {
         let userDetail = try await self.checkUserInfoUseCase.execute()
         self.updateMemeLevel(to: userDetail.level)
         self.state = State(isVisible: false)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) { [weak self] in
           self?.router?.showMainTabView(userDetail: userDetail)
         }
       } catch(let error) {
