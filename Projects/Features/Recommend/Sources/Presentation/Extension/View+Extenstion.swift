@@ -42,3 +42,16 @@ extension View {
     )
   }
 }
+
+extension View {
+  func searchSkeleton(
+    isShow: Bool,
+    radius: CGFloat,
+    width: CGFloat? = nil,
+    height: CGFloat? = nil
+  ) -> some View {
+    self.modifier(
+      SkeletonModifier(isShow: isShow, radius: radius, width: width, height: height)
+    )
+  }
+}
