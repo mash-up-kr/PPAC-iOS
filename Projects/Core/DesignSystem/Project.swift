@@ -20,6 +20,7 @@ let project = Project(
                 .ResourceKit,
                 .ThirdParty.PopupView,
                 .ThirdParty.Kingfisher,
+                .ThirdParty.Lottie,
                 .Core.PPACModels
             ]
         )
