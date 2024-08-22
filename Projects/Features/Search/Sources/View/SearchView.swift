@@ -14,7 +14,10 @@ import PPACUtil
 import DesignSystem
 import ResourceKit
 
+import SkeletonUI
+
 public struct SearchView: View {
+  @Environment(\.screenSize) var screenSize
   @ObservedObject var viewModel: SearchViewModel
   
   public init(viewModel: SearchViewModel) {
@@ -22,30 +25,37 @@ public struct SearchView: View {
   }
   
   public var body: some View {
-    VStack(spacing: 0) {
-      fakeSearchBar
+    ZStack {
+      VStack(spacing: 0) {
+        fakeSearchBar
+        
+        ScrollView {
+          VStack(spacing: 0) {
+            currentHotKeywords
+            memeCategoriesViews
+          }
+        }
+        .scrollIndicators(.hidden)
+      }
+      .padding(.bottom, 64 + 50) // 탭바 높이 추가
+      .onAppear {
+        viewModel.dispatch(type: .viewWillAppear)
+      }
+      .basicModal(
+        isPresented: $viewModel.state.isPresenting,
+        opacity: 0.5,
+        content: {
+          SearchPreparingAlert {
+            viewModel.dispatch(type: .dismissSearchBarAlert)
+          }
+        }
+      )
       
-      ScrollView {
-        VStack(spacing: 0) {
-          currentHotKeywords
-          memeCategoriesViews
-        }
+      if viewModel.state.isLoading {
+        skeletonView
       }
-      .scrollIndicators(.hidden)
     }
-    .padding(.bottom, 40)
-    .onAppear {
-      viewModel.dispatch(type: .viewWillAppear)
-    }
-    .basicModal(
-      isPresented: $viewModel.state.isPresenting,
-      opacity: 0.5,
-      content: {
-        SearchPreparingAlert {
-          viewModel.dispatch(type: .dismissSearchBarAlert)
-        }
-      }
-    )
+    .animation(.easeInOut, value: viewModel.state.isLoading)
   }
   
   private var fakeSearchBar: some View {
@@ -107,7 +117,79 @@ public struct SearchView: View {
       }
     }
   }
+  
+  private var skeletonView: some View {
+    VStack(alignment: .leading, spacing: 0) {
+      EmptyView()
+      searchSkeleton(
+        size: .init(width: screenSize.width - 40, height: 44),
+        shape: .rounded(.radius(10))
+      )
+      .padding(.vertical, 16)
+      
+      searchSkeleton(
+        size: .init(width: 200, height: 20),
+        shape: .rounded(.radius(4))
+      )
+      .padding(.vertical, 18)
+      
+      ScrollView(.horizontal) {
+        HStack(spacing: 10) {
+          ForEach(0..<5) { _ in
+            searchSkeleton(
+              size: .init(width: 90, height: 92),
+              shape: .rounded(.radius(12))
+            )
+          }
+          Spacer()
+        }
+      }
+      .padding(.bottom, 40)
+      
+      searchSkeleton(
+        size: .init(width: 200, height: 20),
+        shape: .rounded(.radius(4))
+      )
+      .padding(.vertical, 18)
+      
+      searchSkeleton(
+        size: .init(width: 60, height: 16),
+        shape: .rounded(.radius(4))
+      )
+      .padding(.top, 4)
+      .padding(.bottom, 16)
+      
+      HStack {
+        ForEach(0..<3) { _ in
+          searchSkeleton(
+            size: .init(width: 60, height: 36),
+            shape: .rounded(.radius(18))
+          )
+          .padding(.top, 4)
+        }
+      }
+      
+      Spacer()
+    }
+    .padding(.leading, 20)
+    .background(.white)
+  }
+  
+  private func searchSkeleton(size: CGSize? = .none, shape: ShapeType = .capsule) -> some View {
+    EmptyView()
+      .skeleton(
+        with: viewModel.state.isLoading,
+        size: size,
+        animation: .linear(duration: 2, delay: 0, speed: 1),
+        appearance: .gradient(
+          .linear,
+          color: Color.Skeleton.secondary,
+          background: Color.Skeleton.primary,
+          radius: 1
+        ),
+        shape: shape
+      )
+  }
 }
 
 extension HotKeyword: HorizontalMemeItemProtocol {}
-
