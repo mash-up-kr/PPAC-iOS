@@ -34,6 +34,7 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
     var hotKeywords: [HotKeyword]
     var memeCategories: [MemeCategory]
     var isPresenting: Bool = false
+    var isLoading: Bool = true
   }
   
   // MARK: - Properties
@@ -80,10 +81,11 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
   @MainActor
   func fetchData() async {
     guard state.hotKeywords == [] || state.memeCategories == [] else { return }
-    
+    state.isLoading = true
     do {
       state.hotKeywords = try await hotKeywordsUseCase.execute()
       state.memeCategories = try await memeCategorysUseCase.execute()
+      state.isLoading = false
     } catch(let error) {
       debugPrint("error = \(error)")
     }
