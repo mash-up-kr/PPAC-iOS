@@ -24,6 +24,10 @@ public struct RecommendView: View {
   @State private var memeImageHeight: CGFloat = 0
   @State private var buttonViewHeight: CGFloat = 0
   
+  var isOverlapView: Bool {
+    memeImageHeight + buttonViewHeight > memeContentsHeight + 30
+  }
+  
   @State private var currentMeme: MemeDetail?
   @State var isActiveCopyPopup: Bool = false
   @State var isFarmemed: Bool = false
@@ -41,9 +45,7 @@ public struct RecommendView: View {
     VStack(spacing: 0) {
       Spacer()
       
-      if viewModel.state.recommendMemeSize > 0 &&
-          !viewModel.state.isSuccessFetch
-      {
+      if viewModel.state.recommendMemeSize > 0 && !viewModel.state.isSuccessFetch {
         ProgressView()
           .frame(width: 30, height: 30, alignment: .center)
           .padding(.bottom, 20)
@@ -56,18 +58,15 @@ public struct RecommendView: View {
       )
       
       ZStack {
-        let isOverlapView = memeImageHeight + buttonViewHeight > memeContentsHeight + 30
         VStack(spacing: 0) {
           
-          if viewModel.state.recommendMemes.count > 0 {
-            RecommendMemeImagesView(
-              currentMeme: $currentMeme,
-              memes: viewModel.state.recommendMemes,
-              isTagHidden: isOverlapView
-            )
-            .onReadSize { size in
-              memeImageHeight = size.height
-            }
+          RecommendMemeImagesView(
+            currentMeme: $currentMeme,
+            memes: viewModel.state.recommendMemes,
+            isTagHidden: isOverlapView
+          )
+          .onReadSize { size in
+            memeImageHeight = size.height
           }
           
           Spacer()
@@ -77,24 +76,25 @@ public struct RecommendView: View {
         VStack(spacing: 0) {
           Spacer()
           
-          RecommendMemeButtonView(
-            isReaction: currentMeme?.isReaction ?? false,
-            reactionCnt: currentMeme?.reaction ?? 0,
-            isFarmemed: currentMeme?.isFarmemed ?? false,
-            isOverlapView: isOverlapView,
-            reactionButtonTapped: reactionButtonTap,
-            copyButtonTapped: copyButtonTap,
-            shareButtonTapped : shareButtonTap,
-            saveButtonTapped : saveButtonTap
-          )
-          .onReadSize { size in
-            print(size.height)
-            buttonViewHeight = size.height
+          if let currentMeme {
+            RecommendMemeButtonView(
+              isReaction: currentMeme.isReaction,
+              reactionCnt: currentMeme.reaction,
+              isFarmemed: currentMeme.isFarmemed,
+              isOverlapView: isOverlapView,
+              reactionButtonTapped: reactionButtonTap,
+              copyButtonTapped: copyButtonTap,
+              shareButtonTapped : shareButtonTap,
+              saveButtonTapped : saveButtonTap
+            )
+            .onReadSize { size in
+              buttonViewHeight = size.height
+            }
           }
         }
         .zIndex(2)
       }
-      .frame(maxHeight: 490)
+      .frame(maxHeight: 457)
       .onReadSize { size in
         memeContentsHeight = size.height
       }
@@ -103,8 +103,8 @@ public struct RecommendView: View {
       
       // 높이를 위한 가짜 탭뷰
       Rectangle()
-        .frame(maxWidth: .infinity, maxHeight: 98)
-        .background(.white.opacity(0))
+        .frame(maxWidth: .infinity, maxHeight: 88)
+        .foregroundColor(.black.opacity(0))
         .clipShape(
           .rect(
             topLeadingRadius: 30,
@@ -153,7 +153,9 @@ public struct RecommendView: View {
           if value.translation.height < 0 { return }
           
           withAnimation(.spring()) {
-            currentOffsetY = value.translation.height > 180 ? 180 : value.translation.height
+            currentOffsetY = value.translation.height > 180
+            ? 180
+            : value.translation.height
           }
         })
         .onEnded({ value in

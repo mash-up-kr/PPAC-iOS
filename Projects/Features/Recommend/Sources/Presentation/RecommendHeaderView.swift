@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SkeletonUI
+
 import ResourceKit
 
 struct RecommendHeaderView: View {
@@ -15,6 +17,8 @@ struct RecommendHeaderView: View {
   @Binding var recommendMemeSize: Int
   
   public var body: some View {
+    let isNotLoading = userLevel == 0 || seenMemeCount == 0
+    
     VStack(spacing: 0) {
       ResourceKitAsset.Icon.homeLogo.swiftUIImage
         .resizable()
@@ -22,15 +26,20 @@ struct RecommendHeaderView: View {
         .padding(.bottom, 10)
       
       recommendTitle
-        .padding(.bottom, 16)
       
-      recommendProgressBar(
-        seenMemeCount: self.seenMemeCount,
-        total: recommendMemeSize
-      )
-      .padding(.bottom, 8)
-      
-      recommendText(getRecommendText())
+      if !isNotLoading {
+        recommendProgressBar(
+          seenMemeCount: self.seenMemeCount,
+          total: recommendMemeSize
+        )
+        
+        recommendText(getRecommendText())
+      } else {
+        EmptyView()
+          .recommendSkeleton(isShow: isNotLoading, radius: 4, width: 200, height: 16)
+          .padding(.top, 20)
+          .padding(.bottom, 37)
+      }
     }
   }
   
@@ -41,7 +50,7 @@ struct RecommendHeaderView: View {
                 (1...(recommendMemeSize - 1)).contains(seenMemeCount)
     {
       "밈 보고 레벨 포인트 받아요!"
-    } else if userLevel == 2 && 
+    } else if userLevel == 2 &&
                 (1...(recommendMemeSize - 1)).contains(seenMemeCount)
     {
       "추천 밈 둘러보세요!"
@@ -54,7 +63,7 @@ struct RecommendHeaderView: View {
 private var recommendTitle : some View {
   Text("이번 주 이 밈 어때!")
     .font(Font.Heading.Large.semiBold)
-    .padding(.bottom, 8)
+    .padding(.bottom, 16)
 }
 
 private func recommendProgressBar(
@@ -83,10 +92,12 @@ private func recommendText(_ text: String) -> some View {
   Text(text)
     .font(Font.Body.Medium.medium)
     .foregroundStyle(Color.Text.secondary)
+    .padding(.top, 8)
+    .padding(.bottom, 32)
 }
 
 #Preview {
-  @State var userLevel: Int = 1
+  @State var userLevel: Int = 0
   @State var seenMemeCount: Int = 5
   @State var recommendMemeSize: Int = 5
   
@@ -95,4 +106,16 @@ private func recommendText(_ text: String) -> some View {
     seenMemeCount: $seenMemeCount,
     recommendMemeSize: $recommendMemeSize
   )
+  .frame(maxWidth: .infinity, maxHeight: .infinity)
+  .background(
+    LinearGradient(
+      colors: [
+        Color.Background.brandassistive,
+        Color.Background.brandsubassistive
+      ],
+      startPoint: .top,
+      endPoint: .bottom
+    )
+  )
+  .edgesIgnoringSafeArea(.bottom)
 }
