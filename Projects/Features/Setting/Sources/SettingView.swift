@@ -40,8 +40,7 @@ public struct SettingView: View {
           .padding(.top, 50)
     
         memeLogoImage
-        appNameAndVersion
-          .padding(.bottom, 50)
+        appDescriptionView
         
         Divider()
           .padding(.horizontal, 10)
@@ -69,6 +68,19 @@ public struct SettingView: View {
       .padding(.top, 50)
   }
   
+  var appDescriptionView: some View {
+    VStack {
+      if viewModel.state.needUpdate {
+        appNameAndVersion
+          .padding(.bottom, 16)
+        appUpdateButton
+      } else {
+        appNameAndVersion
+      }
+    }
+    .padding(.bottom, 50)
+  }
+  
   var appNameAndVersion: some View {
     VStack {
       Text("파밈")
@@ -78,6 +90,20 @@ public struct SettingView: View {
       Text(viewModel.state.currnetAppVersion)
         .font(Font.Body.Small.medium)
         .foregroundStyle(Color.Text.tertiary)
+    }
+  }
+  
+  var appUpdateButton: some View {
+    Link(destination: viewModel.appStoreUrl) {
+      Text("앱 업데이트하기")
+        .font(Font.Body.Large.semiBold)
+        .foregroundStyle(Color.Text.inverse)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
+        .background {
+          RoundedCorners(radius: 10, corners: .allCorners)
+            .foregroundStyle(Color.Background.primary)
+        }
     }
   }
   

@@ -29,7 +29,7 @@ struct SplashView: View {
         .foregroundStyle(Color.Text.primary)
     }
     .opacity(viewModel.state.isVisible ? 1 : 0)
-    .animation(.easeInOut(duration: 3.0), value: viewModel.state.isVisible)
+    .animation(.easeInOut(duration: 0.7), value: viewModel.state.isVisible)
   }
 }
 

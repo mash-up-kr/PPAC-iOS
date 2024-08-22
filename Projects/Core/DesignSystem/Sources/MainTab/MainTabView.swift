@@ -60,12 +60,13 @@ public struct TabItemView: View {
     .padding(40)
   }
   
-  var needPlayLottieView: Bool {
-    return !isAnimationFinished && isSelected
-  }
+//  var needPlayLottieView: Bool {
+//    return !isAnimationFinished && isSelected
+//  }
   
   var tabItemImageView: some View {
-    needPlayLottieView ? tabLottieView : tabImageView
+    //needPlayLottieView ? tabLottieView : tabImageView
+    tabImageView
   }
   
   var tabLottieView: AnyView {
