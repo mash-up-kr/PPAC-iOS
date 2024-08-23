@@ -43,7 +43,7 @@ extension Requestable {
     urlRequest.httpMethod = httpMethod.rawValue.uppercased()
     
     var defaultHeaders = [
-      "x-device-id": UserInfo.shared.testDeviceId, // FIXME: testId가 필요없어지면 deviceId로 변경하기
+      "x-device-id": UserInfo.shared.deviceId,
       "accept": "application/json",
       "Content-Type": "application/json"
     ]
