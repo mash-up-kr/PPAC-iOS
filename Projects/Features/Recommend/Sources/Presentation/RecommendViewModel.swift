@@ -179,23 +179,13 @@ private extension RecommendViewModel {
     }
   }
   
+  @MainActor
   func showShareSheet(memeImageUrl: String?) async {
-    guard let memeImageUrl else { return }
-    
-    guard let url = URL(string: memeImageUrl) else {
-      debugPrint("invalid url")
+    guard let memeId = self.state.recommendMemes.filter({ $0.imageUrlString == memeImageUrl }).first?.id else {
       return
     }
-    do {
-      let (data, _) = try await URLSession.shared.data(from: url)
-      guard let image = UIImage(data: data) else {
-        debugPrint("invalid image data")
-        return
-      }
-      await self.router?.showShareView(items: [image])
-    } catch {
-      debugPrint("Failed to load image data: \(error)")
-    }
+    let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(memeId)"
+    router?.showShareView(items: [deeplinkUrl])
   }
   
   func saveMeme(memeId: String?) async {
