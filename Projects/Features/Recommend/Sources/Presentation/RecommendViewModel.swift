@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 import PPACUtil
 import PPACDomain
@@ -14,6 +15,7 @@ import PPACModels
 
 public protocol RecommendRouting: AnyObject {
   func showShareView(items: [Any])
+  func showMemeDetailView(meme: MemeDetail)
 }
 
 public final class RecommendViewModel: ViewModelType, ObservableObject {
@@ -35,7 +37,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     var isSuccessFetch: Bool
   }
   
-  weak var router: RecommendRouter?
+  weak var router: RecommendRouting?
   @Published public var state: State
   
   private let getRecommendMemesUseCase: GetRecommendMemesUseCase
@@ -43,6 +45,9 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   private let watchMemeUseCase: WatchMemeUseCase
   private let reactToMemeUseCase: ReactToMemeUseCase
   private let bookmarkMemeUseCase: BookmarkMemeUseCase
+  private let getMemeDetailUseCase: GetMemeDetailUseCase
+  private let deepLinkMemeId: PassthroughSubject<String, Never>
+  private var cancellables: Set<AnyCancellable> = []
   
   public init(
     router: RecommendRouter?,
@@ -50,7 +55,9 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     getUserInfoUseCase: GetUserInfoUseCase,
     watchMemeUseCase: WatchMemeUseCase,
     reactToMemeUseCase: ReactToMemeUseCase,
-    bookmarkMemeUseCase: BookmarkMemeUseCase
+    bookmarkMemeUseCase: BookmarkMemeUseCase,
+    getMemeDetailUseCase: GetMemeDetailUseCase,
+    deepLinkMemeId: PassthroughSubject<String, Never>
   ) {
     self.router = router
     self.getRecommendMemesUseCase = getRecommendMemesUseCase
@@ -58,6 +65,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     self.watchMemeUseCase = watchMemeUseCase
     self.reactToMemeUseCase = reactToMemeUseCase
     self.bookmarkMemeUseCase = bookmarkMemeUseCase
+    self.getMemeDetailUseCase = getMemeDetailUseCase
+    self.deepLinkMemeId = deepLinkMemeId
     self.state = State(
       recommendMemes: [],
       recommendMemeSize: 0,
@@ -65,6 +74,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
       memeRecommendWatchCount: 0,
       isSuccessFetch: false
     )
+    bind()
   }
   
   public func dispatch(type: Action) {
@@ -89,13 +99,30 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
 
 private extension RecommendViewModel {
   
+  func bind() {
+    deepLinkMemeId.sink { [weak self] memeId in
+      guard let self = self else { return }
+      Task { @MainActor in
+        print("👍 deepLinkMemeId: \(memeId)")
+        do {
+          let meme = try await self.getMemeDetailUseCase.execute(memeId: memeId)
+          print("👍 meme: \(meme)")
+          self.router?.showMemeDetailView(meme: meme)
+        } catch {
+          debugPrint("Failed get meme detail : \(error)")
+        }
+      }
+      
+    }.store(in: &cancellables)
+  }
+  
   @MainActor
   func getRecommendAndUser() async {
     do {
       let recommendMemeSize = 5
       let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
       let user = try await getUserInfoUseCase.execute()
-      
+      print("👍memeids: \(recommendMemes.map { $0.id })")
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
         self.state.recommendMemes = recommendMemes
         self.state.recommendMemeSize = recommendMemes.count

@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Combine
+
 import PopupView
 
 import ResourceKit
-
 import PPACModels
 import PPACDomain
 import PPACData
@@ -224,6 +225,7 @@ public struct RecommendView: View {
   let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
   let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
   let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
+  let getMemeDetailUseCase = GetMemeDetailUseCaseImpl(repository: memeRepository)
   
   return RecommendView(
     RecommendViewModel(
@@ -232,7 +234,9 @@ public struct RecommendView: View {
       getUserInfoUseCase: getUserInfoUseCase,
       watchMemeUseCase: watchMemeUseCase,
       reactToMemeUseCase: reactToMemeUseCase,
-      bookmarkMemeUseCase: bookmarkMemeUseCase
+      bookmarkMemeUseCase: bookmarkMemeUseCase,
+      getMemeDetailUseCase: getMemeDetailUseCase,
+      deepLinkMemeId: PassthroughSubject<String, Never>()
     )
   )
   .tabBar(selectedTab: selectedTabBinding)
