@@ -34,6 +34,7 @@ extension TargetDependency {
     public static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     public static let PopupView = TargetDependency.external(name: "PopupView")
     public static let SkeletonUI = TargetDependency.external(name: "SkeletonUI")
+    public static let AppsFlyerLib = TargetDependency.external(name: "AppsFlyerLib-Dynamic")
   }
   
   public static let ResourceKit = TargetDependency.project(

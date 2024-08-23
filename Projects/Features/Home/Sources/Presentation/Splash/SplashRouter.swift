@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Combine
 
 import PPACUtil
 import PPACNetwork
@@ -23,10 +24,13 @@ public final class SplashRouter: Router, SplashRouting {
   
   public var childRouters: [any Router] = []
   
+  private let deeplinkMemeId: PassthroughSubject<String, Never>
+  
   // MARK: - Initializers
   
-  public init(_ navigationController: UINavigationController) {
+  public init(_ navigationController: UINavigationController, deeplinkMemeId: PassthroughSubject<String, Never>) {
     self.navigationController = navigationController
+    self.deeplinkMemeId = deeplinkMemeId
   }
   
   // MARK: - Methods
@@ -44,8 +48,11 @@ public final class SplashRouter: Router, SplashRouting {
   }
   
   public func showMainTabView(userDetail: UserDetail) {
-    let mainTabRouter = MainTabRouter(navigationController: self.navigationController,
-                                      userDetail: userDetail)
+    let mainTabRouter = MainTabRouter(
+      navigationController: self.navigationController,
+      userDetail: userDetail,
+      deepLinkMemeId: deeplinkMemeId
+    )
     self.childRouters.append(mainTabRouter)
     mainTabRouter.start()
   }

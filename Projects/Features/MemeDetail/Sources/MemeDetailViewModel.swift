@@ -152,20 +152,9 @@ private extension MemeDetailViewModel {
     }
   }
   
+  @MainActor
   func showShareSheet() async {
-    guard let url = URL(string: self.state.meme.imageUrlString) else {
-      print("invalid url")
-      return
-    }
-    do {
-      let (data, _) = try await URLSession.shared.data(from: url)
-      guard let image = UIImage(data: data) else {
-        print("invalid image data")
-        return
-      }
-      await self.router?.showShareView(items: [image])
-    } catch {
-      print("Failed to load image data: \(error)")
-    }
+    let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(self.state.meme.id)"
+    self.router?.showShareView(items: [deeplinkUrl])
   }
 }

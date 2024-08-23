@@ -41,6 +41,7 @@ public extension Router {
         navigationController.dismiss(animated: true)
     }
     
+  @MainActor
     func pushView<V: View>(_ view: V, animated: Bool = false) {
         let viewController = UIHostingController(rootView: view)
         navigationController.pushViewController(viewController, animated: animated)
