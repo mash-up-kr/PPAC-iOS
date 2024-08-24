@@ -100,6 +100,7 @@ private extension MemeDetailViewModel {
     do {
       try await reactToMemeUseCase.execute(memeId: state.meme.id)
       self.state.meme.reaction += 1
+      self.state.meme.isReaction = true
       print("reaction success")
     } catch {
       // TODO: - 에러처리
