@@ -20,11 +20,14 @@ let project = Project.configure(
             infoPlist: .extendingDefault(with: [
               "CFBundleIconName": "AppIcon",
               "CFBundleDevelopmentRegion": "ko_KR",
-              "CFBundleShortVersionString": "1.1.1",
-              "CFBundleVersion": "1",
+              "CFBundleShortVersionString": "1.1.2",
+              "CFBundleVersion": "2",
               "UILaunchStoryboardName": "launch",
               "NSUserTrackingUsageDescription": "이 앱은 사용자 맞춤형 광고 제공 및 분석을 위해 사용자 추적 정보를 수집합니다.",
-              "UIUserInterfaceStyle": "Light"  // 다크모드 방지
+              "UIUserInterfaceStyle": "Light",  // 다크모드 방지
+              "NSAppTransportSecurity": [
+                "NSAllowsArbitraryLoads": true
+              ]
           ]),
             sources: "Sources/**",
             resources: "Resources/**",
