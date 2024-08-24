@@ -34,7 +34,7 @@ public extension Router {
     }
     
     func popView() {
-        self.navigationController.popViewController(animated: true)
+        self.navigationController.popViewController(animated: false)
     }
     
     func dismissView() {
