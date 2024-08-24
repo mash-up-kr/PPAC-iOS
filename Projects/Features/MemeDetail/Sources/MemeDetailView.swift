@@ -29,6 +29,8 @@ public struct MemeDetailView: View {
   // MARK: - UI
   
   public var body: some View {
+    Spacer()
+    
     MemeDetailCardView(meme: $viewModel.state.meme) {
       viewModel.dispatch(type: .likeButtonTapped)
     }
@@ -63,6 +65,8 @@ public struct MemeDetailView: View {
       image: viewModel.state.meme.isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
       text: viewModel.state.meme.isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
     )
+    
+    Spacer()
   }
   
   @MainActor
