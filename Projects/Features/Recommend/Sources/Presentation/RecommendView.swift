@@ -14,7 +14,11 @@ import PPACModels
 import PPACDomain
 import PPACData
 import PPACNetwork
+import PPACAnalytics
+
 import DesignSystem
+
+
 
 public struct RecommendView: View {
   
@@ -185,6 +189,12 @@ public struct RecommendView: View {
       type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
     )
     isActiveCopyPopup = true
+    
+    PPACAnalytics.shared.clickCopy(
+      page: .recommend,
+      memeId: currentMeme?.id ?? "",
+      memeTitle: currentMeme?.title ?? ""
+    )
   }
   
   private func shareButtonTap() {

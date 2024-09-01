@@ -26,6 +26,7 @@ extension TargetDependency {
     public static let PPACUtil = project(moduleName: "PPACUtil")
     public static let PPACDomain = project(moduleName: "PPACDomain")
     public static let PPACData = project(moduleName: "PPACData")
+    public static let PPACAnalytics = project(moduleName: "PPACAnalytics")
   }
   
   public struct ThirdParty {
