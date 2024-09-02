@@ -11,6 +11,7 @@ import SwiftUI
 import PPACUtil
 import PPACDomain
 import PPACModels
+import PPACAnalytics
 
 public protocol RecommendRouting: AnyObject {
   func showShareView(items: [Any])
@@ -20,11 +21,11 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   
   public enum Action {
     case viewInitialized
-    case showRecommendMeme(memeId: String?)
-    case likeButtonTapped(memeId: String?)
-    case copyButtonTapped(memeImageUrl: String?)
-    case shareButtonTapped(memeImageUrl: String?)
-    case farmemeButtonTapped(memeId: String?)
+    case showRecommendMeme(meme: MemeDetail?)
+    case likeButtonTapped(meme: MemeDetail?)
+    case copyButtonTapped(meme: MemeDetail?)
+    case shareButtonTapped(meme: MemeDetail?)
+    case farmemeButtonTapped(meme: MemeDetail?)
   }
   
   public struct State {
@@ -72,16 +73,16 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
       switch(type) {
       case .viewInitialized:
         await getRecommendAndUser()
-      case .showRecommendMeme(let memeId):
-        await postShownMeme(memeId: memeId)
-      case .likeButtonTapped(let memeId):
-        await postReaction(memeId: memeId)
-      case .copyButtonTapped(let memeImageUrl):
-        await copyImage(memeImageUrl: memeImageUrl)
-      case .shareButtonTapped(let memeImageUrl):
-        await showShareSheet(memeImageUrl: memeImageUrl)
-      case .farmemeButtonTapped(let memeId):
-        await saveMeme(memeId: memeId)
+      case .showRecommendMeme(let meme):
+        await postShownMeme(meme: meme)
+      case .likeButtonTapped(let meme):
+        await postReaction(meme: meme)
+      case .copyButtonTapped(let meme):
+        await copyImage(meme: meme)
+      case .shareButtonTapped(let meme):
+        await showShareSheet(meme: meme)
+      case .farmemeButtonTapped(let meme):
+        await saveMeme(meme: meme)
       }
     }
   }
@@ -109,10 +110,10 @@ private extension RecommendViewModel {
   }
   
   @MainActor
-  func postShownMeme(memeId: String?) async {
-    guard let memeId else { return }
+  func postShownMeme(meme: MemeDetail?) async {
+    guard let meme else { return }
     do {
-      try await watchMemeUseCase.execute(memeId: memeId, type: "recommend")
+      try await watchMemeUseCase.execute(memeId: meme.id, type: "recommend")
       let user = try await getUserInfoUseCase.execute()
       self.state.userLevel = user.level
       self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
@@ -121,24 +122,32 @@ private extension RecommendViewModel {
     }
   }
   
-  func postReaction(memeId: String?) async {
-    guard let memeId else { return }
+  func postReaction(meme: MemeDetail?) async {
+    guard let meme else { return }
     do {
-      try await reactToMemeUseCase.execute(memeId: memeId)
+      try await reactToMemeUseCase.execute(memeId: meme.id)
       
-      if let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) {
+      if let index = self.state.recommendMemes.firstIndex(where: { $0.id == meme.id }) {
         self.state.recommendMemes[index].isReaction = true
         self.state.recommendMemes[index].reaction += 1
       }
+      
+      PPACAnalytics.shared.click(
+        action: .reaction,
+        page: .recommend,
+        memeId: meme.id,
+        memeTitle: meme.title
+      )
+      
     } catch {
       debugPrint("Failed post recation : \(error)")
     }
   }
   
-  func copyImage(memeImageUrl: String?) async {
-    guard let memeImageUrl else { return }
+  func copyImage(meme: MemeDetail?) async {
+    guard let meme else { return }
     
-    guard let url = URL(string: memeImageUrl) else { return }
+    guard let url = URL(string: meme.imageUrlString) else { return }
     
     do {
       let (data, _) = try await URLSession.shared.data(from: url)
@@ -147,15 +156,23 @@ private extension RecommendViewModel {
       }
 
       UIPasteboard.general.image = image
+      
+      PPACAnalytics.shared.click(
+        action: .copy,
+        page: .recommend,
+        memeId: meme.id,
+        memeTitle: meme.title
+      )
+      
     } catch {
       debugPrint("Failed to load image data: \(error)")
     }
   }
   
-  func showShareSheet(memeImageUrl: String?) async {
-    guard let memeImageUrl else { return }
+  func showShareSheet(meme: MemeDetail?)  async {
+    guard let meme else { return }
     
-    guard let url = URL(string: memeImageUrl) else {
+    guard let url = URL(string: meme.imageUrlString) else {
       debugPrint("invalid url")
       return
     }
@@ -166,31 +183,54 @@ private extension RecommendViewModel {
         return
       }
       await self.router?.showShareView(items: [image])
+      
+      PPACAnalytics.shared.click(
+        action: .share,
+        page: .recommend,
+        memeId: meme.id,
+        memeTitle: meme.title
+      )
+      
     } catch {
       debugPrint("Failed to load image data: \(error)")
     }
   }
   
-  func saveMeme(memeId: String?) async {
-    guard let memeId else { return }
+  func saveMeme(meme: MemeDetail?) async {
+    guard let meme else { return }
     
-    guard let memeIdx = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) else {
-      debugPrint("not found meme. memeId: \(memeId)")
+    guard let memeIdx = self.state.recommendMemes.firstIndex(where: { $0.id == meme.id }) else {
+      debugPrint("not found meme. memeId: \(meme.id)")
       return
     }
-    let meme = self.state.recommendMemes[memeIdx]
+    let selectedMeme = self.state.recommendMemes[memeIdx]
     
-    if meme.isFarmemed {
+    if selectedMeme.isFarmemed {
       do {
-        try await bookmarkMemeUseCase.delete(memeId: meme.id)
+        try await bookmarkMemeUseCase.delete(memeId: selectedMeme.id)
         self.state.recommendMemes[memeIdx].isFarmemed = false
+        
+        PPACAnalytics.shared.click(
+          action: .saveCancel,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
+        
       } catch {
         debugPrint("Faild delete meme : \(error)")
       }
     } else {
       do {
-        try await bookmarkMemeUseCase.execute(memeId: meme.id)
+        try await bookmarkMemeUseCase.execute(memeId: selectedMeme.id)
         self.state.recommendMemes[memeIdx].isFarmemed = true
+        
+        PPACAnalytics.shared.click(
+          action: .save,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
       } catch {
         debugPrint("Failed save meme : \(error)")
       }

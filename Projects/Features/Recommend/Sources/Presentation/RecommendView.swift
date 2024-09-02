@@ -14,7 +14,6 @@ import PPACModels
 import PPACDomain
 import PPACData
 import PPACNetwork
-import PPACAnalytics
 
 import DesignSystem
 
@@ -136,7 +135,7 @@ public struct RecommendView: View {
     }
     .onChange(of: currentMeme) {
       if let currentMeme {
-        viewModel.dispatch(type: .showRecommendMeme(memeId: currentMeme.id))
+        viewModel.dispatch(type: .showRecommendMeme(meme: currentMeme))
       }
     }
     .popup(
@@ -179,34 +178,29 @@ public struct RecommendView: View {
   
   private func reactionButtonTap() {
     viewModel.dispatch(
-      type: .likeButtonTapped(memeId: currentMeme?.id)
+      type: .likeButtonTapped(meme: currentMeme)
     )
   }
   
   private func copyButtonTap() {
     if isActiveCopyPopup || isActiveFarmemePopup { return }
     viewModel.dispatch(
-      type: .copyButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+      type: .copyButtonTapped(meme: currentMeme)
     )
     isActiveCopyPopup = true
     
-    PPACAnalytics.shared.clickCopy(
-      page: .recommend,
-      memeId: currentMeme?.id ?? "",
-      memeTitle: currentMeme?.title ?? ""
-    )
   }
   
   private func shareButtonTap() {
     viewModel.dispatch(
-      type: .shareButtonTapped(memeImageUrl: currentMeme?.imageUrlString)
+      type: .shareButtonTapped(meme: currentMeme)
     )
   }
   
   private func saveButtonTap() {
     if isActiveCopyPopup || isActiveFarmemePopup { return }
     viewModel.dispatch(
-      type: .farmemeButtonTapped(memeId: currentMeme?.id)
+      type: .farmemeButtonTapped(meme: currentMeme)
     )
     currentMeme?.isFarmemed.toggle()
     isActiveFarmemePopup = true
