@@ -67,7 +67,12 @@ struct RecommendMemeImagesView: View {
       if let currentMeme, isTagHidden == false {
         HashTagView(keywords: currentMeme.keywords)
           .onTapGesture {
-            PPACAnalytics.shared.click(action: .tag, page: .recommend)
+            PPACAnalytics.shared
+              .log(
+                interaction: .click,
+                event: .tag,
+                page: .recommend
+              )
           }
       } else {
         EmptyView()
@@ -80,7 +85,6 @@ struct RecommendMemeImagesView: View {
           $0.id == currentMeme.id
         })
         self.currentMeme = current
-        
       } else {
         self.currentMeme = memes.first
         memes.forEach { meme in

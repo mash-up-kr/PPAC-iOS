@@ -117,6 +117,15 @@ private extension RecommendViewModel {
       let user = try await getUserInfoUseCase.execute()
       self.state.userLevel = user.level
       self.state.memeRecommendWatchCount = user.memeRecommendWatchCount
+      
+      PPACAnalytics.shared
+        .log(
+          interaction: .view,
+          event: .meme,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
     } catch {
       debugPrint("Failed show recommnedMeme : \(error)")
     }
@@ -132,12 +141,14 @@ private extension RecommendViewModel {
         self.state.recommendMemes[index].reaction += 1
       }
       
-      PPACAnalytics.shared.click(
-        action: .reaction,
-        page: .recommend,
-        memeId: meme.id,
-        memeTitle: meme.title
-      )
+      PPACAnalytics.shared
+        .log(
+          interaction: .click,
+          event: .reaction,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
       
     } catch {
       debugPrint("Failed post recation : \(error)")
@@ -157,12 +168,14 @@ private extension RecommendViewModel {
 
       UIPasteboard.general.image = image
       
-      PPACAnalytics.shared.click(
-        action: .copy,
-        page: .recommend,
-        memeId: meme.id,
-        memeTitle: meme.title
-      )
+      PPACAnalytics.shared
+        .log(
+          interaction: .click,
+          event: .copy,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
       
     } catch {
       debugPrint("Failed to load image data: \(error)")
@@ -184,12 +197,14 @@ private extension RecommendViewModel {
       }
       await self.router?.showShareView(items: [image])
       
-      PPACAnalytics.shared.click(
-        action: .share,
-        page: .recommend,
-        memeId: meme.id,
-        memeTitle: meme.title
-      )
+      PPACAnalytics.shared
+        .log(
+          interaction: .click,
+          event: .share,
+          page: .recommend,
+          memeId: meme.id,
+          memeTitle: meme.title
+        )
       
     } catch {
       debugPrint("Failed to load image data: \(error)")
@@ -210,13 +225,14 @@ private extension RecommendViewModel {
         try await bookmarkMemeUseCase.delete(memeId: selectedMeme.id)
         self.state.recommendMemes[memeIdx].isFarmemed = false
         
-        PPACAnalytics.shared.click(
-          action: .saveCancel,
-          page: .recommend,
-          memeId: meme.id,
-          memeTitle: meme.title
-        )
-        
+        PPACAnalytics.shared
+          .log(
+            interaction: .click,
+            event: .saveCancel,
+            page: .recommend,
+            memeId: meme.id,
+            memeTitle: meme.title
+          )
       } catch {
         debugPrint("Faild delete meme : \(error)")
       }
@@ -225,12 +241,15 @@ private extension RecommendViewModel {
         try await bookmarkMemeUseCase.execute(memeId: selectedMeme.id)
         self.state.recommendMemes[memeIdx].isFarmemed = true
         
-        PPACAnalytics.shared.click(
-          action: .save,
-          page: .recommend,
-          memeId: meme.id,
-          memeTitle: meme.title
-        )
+        PPACAnalytics.shared
+          .log(
+            interaction: .click,
+            event: .save,
+            page: .recommend,
+            memeId: meme.id,
+            memeTitle: meme.title
+          )
+        
       } catch {
         debugPrint("Failed save meme : \(error)")
       }

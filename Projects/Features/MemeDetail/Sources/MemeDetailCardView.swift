@@ -9,6 +9,7 @@ import SwiftUI
 
 import DesignSystem
 import PPACModels
+import PPACAnalytics
 import ResourceKit
 
 import Lottie
@@ -45,6 +46,14 @@ struct MemeDetailCardView: View {
       
       HashTagView(keywords: meme.keywords)
         .padding(.bottom, 11)
+        .onTapGesture {
+          PPACAnalytics.shared
+            .log(
+              interaction: .click,
+              event: .tag,
+              page: .memeDetail
+            )
+        }
       
       subtitleLabel
         .padding(.bottom, 20)

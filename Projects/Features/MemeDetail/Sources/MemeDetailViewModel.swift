@@ -13,6 +13,8 @@ import PPACUtil
 import PPACModels
 import PPACDomain
 
+import PPACAnalytics
+
 @MainActor
 public protocol MemeDetailRouting: AnyObject {
   func popView()
@@ -91,6 +93,20 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
       }
     }
   }
+  
+  public func logMemeDetail(
+    interaction: PPACAnalytics.UserInteraction = .click,
+    event: PPACAnalytics.UserEvent
+  ) {
+    PPACAnalytics.shared
+      .log(
+        interaction: interaction,
+        event: event,
+        page: .memeDetail,
+        memeId: self.state.meme.id,
+        memeTitle: self.state.meme.title
+      )
+  }
 }
 
 private extension MemeDetailViewModel {
@@ -100,6 +116,7 @@ private extension MemeDetailViewModel {
     do {
       try await reactToMemeUseCase.execute(memeId: state.meme.id)
       self.state.meme.reaction += 1
+      self.logMemeDetail(event: .reaction)
       print("reaction success")
     } catch {
       // TODO: - 에러처리
@@ -119,6 +136,7 @@ private extension MemeDetailViewModel {
       }
       UIPasteboard.general.image = image
       state.isCopied = true
+      self.logMemeDetail(event: .copy)
     } catch {
       print("Failed to load image data: \(error)")
     }
@@ -132,6 +150,7 @@ private extension MemeDetailViewModel {
       try await bookmarkMemeUseCase.execute(memeId: state.meme.id)
       state.meme.isFarmemed = true
       state.isFarmemeChanged = true
+      self.logMemeDetail(event: .save)
     } catch {
       // TODO: - 에러처리
       print(error)
@@ -146,6 +165,7 @@ private extension MemeDetailViewModel {
       try await bookmarkMemeUseCase.delete(memeId: state.meme.id)
       state.meme.isFarmemed = false
       state.isFarmemeChanged = true
+      self.logMemeDetail(event: .saveCancel)
     } catch {
       // TODO: - 에러처리
       print(error)
@@ -164,6 +184,7 @@ private extension MemeDetailViewModel {
         return
       }
       await self.router?.showShareView(items: [image])
+      self.logMemeDetail(event: .share)
     } catch {
       print("Failed to load image data: \(error)")
     }
