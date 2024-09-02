@@ -22,12 +22,57 @@ final public class PPACAnalytics {
     case settings
   }
   
+  public enum Action: String {
+    case reaction
+    case copy
+    case share
+    case save
+    case saveCancel = "save_cancel"
+    case tag
+    case searchBar = "search_bar"
+    case hotKeyword = "hot_keyword"
+    case keyword
+    case meme
+    case settings
+  }
+  
   private init() {
     print("PPACAnalytics init")
   }
   
   public func congigureFirebaseApp() {
     FirebaseApp.configure()
+  }
+  
+  public func click(
+    action: Action,
+    page: Page,
+    memeId: String? = nil,
+    memeTitle: String? = nil,
+    extraParameters: [String: Any]? = nil
+  ) {
+    
+    let keyName = "click_" + action.rawValue
+    var parameters: [String: Any] = [:]
+    parameters["page"] = page.rawValue
+    
+    if let memeId {
+      parameters["meme_id"] = memeId
+    }
+    
+    if let memeTitle {
+      parameters["meme_title"] = memeTitle
+    }
+    
+    if let extraParameters {
+      parameters.merge(extraParameters) { (current, _) in current }
+    }
+    
+    Analytics
+      .logEvent(
+        keyName,
+        parameters: parameters
+      )
   }
   
   public func clickCopy (
