@@ -29,13 +29,13 @@ public struct MyPageView: View {
         RecentlyMemeListView(
           memeDetailList: $viewModel.state.lastSeenMemeList,
           memeClickHandler: { meme in
-            viewModel.dispatch(type: .onTappedMeme(meme: meme))
+            viewModel.dispatch(type: .onTappedRecentMeme(meme: meme))
           }
         )
         SavedMemeListView(
           memeDetailList: $viewModel.state.savedMemeList,
           memeClickHandler: { meme in
-            viewModel.dispatch(type: .onTappedMeme(meme: meme))
+            viewModel.dispatch(type: .onTappedSavedMeme(meme: meme))
           },
           memeCopyHandler: { meme in
             viewModel.dispatch(type: .onTappedCopyButton(meme: meme))

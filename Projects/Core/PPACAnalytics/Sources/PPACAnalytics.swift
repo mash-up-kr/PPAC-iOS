@@ -17,6 +17,7 @@ final public class PPACAnalytics {
     case click
     case view
     case swipe
+    case scroll
   }
   
   public enum Page: String {
@@ -40,6 +41,7 @@ final public class PPACAnalytics {
     case keyword
     case meme
     case settings
+    case appUpdate = "app_update"
   }
   
   private init() {
@@ -59,7 +61,11 @@ final public class PPACAnalytics {
     extraParameters: [String: Any]? = nil
   ) {
     
-    let keyName = interaction.rawValue + "_" + event.rawValue
+    var keyName = interaction.rawValue
+    if interaction != .scroll {
+      keyName += "_" + event.rawValue
+    }
+    
     var parameters: [String: Any] = [:]
     parameters["page"] = page.rawValue
     
