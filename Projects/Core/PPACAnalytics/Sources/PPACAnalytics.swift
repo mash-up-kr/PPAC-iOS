@@ -13,6 +13,12 @@ import FirebaseAnalytics
 final public class PPACAnalytics {
   static public let shared = PPACAnalytics()
   
+  public enum UserInteraction: String {
+    case click
+    case view
+    case swipe
+  }
+  
   public enum Page: String {
     case recommend
     case memeDetail = "meme_detail"
@@ -22,7 +28,7 @@ final public class PPACAnalytics {
     case settings
   }
   
-  public enum Action: String {
+  public enum UserEvent: String {
     case reaction
     case copy
     case share
@@ -44,15 +50,16 @@ final public class PPACAnalytics {
     FirebaseApp.configure()
   }
   
-  public func click(
-    action: Action,
+  public func log(
+    interaction: UserInteraction,
+    event: UserEvent,
     page: Page,
     memeId: String? = nil,
     memeTitle: String? = nil,
     extraParameters: [String: Any]? = nil
   ) {
     
-    let keyName = "click_" + action.rawValue
+    let keyName = interaction.rawValue + "_" + event.rawValue
     var parameters: [String: Any] = [:]
     parameters["page"] = page.rawValue
     
@@ -74,21 +81,4 @@ final public class PPACAnalytics {
         parameters: parameters
       )
   }
-  
-  public func clickCopy (
-    page: Page,
-    memeId: String,
-    memeTitle: String
-  ) {
-    Analytics
-      .logEvent(
-        "click_copy",
-        parameters: [
-          "page": page.rawValue,
-          "meme_id" : memeId,
-          "meme_title": memeTitle
-        ]
-      )
-  }
-  
 }

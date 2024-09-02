@@ -22,6 +22,7 @@ let project = Project(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACModels,
+                .Core.PPACAnalytics,
                 .Feature.MemeDetail,
                 .Feature.Setting
             ]
