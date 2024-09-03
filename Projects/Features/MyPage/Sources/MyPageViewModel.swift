@@ -76,7 +76,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let copyImageUseCase: CopyImageUseCase
   
   private var currentPage: Int = 1
-  private let savedMemeCountPerPage: Int = 2
+  private let savedMemeCountPerPage: Int = 10
   
   // MARK: - Initializers
   
@@ -157,7 +157,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
           page: state.savedMemePagination.currentPage + 1,
           size: self.savedMemeCountPerPage
         )
-      
+      // self.logMyPage(interaction: .scroll, event: .meme) // TODO: pageCount 추가 어떻게 할지
       self.state.savedMemeList += savedMemeListWithPagination.memeList
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
     } catch(let error) {
