@@ -157,5 +157,6 @@ struct HighlightButtonStyle: ButtonStyle {
       .frame(height: 50)
       .background(configuration.isPressed ? Color.Skeleton.primary : Color.clear)
       .cornerRadius(8)
+      .animation(nil, value: configuration.isPressed)
   }
 }

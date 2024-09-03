@@ -58,7 +58,9 @@ struct MemeDetailCardView: View {
       subtitleLabel
         .padding(.bottom, 20)
       
-      LikeButton(reactionCount: $meme.reaction) {
+      LikeButton(
+        isReaction: meme.isReaction, reactionCount: meme.reaction
+      ) {
         self.handleReactionTapped()
       }
       .overlay(content: {

@@ -36,6 +36,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     var keyword: String
     var memeList: [MemeDetail]
     var isActiveCopyPopup: Bool = false
+    var isLoading: Bool = true
   }
   
   // MARK: - Properties
@@ -83,7 +84,9 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   @MainActor
   private func fetchData() async {
     do {
+      state.isLoading = true
       state.memeList = try await searchKeywordUseCase.execute(keyword: state.keyword)
+      state.isLoading = false
     } catch(let error) {
       debugPrint("error = \(error)")
     }

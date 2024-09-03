@@ -116,6 +116,7 @@ private extension MemeDetailViewModel {
     do {
       try await reactToMemeUseCase.execute(memeId: state.meme.id)
       self.state.meme.reaction += 1
+      self.state.meme.isReaction = true
       self.logMemeDetail(event: .reaction)
       print("reaction success")
     } catch {
@@ -172,21 +173,10 @@ private extension MemeDetailViewModel {
     }
   }
   
+  @MainActor
   func showShareSheet() async {
-    guard let url = URL(string: self.state.meme.imageUrlString) else {
-      print("invalid url")
-      return
-    }
-    do {
-      let (data, _) = try await URLSession.shared.data(from: url)
-      guard let image = UIImage(data: data) else {
-        print("invalid image data")
-        return
-      }
-      await self.router?.showShareView(items: [image])
-      self.logMemeDetail(event: .share)
-    } catch {
-      print("Failed to load image data: \(error)")
-    }
+    let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(self.state.meme.id)"
+    self.router?.showShareView(items: [deeplinkUrl])
+    self.logMemeDetail(event: .share)
   }
 }

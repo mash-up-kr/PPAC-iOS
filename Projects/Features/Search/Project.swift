@@ -26,7 +26,8 @@ let project = Project(
               .Core.PPACAnalytics,
               .Feature.MemeDetail,
               .ThirdParty.Dependency,
-              .ThirdParty.Kingfisher
+              .ThirdParty.Kingfisher,
+              .ThirdParty.SkeletonUI
             ]
         )
     ]

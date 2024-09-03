@@ -23,6 +23,6 @@ let package = Package(
         .package(url: "https://github.com/onevcat/Kingfisher", from: "7.12.0"),
         .package(url: "https://github.com/exyte/PopupView.git", from: "3.0.4"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
-        .package(url: "https://github.com/CSolanaM/SkeletonUI.git", from: "2.0.2")
+        .package(url: "https://github.com/AppsFlyerSDK/AppsFlyerFramework-Dynamic", from: "6.15.1")
     ]
 )

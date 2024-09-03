@@ -37,6 +37,7 @@ extension TargetDependency {
     public static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics")
     public static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
     public static let SkeletonUI = TargetDependency.external(name: "SkeletonUI")
+    public static let AppsFlyerLib = TargetDependency.external(name: "AppsFlyerLib-Dynamic")
   }
   
   public static let ResourceKit = TargetDependency.project(

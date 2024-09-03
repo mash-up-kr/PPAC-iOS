@@ -174,3 +174,5 @@ fastlane/test_output
 
 iOSInjectionProject/
 Tuist/.build
+
+**/Secret.swift

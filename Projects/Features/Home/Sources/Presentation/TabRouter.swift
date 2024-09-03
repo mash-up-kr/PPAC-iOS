@@ -29,6 +29,7 @@ public final class MainTabRouter: Router, ObservableObject {
   public var childRouters: [Router] = []
   private var cancellables: Set<AnyCancellable> = []
   private let userDetail: UserDetail
+  private let deepLinkMemeId: PassthroughSubject<String, Never>
   
   @Published private var selectedTab: MainTab = .recommend
   
@@ -39,10 +40,15 @@ public final class MainTabRouter: Router, ObservableObject {
     )
   }
   
-  public init(navigationController: UINavigationController, userDetail: UserDetail) {
+  public init(
+    navigationController: UINavigationController,
+    userDetail: UserDetail,
+    deepLinkMemeId: PassthroughSubject<String,Never>
+  ) {
     print("MainTabRouter init")
     self.navigationController = navigationController
     self.userDetail = userDetail
+    self.deepLinkMemeId = deepLinkMemeId
   }
   
   public func start() {
@@ -53,7 +59,7 @@ public final class MainTabRouter: Router, ObservableObject {
     childRouters = []
     switch tab {
     case .recommend:
-      let recommendRouter = RecommendRouter(self.navigationController, selectedTab: selectedTabBinding)
+      let recommendRouter = RecommendRouter(self.navigationController, selectedTab: selectedTabBinding, deepLinkMemeId: deepLinkMemeId)
       childRouters.append(recommendRouter)
       recommendRouter.start()
     case .search:

@@ -30,6 +30,7 @@ let project = Project(
         .Core.PPACData,
         .Core.PPACUtil,
         .Core.PPACAnalytics
+        .Feature.MemeDetail
       ]
     )
   ]
