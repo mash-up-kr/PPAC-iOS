@@ -85,6 +85,7 @@ struct RecommendMemeImagesView: View {
           $0.id == currentMeme.id
         })
         self.currentMeme = current
+       
       } else {
         self.currentMeme = memes.first
         memes.forEach { meme in

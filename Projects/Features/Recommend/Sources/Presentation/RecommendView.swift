@@ -136,6 +136,7 @@ public struct RecommendView: View {
     .onChange(of: currentMeme) {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(meme: currentMeme))
+        viewModel.logRecommend(interaction: .swipe, event: .meme, meme: nil)
       }
     }
     .popup(
