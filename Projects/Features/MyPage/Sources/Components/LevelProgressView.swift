@@ -49,7 +49,7 @@ struct LevelProgressView: View {
         RoundedRectangle(cornerRadius: 25, style: .circular)
           .stroke(Color.Border.primary, lineWidth: 2, fill: Color.Background.brand)
           .frame(width: isAnimation ? currnetlevelWidth : minimumWidth)
-          .animation(.easeInOut(duration: 1.0), value: isAnimation)
+          .animation(.easeInOut(duration: 1.2), value: isAnimation)
       }
     }
   }

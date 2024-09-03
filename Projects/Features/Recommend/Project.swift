@@ -29,7 +29,7 @@ let project = Project(
         .Core.PPACDomain,
         .Core.PPACData,
         .Core.PPACUtil,
-        .Core.PPACAnalytics
+        .Core.PPACAnalytics,
         .Feature.MemeDetail
       ]
     )

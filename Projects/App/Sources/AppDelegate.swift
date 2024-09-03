@@ -29,6 +29,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 		PPACAnalytics.shared.congigureFirebaseApp()
+		self.window = UIWindow(frame: UIScreen.main.bounds)
 		let router = SplashRouter(navigationController, deeplinkMemeId: self.deeplinkMemeId)
 		self.navigationController.setNavigationBarHidden(true, animated: false)
 		self.appRouter = router
