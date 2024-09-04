@@ -62,24 +62,32 @@ public struct PlainNavigationBarModifier: ViewModifier {
   public func body(content: Content) -> some View {
     content.overlay {
       VStack(spacing: 0) {
-        HStack(alignment: .center, spacing: 0) {
-          Button(action: { self.backHandler?() }) {
-            ResourceKitAsset.Icon.back.swiftUIImage
+        ZStack {
+          HStack {
+            Button(action: { self.backHandler?() }) {
+              ResourceKitAsset.Icon.back.swiftUIImage
+                .resizable()
+                .frame(width: 20, height: 20)
+            }
+            Spacer()
           }
-          
-          Spacer()
           
           if let title {
             Text(title)
               .font(Font.Body.Xlarge.semiBold)
               .lineLimit(1)
               .foregroundColor(Color.Text.primary)
+              .frame(maxWidth: .infinity)
+              .multilineTextAlignment(.center) // 중앙 정렬
           }
           
-          Spacer()
-          
-          if hasConfigureButton {
-            ResourceKitAsset.Icon.setting.swiftUIImage
+          HStack {
+            Spacer()
+            if hasConfigureButton {
+              ResourceKitAsset.Icon.setting.swiftUIImage
+                .resizable()
+                .frame(width: 20, height: 20)
+            }
           }
         }
         .padding(.horizontal, 16)

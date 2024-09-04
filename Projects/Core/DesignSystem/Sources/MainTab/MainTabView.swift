@@ -33,7 +33,6 @@ public struct CustomTabBarView: View {
         topTrailingRadius: 30
       )
     )
-    
   }
 }
 
@@ -52,9 +51,8 @@ public struct TabItemView: View {
     VStack {
       tabItemImageView
         .frame(width: 24, height: 24)
-        .padding(.bottom, 6)
       Text(tab.title)
-        .font(Font.Weight.medium)
+        .font(Font.Body.Xsmall.semiBold)
     }
     .foregroundStyle(color)
     .padding(40)

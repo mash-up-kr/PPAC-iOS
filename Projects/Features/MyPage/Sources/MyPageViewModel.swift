@@ -92,7 +92,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.state = State(userDetail: userDetail,
                        lastSeenMemeList: [],
                        savedMemeList: [],
-                       savedMemePagination: .none)
+                       savedMemePagination: .default)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
@@ -136,6 +136,13 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
                          lastSeenMemeList: lastSeenMemeList,
                          savedMemeList: savedMemeListWithPagination.memeList,
                          savedMemePagination: savedMemeListWithPagination.pagination)
+      
+      self.logMyPage(
+        interaction: .scroll,
+        event: .meme,
+        pageCount: state.savedMemePagination.currentPage
+      )
+      
     } catch(let error) {
       print("fetchUserMemes error = \(error)")
     }
@@ -157,9 +164,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
           page: state.savedMemePagination.currentPage + 1,
           size: self.savedMemeCountPerPage
         )
-      // self.logMyPage(interaction: .scroll, event: .meme) // TODO: pageCount 추가 어떻게 할지
       self.state.savedMemeList += savedMemeListWithPagination.memeList
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
+      
+      self.logMyPage(
+        interaction: .scroll,
+        event: .meme,
+        pageCount: state.savedMemePagination.currentPage
+      )
+      
     } catch(let error) {
       print("fetchNextPageSavedMeme error = \(error)")
     }

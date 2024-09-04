@@ -22,8 +22,8 @@ final public class NetworkService: NetworkServiceable {
     let (data, response): (Data, URLResponse)
     do {
       (data, response) = try await URLSession.shared.data(for: urlRequest)
-    } catch {
-      NetworkLogger.logError(.invalidResponse)
+    } catch(let error) {
+      NetworkLogger.logError(.invalidResponse, message: "\(error)")
       return .failure(.invalidResponse)
     }
     
@@ -32,7 +32,7 @@ final public class NetworkService: NetworkServiceable {
       return .failure(.invalidResponse)
     }
     
-    //NetworkLogger.logResponse(httpResponse, data: data)
+    NetworkLogger.logResponse(httpResponse, data: data)
     let error: NetworkError
     switch httpResponse.statusCode {
     case 200..<300:

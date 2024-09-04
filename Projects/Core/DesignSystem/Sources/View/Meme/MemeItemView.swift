@@ -103,12 +103,12 @@ struct ResizableMemeImageView: View {
           .frame(height: imageHeight)
           .opacity(isImageLoaded ? 1 : 0) // 이미지 로드 완료 전에 투명하게 처리
         
-        if !isImageLoaded {
-          skeletonView
-            .onAppear {
-              imageHeight = geometry.size.width
-            }
-        }
+//        if !isImageLoaded {
+//          skeletonView
+//            .onAppear {
+//              imageHeight = geometry.size.width
+//            }
+//        }
       }
     }
   }

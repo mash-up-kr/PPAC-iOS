@@ -41,7 +41,7 @@ public struct MemeListWithPagination {
       self.currentPage = currentPage
     }
     
-    static public let none = Pagination(totalPages: 0, totalMemes: 0, perPageOfMemes: 0, currentPage: 0)
+    static public let `default` = Pagination(totalPages: 1, totalMemes: 0, perPageOfMemes: 10, currentPage: 0)
   }
 }
 

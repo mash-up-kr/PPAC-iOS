@@ -22,7 +22,7 @@ public struct MyPageView: View {
   
   public var body: some View {
     ZStack(alignment: .top) {
-      blurView
+//      blurView
       ScrollView {
         levelView
         divider
@@ -44,7 +44,7 @@ public struct MyPageView: View {
             viewModel.dispatch(type: .onAppearLastMeme)
           }
         )
-        Spacer(minLength: 100)
+        //Spacer(minLength: 100)
       }
       .onAppear {
         viewModel.dispatch(type: .onAppearMyPageView)
@@ -52,7 +52,7 @@ public struct MyPageView: View {
       .refreshable {
         viewModel.dispatch(type: .pullToRefresh)
       }
-      .padding(.top, 51)
+      //.padding(.top, 51)
       .edgesIgnoringSafeArea(.all)
     }
     .popup(
@@ -106,7 +106,7 @@ public struct MyPageView: View {
           viewModel.dispatch(type: .settingButtonTapped)
         }
     }
-    .padding(.top, 10)
+    .padding(.top, 51)
   }
   
   var levelTitleTextView: some View {

@@ -10,7 +10,7 @@ import Foundation
 import PPACModels
 
 public protocol SearchKeywordUseCase {
-    func execute(keyword: String) async throws -> [MemeDetail]
+  func execute(page: Int, size: Int, keyword: String) async throws -> MemeListWithPagination
 }
 
 public class SearchKeywordUseCaseImpl: SearchKeywordUseCase {
@@ -20,7 +20,7 @@ public class SearchKeywordUseCaseImpl: SearchKeywordUseCase {
     self.repository = repository
   }
   
-  public func execute(keyword: String) async throws -> [MemeDetail] {
-    try await repository.getSearchKeywordMemeList(keyword: keyword)
+  public func execute(page: Int, size: Int, keyword: String) async throws -> MemeListWithPagination {
+    try await repository.getSearchKeywordMemeList(page: page, size: size, keyword: keyword)
   }
 }

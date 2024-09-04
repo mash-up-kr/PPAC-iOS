@@ -68,6 +68,9 @@ public struct SearchResultView: View {
         },
         memeCopyHandler: { meme in
           viewModel.dispatch(type: .memeCopyTapped(meme: meme))
+        },
+        onAppearLastMemeHandler: {
+          viewModel.dispatch(type: .onAppearLastMeme)
         }
       )
       .padding(.horizontal, 20)
