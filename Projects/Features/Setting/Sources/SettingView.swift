@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+
 import ResourceKit
 import DesignSystem
+import PPACAnalytics
 
 public struct SettingView: View {
   @ObservedObject private var viewModel: SettingViewModel

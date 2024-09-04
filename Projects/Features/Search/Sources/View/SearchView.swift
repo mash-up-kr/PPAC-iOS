@@ -115,6 +115,7 @@ public struct SearchView: View {
           keywords: memeCategory.keywords
         ) { keyword in
           viewModel.dispatch(type: .recommendKeywordTapped(keyword: keyword))
+          viewModel.logSearch(event: .keyword, keyword: keyword, category: memeCategory.category)
         }
       }
     }

@@ -27,6 +27,7 @@ let project = Project(
                 .Core.PPACUtil,
                 .Core.PPACDomain,
                 .Core.PPACData,
+                .Core.PPACAnalytics
             ]
         )
     ]

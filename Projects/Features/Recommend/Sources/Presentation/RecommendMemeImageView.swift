@@ -12,6 +12,7 @@ import DesignSystem
 import ResourceKit
 
 import PPACModels
+import PPACAnalytics
 
 struct RecommendMemeImagesView: View {
   @Binding var currentMeme: MemeDetail?
@@ -65,6 +66,14 @@ struct RecommendMemeImagesView: View {
       
       if let currentMeme, isTagHidden == false {
         HashTagView(keywords: currentMeme.keywords)
+          .onTapGesture {
+            PPACAnalytics.shared
+              .log(
+                interaction: .click,
+                event: .tag,
+                page: .recommend
+              )
+          }
       } else {
         EmptyView()
           .recommendSkeleton(isShow: true, radius: 4, width: 200, height: 16)
@@ -76,7 +85,7 @@ struct RecommendMemeImagesView: View {
           $0.id == currentMeme.id
         })
         self.currentMeme = current
-        
+       
       } else {
         self.currentMeme = memes.first
         memes.forEach { meme in

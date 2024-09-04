@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+
 import PPACUtil
 import PPACDomain
 import PPACModels
+import PPACAnalytics
 
 @MainActor
 public protocol MyPageRouting: AnyObject {
@@ -18,11 +20,18 @@ public protocol MyPageRouting: AnyObject {
 
 final public class MyPageViewModel: ViewModelType, ObservableObject {
   
+  // 트래킹을 위해 추가한 type
+  public enum MyMemeType: String {
+    case recentMeme = "my_recent_meme"
+    case savedMeme = "my_saved_meme"
+  }
+  
   public enum Action {
     case onAppearMyPageView
     case pullToRefresh
     case settingButtonTapped
-    case onTappedMeme(meme: MemeDetail?)
+    case onTappedRecentMeme(meme: MemeDetail?)
+    case onTappedSavedMeme(meme: MemeDetail?)
     case onTappedCopyButton(meme: MemeDetail?)
     case onAppearLastMeme
   }
@@ -67,7 +76,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let copyImageUseCase: CopyImageUseCase
   
   private var currentPage: Int = 1
-  private let savedMemeCountPerPage: Int = 2
+  private let savedMemeCountPerPage: Int = 10
   
   // MARK: - Initializers
   
@@ -101,10 +110,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         await self.refreshUserMemes()
       case .settingButtonTapped:
         self.router?.showSettingView()
-      case .onTappedMeme(let meme):
+        self.logMyPage(event: .settings)
+      case .onTappedRecentMeme(let meme):
         self.router?.showMemeDetail(memeDetail: meme)
+        self.logMyPage(event: .meme, type: .recentMeme)
+      case .onTappedSavedMeme(let meme):
+        self.router?.showMemeDetail(memeDetail: meme)
+        self.logMyPage(event: .meme, type: .savedMeme)
       case .onTappedCopyButton(let meme):
-        await self.copyMemeImage(with: meme?.imageUrlString)
+        await self.copyMemeImage(with: meme)
       case .onAppearLastMeme:
         await self.fetchNextPageSavedMeme()
       }
@@ -143,7 +157,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
           page: state.savedMemePagination.currentPage + 1,
           size: self.savedMemeCountPerPage
         )
-      
+      // self.logMyPage(interaction: .scroll, event: .meme) // TODO: pageCount 추가 어떻게 할지
       self.state.savedMemeList += savedMemeListWithPagination.memeList
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
     } catch(let error) {
@@ -152,13 +166,45 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   }
   
   @MainActor
-  private func copyMemeImage(with url: String?) async {
+  private func copyMemeImage(with meme: MemeDetail?) async {
+    guard let meme else { return }
     do {
-      try await self.copyImageUseCase.execute(url: url ?? "")
+      try await self.copyImageUseCase.execute(url: meme.imageUrlString)
       self.state.isActiveCopyPopup = true
+      self.logMyPage(event: .copy, meme: meme)
     } catch {
       print("복사 실패")
     }
+  }
+  
+  func logMyPage(
+    interaction: PPACAnalytics.UserInteraction = .click,
+    event: PPACAnalytics.UserEvent,
+    meme: MemeDetail? = nil,
+    type: MyMemeType? = nil,
+    pageCount: Int? = nil
+  ) {
+    
+    var parameters: [String: Any] = [:]
+    
+    if let type {
+      parameters["content_type"] = type.rawValue
+    }
+    
+    if let pageCount {
+      parameters["page_count"] = pageCount
+    }
+    
+    PPACAnalytics.shared
+      .log(
+        interaction: interaction,
+        event: event,
+        page: .myPage,
+        memeId: meme?.id,
+        memeTitle: meme?.title,
+        extraParameters: parameters
+      )
+    
   }
 
 }

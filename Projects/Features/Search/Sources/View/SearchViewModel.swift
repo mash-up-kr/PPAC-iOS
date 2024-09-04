@@ -13,6 +13,8 @@ import PPACModels
 import PPACDomain
 import PPACNetwork
 import PPACData
+import PPACAnalytics
+
 import MemeDetail
 
 @MainActor
@@ -68,10 +70,12 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
         await fetchData()
       case .searchBarTapped:
         state.isPresenting = true
+        logSearch(event: .searchBar)
       case .dismissSearchBarAlert:
         state.isPresenting = false
       case .hotKeywordTapped(let keyword):
         router?.showSearchResult(keyword: keyword)
+        logSearch(event: .hotKeyword, keyword: keyword)
       case .recommendKeywordTapped(let keyword):
         router?.showSearchResult(keyword: keyword)
       }
@@ -89,5 +93,28 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
     } catch(let error) {
       debugPrint("error = \(error)")
     }
+  }
+  
+  func logSearch(
+    event: PPACAnalytics.UserEvent,
+    keyword: String? = nil,
+    category: String? = nil
+  ) {
+    var parameters: [String: Any] = [:]
+    
+    if let keyword {
+      parameters["keyword_name"] = keyword
+    }
+    
+    if let category {
+      parameters["category"] = category
+    }
+    
+    PPACAnalytics.shared
+      .log(interaction: .click,
+           event: event,
+           page: .search,
+           extraParameters: parameters
+      )
   }
 }

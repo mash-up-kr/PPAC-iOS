@@ -26,6 +26,7 @@ extension TargetDependency {
     public static let PPACUtil = project(moduleName: "PPACUtil")
     public static let PPACDomain = project(moduleName: "PPACDomain")
     public static let PPACData = project(moduleName: "PPACData")
+    public static let PPACAnalytics = project(moduleName: "PPACAnalytics")
   }
   
   public struct ThirdParty {
@@ -33,6 +34,8 @@ extension TargetDependency {
     public static let Dependency = TargetDependency.external(name: "Dependencies")
     public static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     public static let PopupView = TargetDependency.external(name: "PopupView")
+    public static let FirebaseAnalytics = TargetDependency.external(name: "FirebaseAnalytics")
+    public static let FirebaseCrashlytics = TargetDependency.external(name: "FirebaseCrashlytics")
     public static let SkeletonUI = TargetDependency.external(name: "SkeletonUI")
     public static let AppsFlyerLib = TargetDependency.external(name: "AppsFlyerLib-Dynamic")
   }

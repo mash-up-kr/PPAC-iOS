@@ -21,7 +21,8 @@ let project = Project(
               .ThirdParty.Dependency,
               .ResourceKit,
               .Core.DesignSystem,
-              .Core.PPACUtil
+              .Core.PPACUtil,
+              .Core.PPACAnalytics
             ]
         )
     ]

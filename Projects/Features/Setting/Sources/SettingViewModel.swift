@@ -7,6 +7,7 @@
 
 import Foundation
 import PPACUtil
+import PPACAnalytics
 
 @MainActor
 public protocol SettingRouting: AnyObject {
@@ -31,6 +32,14 @@ final public class SettingViewModel: ViewModelType, ObservableObject {
   @Published public var state: State
   private let appId: String = "6532618484"
   var appStoreUrl: URL {
+    // appStoreUrl에 접근하는건 앱 업데이트 버튼 클릭 시 밖에 없기 떄문에
+    // 여기에 임시 클릭 로그 추가
+    PPACAnalytics.shared
+      .log(
+        interaction: .click,
+        event: .appUpdate,
+        page: .settings
+      )
     return URL(string: "itms-apps://itunes.apple.com/app/\(appId)")!
   }
   

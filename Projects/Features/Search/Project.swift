@@ -23,6 +23,7 @@ let project = Project(
               .Core.PPACModels,
               .Core.PPACData,
               .Core.PPACNetwork,
+              .Core.PPACAnalytics,
               .Feature.MemeDetail,
               .ThirdParty.Dependency,
               .ThirdParty.Kingfisher,

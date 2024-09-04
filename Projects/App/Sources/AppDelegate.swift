@@ -12,6 +12,7 @@ import Combine
 
 import Home
 import PPACUtil
+import PPACAnalytics
 
 import AppsFlyerLib
 import AppTrackingTransparency
@@ -27,8 +28,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
 	private let deeplinkMemeId = PassthroughSubject<String, Never>()
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+		PPACAnalytics.shared.congigureFirebaseApp()
 		self.window = UIWindow(frame: UIScreen.main.bounds)
-		
 		let router = SplashRouter(navigationController, deeplinkMemeId: self.deeplinkMemeId)
 		self.navigationController.setNavigationBarHidden(true, animated: false)
 		self.appRouter = router

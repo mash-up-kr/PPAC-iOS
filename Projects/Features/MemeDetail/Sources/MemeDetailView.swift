@@ -13,6 +13,7 @@ import ResourceKit
 import DesignSystem
 
 import Kingfisher
+import PPACAnalytics
 
 public struct MemeDetailView: View {
   
@@ -49,6 +50,9 @@ public struct MemeDetailView: View {
         .opacity(0.4)
         .edgesIgnoringSafeArea(.top)
     )
+    .onAppear {
+      viewModel.logMemeDetail(interaction: .view, event: .meme)
+    }
     .plainNavigationBar(
       backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
       rightActionHandler: nil,

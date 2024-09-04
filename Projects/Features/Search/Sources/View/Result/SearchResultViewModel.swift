@@ -13,6 +13,8 @@ import PPACModels
 import PPACDomain
 import PPACNetwork
 import PPACData
+import PPACAnalytics
+
 import MemeDetail
 
 @MainActor
@@ -72,9 +74,10 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
         await fetchData()
       case .memeDetailTapped(let meme):
         router?.showMemeDetail(memeDetail: meme)
+        logSearch(event: .meme, keyword: state.keyword)
         await postShownMeme(memeId: meme.id)
       case .memeCopyTapped(let meme):
-        await copyImage(urlString: meme.imageUrlString)
+        await copyImage(meme: meme)
         break
       case .naviBackButtonTapped:
         router?.popView()
@@ -94,10 +97,11 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   }
   
   @MainActor
-  private func copyImage(urlString: String) async {
+  private func copyImage(meme: MemeDetail) async {
     do {
-      try await copyImageUseCase.execute(url: urlString)
+      try await copyImageUseCase.execute(url: meme.imageUrlString)
       state.isActiveCopyPopup = true
+      logSearch(event: .copy, meme: meme)
     } catch(let error) {
       debugPrint("error = \(error)")
     }
@@ -111,5 +115,31 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     } catch {
       debugPrint("Failed show recommnedMeme : \(error)")
     }
+  }
+
+  func logSearch(
+    event: PPACAnalytics.UserEvent,
+    keyword: String? = nil,
+    pageCount: Int? = nil,
+    meme: MemeDetail? = nil
+  ) {
+    var parameters: [String: Any] = [:]
+    
+    if let keyword {
+      parameters["keyword_name"] = keyword
+    }
+    
+    if let pageCount {
+      parameters["page_count"] = pageCount
+    }
+    
+    PPACAnalytics.shared
+      .log(interaction: .click,
+           event: event,
+           page: .searchDetail,
+           memeId: meme?.id,
+           memeTitle: meme?.title,
+           extraParameters: parameters
+      )
   }
 }

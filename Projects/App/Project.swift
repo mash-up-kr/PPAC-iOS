@@ -42,6 +42,7 @@ let project = Project.configure(
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
                 .Core.PPACUtil,
+                .Core.PPACAnalytics,
                 .ThirdParty.Lottie,
                 .ThirdParty.Dependency,
                 .ThirdParty.AppsFlyerLib,
@@ -85,8 +86,9 @@ let project = Project.configure(
                 .Core.DesignSystem,
                 .Core.PPACNetwork,
                 .Core.PPACUtil,
+                .Core.PPACAnalytics,
                 .ThirdParty.Dependency,
-                .ThirdParty.AppsFlyerLib,
+                .ThirdParty.AppsFlyerLib
             ],
             settings: .settings(
                 base: [
