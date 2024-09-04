@@ -51,7 +51,7 @@ struct MemeLevelConditionCheckView: View {
         DottedLine()
           .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
           .frame(height: 1)
-          .foregroundColor(Color.gray)
+          .foregroundColor(Color.Icon.assistive)
         
         DottedLine()
           .stroke(style: StrokeStyle(lineWidth: 1.5, dash: [5]))

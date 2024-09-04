@@ -59,6 +59,19 @@ public enum MemeLevelType: Int, CaseIterable, Identifiable, Comparable {
     }
   }
   
+  public var levelConditionText: String {
+    switch self {
+    case .level1:
+      return "밈 20번 보기"
+    case .level2:
+      return "ㅋㅋ반응 20번 남기기"
+    case .level3:
+      return "밈 20번 공유하기"
+    case .level4:
+      return "밈 20번 저장하기"
+    }
+  }
+  
   public var levelCharacterImage: Image {
     switch self {
     case .level1:

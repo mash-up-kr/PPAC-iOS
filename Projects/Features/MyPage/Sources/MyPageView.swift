@@ -44,7 +44,7 @@ public struct MyPageView: View {
             viewModel.dispatch(type: .onAppearLastMeme)
           }
         )
-        //Spacer(minLength: 100)
+        .padding(.bottom, 138)
       }
       .onAppear {
         viewModel.dispatch(type: .onAppearMyPageView)
@@ -52,7 +52,6 @@ public struct MyPageView: View {
       .refreshable {
         viewModel.dispatch(type: .pullToRefresh)
       }
-      //.padding(.top, 51)
       .edgesIgnoringSafeArea(.all)
     }
     .popup(
@@ -118,7 +117,7 @@ public struct MyPageView: View {
   var divider: some View {
     Rectangle()
       .frame(height: 10)
-      .foregroundStyle(Color.Skeleton.secondary)
+      .foregroundStyle(Color.Skeleton.primary)
       .padding(.bottom, 20)
   }
 }

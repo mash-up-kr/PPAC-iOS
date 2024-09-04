@@ -36,7 +36,6 @@ struct MemeLevelConditionInfoView: View {
   var confitionInfoView: some View {
     VStack(alignment: .leading, spacing: 4) {
       titleLabel
-        .padding(.top, 6)
       descriptionLabel
     }
   }
@@ -97,7 +96,7 @@ struct MemeLevelConditionInfoView: View {
   }
   
   var descriptionLabel: some View {
-    Text("밈 20번 공유하기")
+    Text(level.levelConditionText)
       .foregroundStyle(Color.Text.primary)
       .font(Font.Heading.Small.semiBold)
   }
