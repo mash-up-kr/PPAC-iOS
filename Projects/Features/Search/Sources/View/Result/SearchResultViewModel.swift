@@ -30,11 +30,13 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     case memeDetailTapped(meme: MemeDetail)
     case memeCopyTapped(meme: MemeDetail)
     case naviBackButtonTapped
+    case onAppearLastMeme
   }
   
   public struct State {
     var keyword: String
     var memeList: [MemeDetail]
+    var memePagination: MemeListWithPagination.Pagination
     var isActiveCopyPopup: Bool = false
     var isLoading: Bool = true
   }
@@ -58,7 +60,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     watchMemeUseCase: WatchMemeUseCase
   ) {
     self.router = router
-    self.state = State(keyword: keyword, memeList: [])
+    self.state = State(keyword: keyword, memeList: [], memePagination: .default)
     self.searchKeywordUseCase = searchKeywordUseCase
     self.copyImageUseCase = copyImageUseCase
     self.watchMemeUseCase = watchMemeUseCase
@@ -81,6 +83,8 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
         break
       case .naviBackButtonTapped:
         router?.popView()
+      case .onAppearLastMeme:
+        await fetchData()
       }
     }
   }
@@ -88,8 +92,17 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   @MainActor
   private func fetchData() async {
     do {
+      guard state.memePagination.currentPage < state.memePagination.totalPages else { return }
       state.isLoading = true
-      state.memeList = try await searchKeywordUseCase.execute(keyword: state.keyword)
+      
+      let result = try await searchKeywordUseCase
+        .execute(
+          page: state.memePagination.currentPage + 1,
+          size: state.memePagination.perPageOfMemes,
+          keyword: state.keyword
+        )
+      state.memeList += result.memeList
+      state.memePagination = result.pagination
       state.isLoading = false
     } catch(let error) {
       debugPrint("error = \(error)")

@@ -92,7 +92,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.state = State(userDetail: userDetail,
                        lastSeenMemeList: [],
                        savedMemeList: [],
-                       savedMemePagination: .none)
+                       savedMemePagination: .default)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase

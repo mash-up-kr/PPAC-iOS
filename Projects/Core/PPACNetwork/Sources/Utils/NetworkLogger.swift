@@ -24,6 +24,7 @@ class NetworkLogger {
       print("❌ [RESPONSE ERROR]: Invalid response")
       return
     }
+    
     print("⬅️ [REQUEST URL]: \(httpResponse.url?.absoluteString ?? "")")
     if let headers = httpResponse.allHeaderFields as? [String: Any] {
       if let prettyData = try? JSONSerialization.data(withJSONObject: headers, options: [.prettyPrinted]),
@@ -45,7 +46,7 @@ class NetworkLogger {
     print("==========================================================\n")
   }
   
-  static func logError(_ error: NetworkError) {
+  static func logError(_ error: NetworkError, message: String? = nil) {
     switch error {
     case .urlEncodingError:
       print("❌ [ERROR]: URL Encoding Error")
@@ -59,6 +60,9 @@ class NetworkLogger {
       print("❌ [SERVER ERROR]: StatusCode: \(statusCode), Message: \(message ?? "N/A")")
     case .unknown:
       print("❌ [ERROR]: Unknown Error")
+    }
+    if let message {
+      print("[ERROR] Message: \(message)")
     }
   }
 }
