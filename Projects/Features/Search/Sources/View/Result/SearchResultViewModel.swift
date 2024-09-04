@@ -44,6 +44,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   
   private let searchKeywordUseCase: SearchKeywordUseCase
   private let copyImageUseCase: CopyImageUseCase
+  private let watchMemeUseCase: WatchMemeUseCase
 
   // MARK: - Initializers
   
@@ -51,12 +52,14 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     keyword: String,
     router: SearchResultRouting?,
     searchKeywordUseCase: SearchKeywordUseCase,
-    copyImageUseCase: CopyImageUseCase
+    copyImageUseCase: CopyImageUseCase,
+    watchMemeUseCase: WatchMemeUseCase
   ) {
     self.router = router
     self.state = State(keyword: keyword, memeList: [])
     self.searchKeywordUseCase = searchKeywordUseCase
     self.copyImageUseCase = copyImageUseCase
+    self.watchMemeUseCase = watchMemeUseCase
   }
   
   // MARK: - Methods
@@ -69,6 +72,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
         await fetchData()
       case .memeDetailTapped(let meme):
         router?.showMemeDetail(memeDetail: meme)
+        await postShownMeme(memeId: meme.id)
       case .memeCopyTapped(let meme):
         await copyImage(urlString: meme.imageUrlString)
         break
@@ -96,6 +100,16 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
       state.isActiveCopyPopup = true
     } catch(let error) {
       debugPrint("error = \(error)")
+    }
+  }
+  
+  @MainActor
+  func postShownMeme(memeId: String?) async {
+    guard let memeId else { return }
+    do {
+      try await watchMemeUseCase.execute(memeId: memeId, type: "search")
+    } catch {
+      debugPrint("Failed show recommnedMeme : \(error)")
     }
   }
 }
