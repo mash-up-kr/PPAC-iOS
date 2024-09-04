@@ -106,7 +106,7 @@ public struct MemeListView: View {
   @State private var scrollContentHeight: CGFloat = 0
   @State private var scrollOffset: CGFloat = 0
   @State private var isLoadCompleted: Bool = true
-  private let threshold: CGFloat = 200 // 스크롤 할 수 있는 영역 한계치
+  private let threshold: CGFloat = 400 // 남은 스크롤 영역
   
   private func checkIfNeedToLoadMore() {
     guard isLoadCompleted else { return }

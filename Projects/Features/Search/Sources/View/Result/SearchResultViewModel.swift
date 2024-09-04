@@ -101,9 +101,17 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
           size: state.memePagination.perPageOfMemes,
           keyword: state.keyword
         )
+
       state.memeList += result.memeList
       state.memePagination = result.pagination
       state.isLoading = false
+      
+      self.logSearch(
+        interaction: .scroll,
+        event: .meme,
+        pageCount: state.memePagination.currentPage
+      )
+
     } catch(let error) {
       debugPrint("error = \(error)")
     }
@@ -131,6 +139,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   }
 
   func logSearch(
+    interaction: PPACAnalytics.UserInteraction = .click,
     event: PPACAnalytics.UserEvent,
     keyword: String? = nil,
     pageCount: Int? = nil,
@@ -147,7 +156,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     }
     
     PPACAnalytics.shared
-      .log(interaction: .click,
+      .log(interaction: interaction,
            event: event,
            page: .searchDetail,
            memeId: meme?.id,
