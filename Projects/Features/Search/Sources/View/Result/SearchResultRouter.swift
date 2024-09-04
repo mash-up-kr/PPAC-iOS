@@ -43,7 +43,8 @@ public final class SearchResultRouter: Router, SearchResultRouting {
         keyword: keyword,
         router: self, 
         searchKeywordUseCase: SearchKeywordUseCaseImpl(repository: repository),
-        copyImageUseCase: CopyImageUseCaseImpl()
+        copyImageUseCase: CopyImageUseCaseImpl(),
+        watchMemeUseCase: WatchMemeUseCaseImpl(repository: repository)
       ))
     )
   }

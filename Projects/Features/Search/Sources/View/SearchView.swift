@@ -34,10 +34,12 @@ public struct SearchView: View {
             currentHotKeywords
             memeCategoriesViews
           }
+          
+          Spacer()
+            .frame(height: 64 + 50)
         }
         .scrollIndicators(.hidden)
       }
-      .padding(.bottom, 64 + 50) // 탭바 높이 추가
       .onAppear {
         viewModel.dispatch(type: .viewWillAppear)
       }

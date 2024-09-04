@@ -46,6 +46,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   
   private let searchKeywordUseCase: SearchKeywordUseCase
   private let copyImageUseCase: CopyImageUseCase
+  private let watchMemeUseCase: WatchMemeUseCase
 
   // MARK: - Initializers
   
@@ -53,12 +54,14 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     keyword: String,
     router: SearchResultRouting?,
     searchKeywordUseCase: SearchKeywordUseCase,
-    copyImageUseCase: CopyImageUseCase
+    copyImageUseCase: CopyImageUseCase,
+    watchMemeUseCase: WatchMemeUseCase
   ) {
     self.router = router
     self.state = State(keyword: keyword, memeList: [])
     self.searchKeywordUseCase = searchKeywordUseCase
     self.copyImageUseCase = copyImageUseCase
+    self.watchMemeUseCase = watchMemeUseCase
   }
   
   // MARK: - Methods
@@ -72,6 +75,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
       case .memeDetailTapped(let meme):
         router?.showMemeDetail(memeDetail: meme)
         logSearch(event: .meme, keyword: state.keyword)
+        await postShownMeme(memeId: meme.id)
       case .memeCopyTapped(let meme):
         await copyImage(meme: meme)
         break
@@ -103,6 +107,16 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     }
   }
   
+  @MainActor
+  func postShownMeme(memeId: String?) async {
+    guard let memeId else { return }
+    do {
+      try await watchMemeUseCase.execute(memeId: memeId, type: "search")
+    } catch {
+      debugPrint("Failed show recommnedMeme : \(error)")
+    }
+  }
+
   func logSearch(
     event: PPACAnalytics.UserEvent,
     keyword: String? = nil,
