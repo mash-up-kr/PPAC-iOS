@@ -16,10 +16,6 @@ public enum UserEndpoint: Requestable {
   case savedMeme(page: Int, size: Int)
   case lastSeenMeme
   
-  public var url: String {
-    return "https://ppac-server.run.goorm.io/api"
-  }
-  
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
     case .create:

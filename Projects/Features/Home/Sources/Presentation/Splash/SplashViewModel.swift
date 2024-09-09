@@ -10,6 +10,7 @@ import SwiftUI
 import PPACDomain
 import PPACModels
 import PPACUtil
+import PPACAnalytics
 
 @MainActor
 public protocol SplashRouting: AnyObject {
@@ -48,6 +49,7 @@ final class SplashViewModel: ViewModelType, ObservableObject {
         let userDetail = try await self.checkUserInfoUseCase.execute()
         self.updateMemeLevel(to: userDetail.level)
         self.state = State(isVisible: false)
+        PPACAnalytics.shared.setUserID(userDetail.deviceId)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.7) { [weak self] in
           self?.router?.showMainTabView(userDetail: userDetail)
         }

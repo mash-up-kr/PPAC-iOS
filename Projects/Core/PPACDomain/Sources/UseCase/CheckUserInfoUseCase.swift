@@ -39,7 +39,12 @@ final public class CheckUserInfoUseCaseImpl: CheckUserInfoUseCase {
   }
   
   private func getUserDetail() async throws -> UserDetail {
-    return try await self.userRepository.getUserDetail()
+    do {
+      return try await self.userRepository.getUserDetail()
+    } catch(let error) {
+      print("getUserDetail error = \(error.localizedDescription)")
+      return try await createUser()
+    }
   }
 }
 

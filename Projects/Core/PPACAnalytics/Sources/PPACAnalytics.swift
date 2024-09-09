@@ -52,6 +52,10 @@ final public class PPACAnalytics {
     FirebaseApp.configure()
   }
   
+  public func setUserID(_ id: String) {
+    Analytics.setUserID(id)
+  }
+  
   public func log(
     interaction: UserInteraction,
     event: UserEvent,

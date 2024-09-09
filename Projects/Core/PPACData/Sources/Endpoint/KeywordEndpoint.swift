@@ -11,11 +11,7 @@ import PPACNetwork
 enum KeywordEndPoint: Requestable {
   case getTopKeywords
   case getRecommendKeywords
-  
-  var url: String {
-    return "https://ppac-server.run.goorm.io"
-  }
-  
+ 
   var httpMethod: HTTPMethod {
     switch self {
     case .getTopKeywords, .getRecommendKeywords:
@@ -26,9 +22,9 @@ enum KeywordEndPoint: Requestable {
   var path: String? {
     switch self {
     case .getTopKeywords:
-      return "/api/keyword/top"
+      return "/keyword/top"
     case .getRecommendKeywords:
-      return "/api/keyword/recommend"
+      return "/keyword/recommend"
     }
   }
   

@@ -19,11 +19,7 @@ public enum MemeEndpoint: Requestable {
   case share(memeId: String)
   case watch(memeId: String, type: String)
   case reaction(memeId: String)
-  
-  public var url: String {
-    return "https://ppac-server.run.goorm.io/api"
-  }
-  
+
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
     case .recommendMeme:

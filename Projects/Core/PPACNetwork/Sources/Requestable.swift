@@ -21,7 +21,6 @@ public enum HTTPRequestParameter {
 }
 
 public protocol Requestable {
-  var url: String { get }
   var httpMethod: HTTPMethod { get }
   var path: String? { get }
   var headers: [String: String]? { get }
@@ -33,8 +32,12 @@ public protocol Requestable {
 
 extension Requestable {
   
+  private var baseUrl: String {
+    return "https://ppac-server-goorm.run.goorm.site/api"
+  }
+  
   public func makeURL() -> URL? {
-    guard let url = URL(string: url) else { return nil }
+    guard let url = URL(string: baseUrl) else { return nil }
     return url.appending(path: path ?? "").append(queries: parameter)
   }
   
