@@ -1,18 +1,18 @@
 //
 //  Project.swift
-//  MyPage
+//  MemeEditor
 //
-//  Created by hyeryeong on 6/18/24
+//  Created by hyeryeong on 9/20/24
 //
 
 import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project(
-    name: "MyPage",
+    name: "MemeEditor",
     targets: [
         .configure(
-            name: "MyPage",
+            name: "MemeEditor",
             product: .framework,
             infoPlist: .default,
             sources: "Sources/**",
@@ -22,10 +22,7 @@ let project = Project(
                 .ResourceKit,
                 .Core.DesignSystem,
                 .Core.PPACModels,
-                .Core.PPACAnalytics,
-                .Feature.MemeDetail,
-                .Feature.MemeEditor,
-                .Feature.Setting
+                .Core.PPACAnalytics
             ]
         )
     ]
