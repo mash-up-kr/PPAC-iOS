@@ -14,9 +14,12 @@ import PPACDomain
 import PPACNetwork
 import PPACData
 
-import MemeDetail
 import DesignSystem
+
+import MemeDetail
 import Setting
+import MemeEditor
+
 
 public final class MyPageRouter: Router, MyPageRouting {
   
@@ -64,7 +67,11 @@ public final class MyPageRouter: Router, MyPageRouting {
   }
   
   public func showSettingView() { 
-    let router = SettingRouter(navigationController: self.navigationController)
+//    let router = SettingRouter(navigationController: self.navigationController)
+//    self.childRouters.append(router)
+//    router.start()
+//
+    let router = MemeEditorRouter(navigationController: self.navigationController)
     self.childRouters.append(router)
     router.start()
   }

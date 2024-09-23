@@ -8,26 +8,10 @@
 import SwiftUI
 import ResourceKit
 
-struct RequiredInputTextFieldView: View {
+struct RequiredTitleView: View {
   let title: String
-  let placeHolder: String
-  let limitedTextCount: Int
-  @State var content: String = ""
-  
-  var currentTextCount: Int {
-    return content.count
-  }
   
   var body: some View {
-    VStack(alignment: .leading) {
-      titleView
-        .padding(.bottom, 12)
-      textFieldView
-    }
-    
-  }
-  
-  var titleView: some View {
     HStack {
       Text(title)
         .font(Font.Body.Xlarge.semiBold)
@@ -35,19 +19,60 @@ struct RequiredInputTextFieldView: View {
       ResourceKitAsset.Icon.starMarker.swiftUIImage
         .resizable()
         .frame(width: 12, height: 12)
-        .padding(.leading, -8)
+        .padding(.leading, -4)
         .padding(.bottom, 10)
+    }
+  }
+}
+
+struct RequiredInputTextFieldView: View {
+  let title: String
+  let placeHolder: String
+  let limitedTextCount: Int
+  let textViewHeight: CGFloat
+  @Binding var content: String
+  
+  var currentTextCount: Int {
+    return content.count
+  }
+  
+  var body: some View {
+    VStack(alignment: .leading) {
+      RequiredTitleView(title: title)
+        .padding(.bottom, 8)
+      textFieldWithTextCountView
+    }
+    .padding(.horizontal, 20)
+  }
+  
+  var textFieldWithTextCountView: some View {
+    ZStack(alignment: .bottomTrailing) {
+      textFieldView
+      textCountView
     }
   }
   
   var textFieldView: some View {
-    ZStack {
+    ZStack(alignment: .topLeading) {
       RoundedRectangle(cornerRadius: 10)
         .foregroundStyle(Color.Background.assistive)
-      TextField(placeHolder, text: $content)
+      Text(placeHolder)
+        .foregroundStyle(content.isEmpty ? Color.Text.assistive : Color.clear)
         .font(Font.Body.Large.medium)
-        .padding(.leading, 16)
-        .padding(.top, 14)
+        .padding(.horizontal, 16)
+        .padding(.top, 12)
+      TextEditor(text: $content)
+        .scrollContentBackground(.hidden)
+        .scrollIndicators(.hidden)
+        .padding(.horizontal, 12)
+        .padding(.top, 4)
+        .font(Font.Body.Large.medium)
+        .foregroundStyle(Color.Text.primary)
+        .onChange(of: content) { _ , newValue in
+          if newValue.count > limitedTextCount {
+            content = String(newValue.prefix(limitedTextCount))
+          }
+        }
     }
   }
   
@@ -55,11 +80,12 @@ struct RequiredInputTextFieldView: View {
     HStack(spacing: 2) {
       currentTextCountView
       Text("/")
-      Text("")
+      Text("\(limitedTextCount)")
     }
+    .padding(.trailing, 16)
+    .padding(.bottom, 14)
     .foregroundStyle(Color.Text.assistive)
     .font(Font.Body.Medium.medium)
-    
   }
   
   var currentTextCountView: some View {
@@ -70,7 +96,7 @@ struct RequiredInputTextFieldView: View {
   var currentTextColor: SwiftUI.Color {
     if currentTextCount == 0 {
       return Color.Text.assistive
-    } else if currentTextCount <= limitedTextCount {
+    } else if currentTextCount >= limitedTextCount {
       return Color.Text.brand
     }
     return Color.Text.secondary
@@ -79,9 +105,13 @@ struct RequiredInputTextFieldView: View {
 }
 
 #Preview {
-  RequiredInputTextFieldView(
+  @Previewable @State var content: String = ""
+  
+  return RequiredInputTextFieldView(
     title: "밈의 제목을 작성해주세요",
     placeHolder: "예) 무한도전, 핀터레스트",
-    limitedTextCount: 32
+    limitedTextCount: 32,
+    textViewHeight: 82,
+    content: $content
   )
 }
