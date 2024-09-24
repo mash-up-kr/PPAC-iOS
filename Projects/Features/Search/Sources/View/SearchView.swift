@@ -112,7 +112,7 @@ public struct SearchView: View {
       ForEach(viewModel.state.memeCategories, id: \.self) { memeCategory in
         MemeCategoryView(
           category: memeCategory.category,
-          keywords: memeCategory.keywords
+          keywordTags: memeCategory.keywords.map { KeywordTag(id: $0.id, name: $0.name) }
         ) { keyword in
           viewModel.dispatch(type: .recommendKeywordTapped(keyword: keyword))
           viewModel.logSearch(event: .keyword, keyword: keyword, category: memeCategory.category)

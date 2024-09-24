@@ -10,38 +10,38 @@ import ResourceKit
 
 // thanks to NamS
 public struct KeywordsTagView: View {
-  @State public var keywords: [String]
+  public let keywordTags: [KeywordTag]
   var onTapHandler: ((String) -> ())?
 
-  public init(keywords: [String], onTapHandler: ((String) -> ())?) {
-    self.keywords = keywords
+  public init(keywordTags: [KeywordTag], onTapHandler: ((String) -> ())?) {
+    self.keywordTags = keywordTags
     self.onTapHandler = onTapHandler
   }
   
   public var body: some View {
     ScrollView {
       CategoryTagLayout(verticalSpacing: 8, horizontalSpacing: 8) {
-        ForEach(keywords, id: \.self) { keyword in
-          Text(keyword)
+        ForEach(keywordTags, id: \.self) { keywordTag in
+          Text(keywordTag.name)
             .font(Font.Body.Medium.medium)
-            .foregroundColor(Color.Text.primary)
+            .foregroundColor(
+              keywordTag.isSelected
+              ? Color.Text.brand
+              : Color.Text.primary
+            )
             .padding(.horizontal, 16)
             .padding(.vertical, 9.5)
             .background(
-              Capsule().foregroundStyle(Color.Background.assistive)
+              Capsule().foregroundStyle(
+                keywordTag.isSelected
+                ? Color.Background.brandassistive
+                : Color.Background.assistive
+              )
             )
             .onTapGesture {
-              onTapHandler?(keyword)
+              onTapHandler?(keywordTag.name)
             }
         }
-      }
-    }
-    .onAppear {
-      // tagView 사이즈를 잰 후 다시 그리기 위함
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-        let cacheValue = keywords
-        keywords = []
-        keywords = cacheValue
       }
     }
   }

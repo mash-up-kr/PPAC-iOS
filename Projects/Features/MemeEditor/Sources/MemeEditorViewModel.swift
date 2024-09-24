@@ -21,13 +21,16 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   public enum Action {
     case viewWillAppear
     case naviBackButtonTapped
+    case memeKeywordTapped(keyword: String)
   }
   
   public struct State {
-    var memeCategories: [MemeCategory]
     var memeTitle: String
     var memeSource: String
-    static let none = State(memeCategories: [], memeTitle: "", memeSource: "")
+    var memeCategories: [MemeCategory]
+    var selectedMemeKeywords: [MemeKeyword] = []
+    var isMemeFormValid: Bool = false
+    static let none = State(memeTitle: "", memeSource: "", memeCategories: [])
   }
   
   // MARK: - Properties
@@ -35,6 +38,12 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   weak var router: MemeEditorRouting?
   
   private let memeCategorysUseCase: MemeCategorysUseCase
+  
+  private var allKeywords: [MemeKeyword] {
+    return self.state.memeCategories
+      .map { $0.keywords }
+      .flatMap { $0 }
+  }
   
   
   public init(
@@ -53,11 +62,13 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         await fetchMemeCategories()
       case .naviBackButtonTapped:
         router?.popView()
+      case .memeKeywordTapped(let keyword):
+        self.updateSelectedMemeKeyword(keyword)
       }
     }
   }
   
-  func fetchMemeCategories() async {
+  private func fetchMemeCategories() async {
     do {
       self.state.memeCategories = try await memeCategorysUseCase.execute()
     } catch(let error) {
@@ -65,4 +76,28 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     }
   }
   
+  private func updateSelectedMemeKeyword(_ keyword: String) {
+    guard var selectedKeyword = self.allKeywords
+      .first(where: { $0.name == keyword }) else { return }
+    
+    // 선택된 키워드가 있다면 삭제, 없다면 추가
+    if let hasSelectedkeywordIndex = self.state.selectedMemeKeywords.firstIndex(where: {$0.id == selectedKeyword.id}) {
+      self.state.selectedMemeKeywords.remove(at: hasSelectedkeywordIndex)
+      selectedKeyword.isSelected = false
+    } else {
+      self.state.selectedMemeKeywords.append(selectedKeyword)
+      selectedKeyword.isSelected = true
+    }
+    
+    for (categoryIndex, category) in self.state.memeCategories.enumerated() {
+      if let keywordIndex = category.keywords.firstIndex(where: { $0.id == selectedKeyword.id }) {
+        var newKeywords = self.state.memeCategories[categoryIndex].keywords
+        newKeywords[keywordIndex] = selectedKeyword
+        self.state.memeCategories[categoryIndex].keywords = newKeywords
+      }
+    }
+    
+    print("선택된 keyword = \(self.state.selectedMemeKeywords)")
+  }
+
 }

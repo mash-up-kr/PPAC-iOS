@@ -104,14 +104,14 @@ struct RequiredInputTextFieldView: View {
   
 }
 
-#Preview {
-  @Previewable @State var content: String = ""
-  
-  return RequiredInputTextFieldView(
-    title: "밈의 제목을 작성해주세요",
-    placeHolder: "예) 무한도전, 핀터레스트",
-    limitedTextCount: 32,
-    textViewHeight: 82,
-    content: $content
-  )
-}
+//#Preview {
+//  @Previewable @State var content: String = ""
+//  
+//  return RequiredInputTextFieldView(
+//    title: "밈의 제목을 작성해주세요",
+//    placeHolder: "예) 무한도전, 핀터레스트",
+//    limitedTextCount: 32,
+//    textViewHeight: 82,
+//    content: $content
+//  )
+//}

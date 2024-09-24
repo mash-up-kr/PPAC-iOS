@@ -26,8 +26,14 @@ struct MemeEditorView: View {
           memeTitleInputView
           memeSourceInputView
           divider
+          memeCategoriesTitleView
+          memeCategoriesViews
         }
       }
+      bottomButton
+    }
+    .onAppear {
+      viewModel.dispatch(type: .viewWillAppear)
     }
     .plainNavigationBar(
       backHandler: {
@@ -39,7 +45,7 @@ struct MemeEditorView: View {
     )
   }
   
-  var memeTitleInputView: some View {
+  private var memeTitleInputView: some View {
     RequiredInputTextFieldView(
       title: "밈의 제목",
       placeHolder: "예) 럭키비키잖아",
@@ -51,7 +57,7 @@ struct MemeEditorView: View {
     .padding(.bottom, 40)
   }
   
-  var memeSourceInputView: some View {
+  private var memeSourceInputView: some View {
     RequiredInputTextFieldView(
       title: "밈의 출처",
       placeHolder: "예) 무한도전, 핀터레스트",
@@ -63,11 +69,61 @@ struct MemeEditorView: View {
     .padding(.bottom, 35)
   }
   
-  var divider: some View {
+  private var divider: some View {
     Rectangle()
       .frame(height: 10)
       .foregroundStyle(Color.Skeleton.primary)
       .padding(.bottom, 35)
+  }
+  
+  private var memeCategoriesTitleView: some View {
+    VStack(alignment: .leading) {
+      HStack {
+        RequiredTitleView(title: "연관있는 키워드를 골라주세요")
+          .padding(.bottom, 4)
+        Spacer()
+      }
+      HStack {
+        Text("최대 6개까지 선택 가능해요")
+          .foregroundStyle(Color.Text.secondary)
+          .font(Font.Body.Medium.medium)
+          .padding(.bottom, 24)
+        Spacer()
+      }
+    }
+    .padding(.horizontal, 20)
+  }
+  
+  private var memeCategoriesViews: some View {
+    ForEach(viewModel.state.memeCategories, id: \.id) { memeCategory in
+      let keywordTags = memeCategory.keywords.map { KeywordTag(id: $0.id, name: $0.name, isSelected: $0.isSelected) }
+      MemeCategoryView(
+        category: memeCategory.category,
+        keywordTags: keywordTags
+      ) { keyword in
+        viewModel.dispatch(type: .memeKeywordTapped(keyword: keyword))
+      }
+    }
+  }
+  
+  private var bottomButton: some View {
+    ZStack {
+      RoundedRectangle(cornerRadius: 10)
+        .frame(height: 48)
+        .padding(.horizontal, 20)
+        .foregroundStyle(
+          viewModel.state.isMemeFormValid
+          ? Color.Background.primary
+          : Color.Background.assistive
+        )
+      Text("등록하기")
+        .font(Font.Heading.Small.semiBold)
+        .foregroundStyle(
+          viewModel.state.isMemeFormValid
+          ? Color.Text.inverse
+          : Color.Text.disabled
+        )
+    }
   }
 }
 
