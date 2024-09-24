@@ -23,7 +23,10 @@ struct MemeEditorView: View {
         .padding(.top, 50)
       ScrollView {
         VStack {
-          ImageEditView(imageUrl: viewModel.state.memeImageUrl)
+          ImageEditView(
+            imageUrl: viewModel.state.memeImageUrl,
+            onTappedImage: { viewModel.dispatch(type: .memeImageTapped)}
+          )
           memeTitleInputView
           memeSourceInputView
           divider

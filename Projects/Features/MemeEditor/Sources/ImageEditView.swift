@@ -16,6 +16,7 @@ public struct ImageEditView: View {
   @Environment(\.screenSize) var screenSize
   
   private let imageUrl: String
+  private var onTappedImage: (() -> ())?
   @State private var imageSize: CGSize = .zero
   private var imageWidth: CGFloat {
     return screenSize.width - Constants.horizantalPadding * 2
@@ -28,8 +29,9 @@ public struct ImageEditView: View {
     static let imageHeight = totalHeight - verticalPadding * 2
   }
   
-  public init(imageUrl: String) {
+  public init(imageUrl: String, onTappedImage: (() -> ())? = nil) {
     self.imageUrl = imageUrl
+    self.onTappedImage = onTappedImage
   }
   
   public var body: some View {
@@ -47,6 +49,9 @@ public struct ImageEditView: View {
     ZStack {
       emptyBackgroundView
       imageRegisterChipView
+    }
+    .onTapGesture {
+      onTappedImage?()
     }
   }
   
@@ -80,7 +85,7 @@ public struct ImageEditView: View {
         height: 50,
         image: ResourceKitAsset.Icon.share.swiftUIImage,
         shadowColor: Color.Shadow.orange,
-        action: { print("imageViewWithButton 클릭") }
+        action: { onTappedImage?() }
       )
       .padding(.trailing, 12)
       .padding(.bottom, 12)

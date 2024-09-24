@@ -21,6 +21,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   public enum Action {
     case viewWillAppear
     case naviBackButtonTapped
+    case memeImageTapped
     case memeKeywordTapped(keyword: String)
   }
   
@@ -70,6 +71,8 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         await fetchMemeCategories()
       case .naviBackButtonTapped:
         router?.popView()
+      case .memeImageTapped:
+        print("meme image tapped")
       case .memeKeywordTapped(let keyword):
         self.updateSelectedMemeKeyword(keyword)
       }
