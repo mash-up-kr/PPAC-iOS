@@ -25,12 +25,20 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   }
   
   public struct State {
+    var memeImageUrl: String
     var memeTitle: String
     var memeSource: String
     var memeCategories: [MemeCategory]
     var selectedMemeKeywords: [MemeKeyword] = []
-    var isMemeFormValid: Bool = false
-    static let none = State(memeTitle: "", memeSource: "", memeCategories: [])
+    var isMemeFormValid: Bool {
+      return !memeImageUrl.isEmpty
+      && !memeTitle.isEmpty
+      && !memeSource.isEmpty
+      && !selectedMemeKeywords.isEmpty
+      && selectedMemeKeywords.count <= 6
+    }
+    
+    static let none = State(memeImageUrl: "", memeTitle: "", memeSource: "", memeCategories: [])
   }
   
   // MARK: - Properties
@@ -77,13 +85,16 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   }
   
   private func updateSelectedMemeKeyword(_ keyword: String) {
+    
     guard var selectedKeyword = self.allKeywords
-      .first(where: { $0.name == keyword }) else { return }
+      .first(where: { $0.name == keyword })else { return }
     
     // 선택된 키워드가 있다면 삭제, 없다면 추가
     if let hasSelectedkeywordIndex = self.state.selectedMemeKeywords.firstIndex(where: {$0.id == selectedKeyword.id}) {
       self.state.selectedMemeKeywords.remove(at: hasSelectedkeywordIndex)
       selectedKeyword.isSelected = false
+    } else if self.state.selectedMemeKeywords.count >= 6 {
+      return
     } else {
       self.state.selectedMemeKeywords.append(selectedKeyword)
       selectedKeyword.isSelected = true
@@ -99,5 +110,4 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     
     print("선택된 keyword = \(self.state.selectedMemeKeywords)")
   }
-
 }

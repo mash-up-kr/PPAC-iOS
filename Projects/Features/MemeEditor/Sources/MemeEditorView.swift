@@ -23,12 +23,14 @@ struct MemeEditorView: View {
         .padding(.top, 50)
       ScrollView {
         VStack {
+          ImageEditView(imageUrl: viewModel.state.memeImageUrl)
           memeTitleInputView
           memeSourceInputView
           divider
           memeCategoriesTitleView
           memeCategoriesViews
         }
+        .padding(.bottom, 48)
       }
       bottomButton
     }
@@ -43,6 +45,13 @@ struct MemeEditorView: View {
       hasConfigureButton: false,
       title: "밈 등록하기"
     )
+  }
+  
+  private var memeImageEditView: some View {
+    VStack {
+      
+    }
+    .padding(.vertical, 48)
   }
   
   private var memeTitleInputView: some View {
@@ -124,6 +133,7 @@ struct MemeEditorView: View {
           : Color.Text.disabled
         )
     }
+    .foregroundStyle(Color.clear)
   }
 }
 
