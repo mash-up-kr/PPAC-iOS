@@ -19,8 +19,6 @@ struct SavedMemeListView: View {
   
   var body: some View {
     VStack {
-      ListHeaderView(icon: ResourceKitAsset.Icon.stroke.swiftUIImage,
-                     title: "나의 파밈함")
       if memeDetailList.count > 0 {
         memeListView
       } else {

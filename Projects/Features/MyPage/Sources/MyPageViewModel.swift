@@ -33,6 +33,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     case onTappedRecentMeme(meme: MemeDetail?)
     case onTappedSavedMeme(meme: MemeDetail?)
     case onTappedCopyButton(meme: MemeDetail?)
+    case onTappedSegmentedTitleItem(title: String)
     case onAppearLastMeme
   }
 
@@ -41,8 +42,27 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
     var savedMemePagination: MemeListWithPagination.Pagination
-    var isRefreshCompleted: Bool = true
-    var isActiveCopyPopup: Bool = false
+    var isRefreshCompleted: Bool
+    var isActiveCopyPopup: Bool
+    
+    var currentMyMemeList: [MemeDetail]
+    var segmentedTitleItems: [SegmentedTitleItem] = []
+    
+    init(
+      userDetail: UserDetail,
+      lastSeenMemeList: [MemeDetail],
+      savedMemeList: [MemeDetail],
+      savedMemePagination: MemeListWithPagination.Pagination
+    ) {
+      self.userDetail = userDetail
+      self.lastSeenMemeList = lastSeenMemeList
+      self.savedMemeList = savedMemeList
+      self.savedMemePagination = savedMemePagination
+      self.isRefreshCompleted = true
+      self.isActiveCopyPopup = false
+      self.currentMyMemeList = lastSeenMemeList // TODO: 나중에 나의 밈으로 바뀌어야함
+      self.segmentedTitleItems = initSegmentedTitleItems()
+    }
     
     var memeLevel: MemeLevelType {
       return MemeLevelType(rawValue: userDetail.level) ?? .level1
@@ -63,6 +83,11 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     
     var hasNextPageOfSavedMeme: Bool {
       return savedMemePagination.currentPage < savedMemePagination.totalPages
+    }
+    
+    private func initSegmentedTitleItems() -> [SegmentedTitleItem] {
+      return [SegmentedTitleItem(title: "나의 밈", isSelected: true),
+              SegmentedTitleItem(title: "나의 파밈함", isSelected: false)]
     }
   }
   
@@ -119,6 +144,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         self.logMyPage(event: .meme, type: .savedMeme)
       case .onTappedCopyButton(let meme):
         await self.copyMemeImage(with: meme)
+      case .onTappedSegmentedTitleItem(let title):
+        self.updateSegmentedTitleItems(selectedTitle: title)
+        self.updateCurrentMyMemeList(selectedTitle: title)
       case .onAppearLastMeme:
         await self.fetchNextPageSavedMeme()
       }
@@ -187,6 +215,29 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       self.logMyPage(event: .copy, meme: meme)
     } catch {
       print("복사 실패")
+    }
+  }
+  
+  @MainActor
+  private func updateSegmentedTitleItems(selectedTitle: String) {
+    guard let selectedItem = self.state.segmentedTitleItems
+      .first(where: { $0.title == selectedTitle }) else { return }
+
+    let newTitleItems = self.state.segmentedTitleItems
+      .map {
+        SegmentedTitleItem(
+          title: $0.title,
+          isSelected: $0.title == selectedItem.title
+        )
+      }
+    self.state.segmentedTitleItems = newTitleItems
+  }
+  
+  private func updateCurrentMyMemeList(selectedTitle: String) {
+    if selectedTitle == "나의 밈" {
+      self.state.currentMyMemeList = self.state.lastSeenMemeList
+    } else {
+      self.state.currentMyMemeList = self.state.savedMemeList
     }
   }
   
