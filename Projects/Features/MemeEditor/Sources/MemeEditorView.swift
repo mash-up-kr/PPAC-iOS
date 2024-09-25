@@ -18,14 +18,18 @@ struct MemeEditorView: View {
   }
   
   var body: some View {
-    VStack {
-      Divider()
+    VStack(spacing: 0) {
+      Rectangle()
+        .frame(height: 1)
+        .foregroundStyle(Color.Background.assistive)
         .padding(.top, 50)
       ScrollView {
         VStack {
           ImageEditView(
             imageUrl: viewModel.state.memeImageUrl,
-            onTappedImage: { viewModel.dispatch(type: .memeImageTapped)}
+            onImageSelectionCompleted: { selectedImage in
+              viewModel.state.selectedImage = selectedImage
+            }
           )
           memeTitleInputView
           memeSourceInputView
@@ -48,13 +52,6 @@ struct MemeEditorView: View {
       hasConfigureButton: false,
       title: "밈 등록하기"
     )
-  }
-  
-  private var memeImageEditView: some View {
-    VStack {
-      
-    }
-    .padding(.vertical, 48)
   }
   
   private var memeTitleInputView: some View {
@@ -121,7 +118,6 @@ struct MemeEditorView: View {
   private var bottomButton: some View {
     ZStack {
       RoundedRectangle(cornerRadius: 10)
-        .frame(height: 48)
         .padding(.horizontal, 20)
         .foregroundStyle(
           viewModel.state.isMemeFormValid
@@ -136,7 +132,12 @@ struct MemeEditorView: View {
           : Color.Text.disabled
         )
     }
+    .frame(height: 48)
     .foregroundStyle(Color.clear)
+    .onTapGesture {
+      guard viewModel.state.isMemeFormValid else { return }
+      viewModel.dispatch(type: .registerButtonTapped)
+    }
   }
 }
 

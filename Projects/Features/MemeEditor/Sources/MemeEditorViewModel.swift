@@ -14,6 +14,7 @@ import PPACDomain
 @MainActor
 public protocol MemeEditorRouting: AnyObject {
   func popView()
+  //func showImagePicker()
 }
 
 final public class MemeEditorViewModel: ViewModelType, ObservableObject {
@@ -21,25 +22,26 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   public enum Action {
     case viewWillAppear
     case naviBackButtonTapped
-    case memeImageTapped
     case memeKeywordTapped(keyword: String)
+    case registerButtonTapped
   }
   
   public struct State {
-    var memeImageUrl: String
+    var memeImageUrl: String // 나중에 수정하기에 쓸 수 있도록 남겨둠
+    var selectedImage: UIImage?
     var memeTitle: String
     var memeSource: String
     var memeCategories: [MemeCategory]
     var selectedMemeKeywords: [MemeKeyword] = []
     var isMemeFormValid: Bool {
-      return !memeImageUrl.isEmpty
+      return selectedImage != nil
       && !memeTitle.isEmpty
       && !memeSource.isEmpty
       && !selectedMemeKeywords.isEmpty
       && selectedMemeKeywords.count <= 6
     }
     
-    static let none = State(memeImageUrl: "", memeTitle: "", memeSource: "", memeCategories: [])
+    static let none = State(memeImageUrl: "empty", selectedImage: nil, memeTitle: "", memeSource: "", memeCategories: [])
   }
   
   // MARK: - Properties
@@ -71,14 +73,20 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         await fetchMemeCategories()
       case .naviBackButtonTapped:
         router?.popView()
-      case .memeImageTapped:
-        print("meme image tapped")
       case .memeKeywordTapped(let keyword):
         self.updateSelectedMemeKeyword(keyword)
+      case .registerButtonTapped:
+        print("===============================")
+        print("selectedImage = \(state.selectedImage)")
+        print("title = \(state.memeTitle)")
+        print("source = \(state.memeSource)")
+        print("keywords = \(state.selectedMemeKeywords)")
+        print("===============================")
       }
     }
   }
   
+  @MainActor
   private func fetchMemeCategories() async {
     do {
       self.state.memeCategories = try await memeCategorysUseCase.execute()
@@ -110,7 +118,5 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         self.state.memeCategories[categoryIndex].keywords = newKeywords
       }
     }
-    
-    print("선택된 keyword = \(self.state.selectedMemeKeywords)")
   }
 }
