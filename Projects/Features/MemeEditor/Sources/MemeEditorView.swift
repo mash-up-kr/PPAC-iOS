@@ -52,6 +52,11 @@ struct MemeEditorView: View {
       hasConfigureButton: false,
       title: "밈 등록하기"
     )
+    .popup(
+      isActive: $viewModel.state.isActivePopup,
+      image: nil,
+      text: viewModel.state.contentOfPopup
+    )
   }
   
   private var memeTitleInputView: some View {

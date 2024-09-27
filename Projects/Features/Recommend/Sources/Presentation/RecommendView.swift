@@ -61,6 +61,9 @@ public struct RecommendView: View {
         recommendMemeSize: $viewModel.state.recommendMemeSize
       )
       
+      // TODO: 종윤쓰 여기 수정 부탁함다
+      registerButton
+      
       ZStack {
         VStack(spacing: 0) {
           
@@ -175,6 +178,25 @@ public struct RecommendView: View {
             }
           }
         })
+    )
+  }
+  
+  // FIXME: 등록하기 버튼 수정
+  private var registerButton: some View {
+    Button(
+      action: {
+        viewModel.dispatch(type: .memeRegisterButtonTapped)
+      },
+      label: {
+        ZStack {
+          RoundedRectangle(cornerRadius: 10)
+            .foregroundStyle(Color.Background.primary)
+          Text("나도 밈 올리기")
+            .foregroundStyle(Color.Text.inverse)
+        }
+        .frame(width: 130, height: 36)
+        .padding()
+      }
     )
   }
   

@@ -24,7 +24,6 @@ let project = Project(
                 .Core.PPACModels,
                 .Core.PPACAnalytics,
                 .Feature.MemeDetail,
-                .Feature.MemeEditor,
                 .Feature.Setting
             ]
         )

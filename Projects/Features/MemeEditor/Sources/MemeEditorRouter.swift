@@ -20,7 +20,6 @@ public final class MemeEditorRouter: Router, MemeEditorRouting {
   public var childRouters: [any Router] = []
   
   // MARK: - Initializers
-  
   public init(
     navigationController: UINavigationController
   ) {

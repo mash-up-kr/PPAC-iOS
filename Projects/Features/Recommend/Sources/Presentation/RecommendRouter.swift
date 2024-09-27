@@ -15,7 +15,9 @@ import PPACDomain
 import PPACData
 import PPACNetwork
 import DesignSystem
+
 import MemeDetail
+import MemeEditor
 
 public final class RecommendRouter: Router, RecommendRouting {
   
@@ -82,6 +84,12 @@ public final class RecommendRouter: Router, RecommendRouting {
   @MainActor
   public func showMemeDetailView(meme: MemeDetail) {
     let router = MemeDetailRouter(self.navigationController, meme: meme)
+    self.childRouters.append(router)
+    router.start()
+  }
+  
+  public func showMemeEditorView() {
+    let router = MemeEditorRouter(navigationController: self.navigationController)
     self.childRouters.append(router)
     router.start()
   }

@@ -33,6 +33,10 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     var memeSource: String
     var memeCategories: [MemeCategory]
     var selectedMemeKeywords: [MemeKeyword] = []
+    
+    var isActivePopup: Bool = false
+    var contentOfPopup: String = ""
+    
     var isMemeFormValid: Bool {
       return selectedImage != nil
       && !memeTitle.isEmpty
@@ -96,7 +100,6 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   }
   
   private func updateSelectedMemeKeyword(_ keyword: String) {
-    
     guard var selectedKeyword = self.allKeywords
       .first(where: { $0.name == keyword })else { return }
     
@@ -105,6 +108,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
       self.state.selectedMemeKeywords.remove(at: hasSelectedkeywordIndex)
       selectedKeyword.isSelected = false
     } else if self.state.selectedMemeKeywords.count >= 6 {
+      self.showToast(text: "최대 개수를 초과했어요")
       return
     } else {
       self.state.selectedMemeKeywords.append(selectedKeyword)
@@ -118,5 +122,10 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         self.state.memeCategories[categoryIndex].keywords = newKeywords
       }
     }
+  }
+  
+  private func showToast(text: String) {
+    self.state.contentOfPopup = text
+    self.state.isActivePopup = true
   }
 }
