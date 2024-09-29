@@ -10,11 +10,11 @@ import SwiftUI
 import PPACUtil
 import PPACModels
 import PPACDomain
+import PPACNetwork
 
 @MainActor
 public protocol MemeEditorRouting: AnyObject {
   func popView()
-  //func showImagePicker()
 }
 
 final public class MemeEditorViewModel: ViewModelType, ObservableObject {
@@ -24,6 +24,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     case naviBackButtonTapped
     case memeKeywordTapped(keyword: String)
     case registerButtonTapped
+    case alertConfirmButtonTapped
   }
   
   public struct State {
@@ -36,6 +37,8 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     
     var isActivePopup: Bool = false
     var contentOfPopup: String = ""
+    var isMemeRegistrationSuccess: Bool = false
+    var needLoadingIndicator: Bool = false
     
     var isMemeFormValid: Bool {
       return selectedImage != nil
@@ -48,11 +51,16 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     static let none = State(memeImageUrl: "empty", selectedImage: nil, memeTitle: "", memeSource: "", memeCategories: [])
   }
   
+  enum MemeError: Error {
+      case imageNotAvailable
+  }
+  
   // MARK: - Properties
   @Published public var state: State
   weak var router: MemeEditorRouting?
   
   private let memeCategorysUseCase: MemeCategorysUseCase
+  private let registerMemeUserCase: RegisterMemeUseCase
   
   private var allKeywords: [MemeKeyword] {
     return self.state.memeCategories
@@ -63,11 +71,13 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   
   public init(
     router: MemeEditorRouting,
-    memeCategorysUseCase: MemeCategorysUseCase
+    memeCategorysUseCase: MemeCategorysUseCase,
+    registerMemeUserCase: RegisterMemeUseCase
   ) {
     self.router = router
     self.state = .none
     self.memeCategorysUseCase = memeCategorysUseCase
+    self.registerMemeUserCase = registerMemeUserCase
   }
   
   public func dispatch(type: Action) {
@@ -86,6 +96,9 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         print("source = \(state.memeSource)")
         print("keywords = \(state.selectedMemeKeywords)")
         print("===============================")
+        await self.registMeme()
+      case .alertConfirmButtonTapped:
+        router?.popView()
       }
     }
   }
@@ -101,7 +114,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   
   private func updateSelectedMemeKeyword(_ keyword: String) {
     guard var selectedKeyword = self.allKeywords
-      .first(where: { $0.name == keyword })else { return }
+      .first(where: { $0.name == keyword }) else { return }
     
     // 선택된 키워드가 있다면 삭제, 없다면 추가
     if let hasSelectedkeywordIndex = self.state.selectedMemeKeywords.firstIndex(where: {$0.id == selectedKeyword.id}) {
@@ -122,6 +135,38 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         self.state.memeCategories[categoryIndex].keywords = newKeywords
       }
     }
+  }
+  
+  private func registMeme() async {
+    do {
+      let imageFormData = try self.getImageFormData()
+      try await self.registerMemeUserCase
+        .execute(
+          formData: imageFormData,
+          title: self.state.memeTitle,
+          source: self.state.memeSource,
+          keywordIds: self.state.selectedMemeKeywords.map { $0.id }
+        )
+      self.state.isMemeRegistrationSuccess = true
+    } catch MemeError.imageNotAvailable {
+      self.showToast(text: "지원하지 않는 이미지 형식입니다. 다른 이미지를 사용해주세요")
+    } catch(let error) {
+      print("error = \(error)")
+      self.showToast(text: "밈 등록에 실패했어요")
+    }
+  }
+  
+  private func getImageFormData() throws -> FormData {
+    guard let imageData = self.state.selectedImage?.jpegData(compressionQuality: 0.8) else {
+      throw MemeError.imageNotAvailable
+    }
+    let formData = FormData(
+        fieldName: "image",
+        fileName: "image_\(UUID().uuidString.replacingOccurrences(of: "-", with: "_")).jpg",
+        mimeType: "image/jpeg",
+        fileData: imageData
+    )
+    return formData
   }
   
   private func showToast(text: String) {

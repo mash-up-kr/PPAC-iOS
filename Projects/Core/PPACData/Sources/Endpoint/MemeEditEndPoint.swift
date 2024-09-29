@@ -22,7 +22,7 @@ enum MemeEditEndPoint: MultipartRequestable {
   var path: String? {
     switch self {
     case .registerMeme:
-      return ""
+      return "meme"
     }
   }
   
@@ -39,11 +39,15 @@ enum MemeEditEndPoint: MultipartRequestable {
     case .registerMeme(let formData, let title, let source, let keywordIds):
       let formFields: [String : String] = ["title" : title,
                                            "source": source]
+      
+      print("=============== MultipartFormData ===============\n")
       var multipartFormData = MultipartFormData(formFields: formFields, formData: formData)
       
       for keyword in keywordIds {
         multipartFormData.body.append(multipartFormData.appendTextField(named: "keywordIds[]", value: keyword))
       }
+      multipartFormData.appendFinalBoundary()
+      print("=============== END ===============")
       return multipartFormData
     }
   }

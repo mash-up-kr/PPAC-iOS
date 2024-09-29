@@ -124,5 +124,29 @@ public class MemeRepositoryImpl: MemeRepository {
       throw failure
     }
   }
+  
+  public func registerMeme(
+    formData: FormData,
+    title: String,
+    source: String,
+    keywordIds: [String]
+  ) async throws {
+    let endPoint = MemeEditEndPoint.registerMeme(
+      formData: formData,
+      title: title,
+      source: source,
+      keywordIds: keywordIds
+    )
+    
+    let result = await networkservice.request(endPoint, dataType: BaseDTO<VoidResponse>.self)
+    
+    switch result {
+    case .success:
+      return
+    case .failure(let failure):
+      throw failure
+    }
+    
+  }
 }
 

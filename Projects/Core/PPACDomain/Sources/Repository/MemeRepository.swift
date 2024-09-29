@@ -8,6 +8,7 @@
 import Foundation
 
 import PPACModels
+import PPACNetwork
 
 public protocol MemeRepository {
   
@@ -19,4 +20,6 @@ public protocol MemeRepository {
   func shareMeme(memeId: String) async throws
   func watchMeme(memeId: String, type: String) async throws
   func reactToMeme(memeId: String) async throws
+  
+  func registerMeme(formData: FormData, title: String, source: String, keywordIds: [String]) async throws
 }

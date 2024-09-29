@@ -27,12 +27,15 @@ public final class MemeEditorRouter: Router, MemeEditorRouting {
   }
   
   public func start() {
-    let repository = KeywordRepositoryImpl(networkService: NetworkService())
+    let networkService = NetworkService()
+    let keywordRepository = KeywordRepositoryImpl(networkService: networkService)
+    let memeRepository = MemeRepositoryImpl(networkservice: networkService)
     
     let memeEditorView = MemeEditorView(
       viewModel: MemeEditorViewModel(
         router: self,
-        memeCategorysUseCase: MemeCategorysUseCaseImpl(repository: repository)
+        memeCategorysUseCase: MemeCategorysUseCaseImpl(repository: keywordRepository),
+        registerMemeUserCase: RegisterMemeUseCaseImpl(repository: memeRepository)
       )
     )
     

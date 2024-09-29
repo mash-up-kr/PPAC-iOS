@@ -18,28 +18,32 @@ struct MemeEditorView: View {
   }
   
   var body: some View {
-    VStack(spacing: 0) {
-      Rectangle()
-        .frame(height: 1)
-        .foregroundStyle(Color.Background.assistive)
-        .padding(.top, 50)
-      ScrollView {
-        VStack {
-          ImageEditView(
-            imageUrl: viewModel.state.memeImageUrl,
-            onImageSelectionCompleted: { selectedImage in
-              viewModel.state.selectedImage = selectedImage
-            }
-          )
-          memeTitleInputView
-          memeSourceInputView
-          divider
-          memeCategoriesTitleView
-          memeCategoriesViews
+    ZStack {
+      VStack(spacing: 0) {
+        Rectangle()
+          .frame(height: 1)
+          .foregroundStyle(Color.Background.assistive)
+          .padding(.top, 50)
+        ScrollView {
+          VStack {
+            ImageEditView(
+              imageUrl: viewModel.state.memeImageUrl,
+              onImageSelectionCompleted: { selectedImage in
+                viewModel.state.selectedImage = selectedImage
+              }
+            )
+            memeTitleInputView
+            memeSourceInputView
+            divider
+            memeCategoriesTitleView
+            memeCategoriesViews
+          }
+          .padding(.bottom, 48)
         }
-        .padding(.bottom, 48)
+        bottomButton
       }
-      bottomButton
+      
+      //if viewModel.state.
     }
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)
@@ -56,6 +60,19 @@ struct MemeEditorView: View {
       isActive: $viewModel.state.isActivePopup,
       image: nil,
       text: viewModel.state.contentOfPopup
+    )
+    .basicModal(
+      isPresented: $viewModel.state.isMemeRegistrationSuccess,
+      opacity: 0.5,
+      content: {
+        FarmemeAlertView(
+          title: "밈 올리기 성공!",
+          description: "마이페이지에서 확인할 수 있어요",
+          dismiss: {
+            viewModel.dispatch(type: .alertConfirmButtonTapped)
+          }
+        )
+      }
     )
   }
   

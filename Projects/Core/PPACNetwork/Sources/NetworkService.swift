@@ -20,6 +20,8 @@ final public class NetworkService: NetworkServiceable {
     var urlRequest = request.buildURLRequest(with: url)
     
     if let multipartRequest = request as? MultipartRequestable {
+      urlRequest.setValue("gzip, deflate, br", forHTTPHeaderField: "accept-encoding")
+      urlRequest.setValue("*/*", forHTTPHeaderField: "Accept")
       urlRequest.setValue(multipartRequest.formData.contentType, forHTTPHeaderField: "Content-Type")
       let multipartData = multipartRequest.formData.finalize()
       return await executeUploadRequest(urlRequest, multipartData, dataType: dataType)
@@ -30,6 +32,7 @@ final public class NetworkService: NetworkServiceable {
   
   private func executeRequest<T: Decodable>(_ urlRequest: URLRequest, dataType: T.Type) async -> Result<T, NetworkError> {
     do {
+      NetworkLogger.logRequest(urlRequest)
       let (data, response) = try await URLSession.shared.data(for: urlRequest)
       return handleResponse(response, data: data, dataType: dataType)
     } catch let error {
@@ -40,6 +43,7 @@ final public class NetworkService: NetworkServiceable {
   
   private func executeUploadRequest<T: Decodable>(_ urlRequest: URLRequest, _ bodyData: Data, dataType: T.Type) async -> Result<T, NetworkError> {
     do {
+      NetworkLogger.logRequest(urlRequest)
       let (data, response) = try await URLSession.shared.upload(for: urlRequest, from: bodyData)
       return handleResponse(response, data: data, dataType: dataType)
     } catch let error {

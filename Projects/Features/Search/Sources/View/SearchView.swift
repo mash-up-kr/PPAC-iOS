@@ -47,9 +47,13 @@ public struct SearchView: View {
         isPresented: $viewModel.state.isPresenting,
         opacity: 0.5,
         content: {
-          SearchPreparingAlert {
-            viewModel.dispatch(type: .dismissSearchBarAlert)
-          }
+          FarmemeAlertView(
+            title: "조금만 기다려주세요!",
+            description: "검색은 준비 중이에요.",
+            dismiss: {
+              viewModel.dispatch(type: .dismissSearchBarAlert)
+            }
+          )
         }
       )
       

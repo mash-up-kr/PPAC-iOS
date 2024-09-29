@@ -27,19 +27,21 @@ struct BoundaryGenerator {
   
   public func boundaryData(
     forBoundaryType boundaryType: BoundaryType
-  ) -> Data {
+  ) -> String {
     let boundaryText: String
     
     switch boundaryType {
     case .initial:
       boundaryText = "--\(boundary)\(EncodingCharacters.crlf)"
     case .encapsulated:
-      boundaryText = "\(EncodingCharacters.crlf)--\(boundary)\(EncodingCharacters.crlf)"
+      //boundaryText = "\(EncodingCharacters.crlf)--\(boundary)\(EncodingCharacters.crlf)"
+      boundaryText = "--\(boundary)\(EncodingCharacters.crlf)"
     case .final:
-      boundaryText = "\(EncodingCharacters.crlf)--\(boundary)--\(EncodingCharacters.crlf)"
+      //boundaryText = "\(EncodingCharacters.crlf)--\(boundary)--\(EncodingCharacters.crlf)"
+      boundaryText = "--\(boundary)--\(EncodingCharacters.crlf)"
     }
     
-    return Data(boundaryText.utf8)
+    return boundaryText
   }
 }
 
@@ -74,7 +76,7 @@ public struct MultipartFormData {
     formFields: FormField = [:],
     formData: FormData
   ) {
-    self.boundary = boundary
+    self.boundary = boundary.replacingOccurrences(of: "-", with: "")
     self.boundaryGenerator = BoundaryGenerator(boundary: boundary)
     
     formFields.forEach {
@@ -82,11 +84,14 @@ public struct MultipartFormData {
     }
     
     self.body.append(appendFormData(formData: formData))
-    self.body.append(boundaryGenerator.boundaryData(forBoundaryType: .final))
   }
   
   public var contentType: String {
     return "multipart/form-data; boundary=\(boundary)"
+  }
+  
+  public mutating func appendFinalBoundary() {
+    self.body.append(boundaryGenerator.boundaryData(forBoundaryType: .final))
   }
   
   public func finalize() -> Data {
@@ -96,18 +101,19 @@ public struct MultipartFormData {
   public func appendTextField(named name: String, value: String) -> Data {
     var data = Data()
     data.append(boundaryGenerator.boundaryData(forBoundaryType: .encapsulated))
-    data.append("Content-Disposition: form-data; name=\"\(name)\"\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)".data(using: .utf8)!)
-    data.append("\(value)\(EncodingCharacters.crlf)".data(using: .utf8)!)
+    data.append("Content-Disposition: form-data; name=\"\(name)\"\(EncodingCharacters.crlf)")
+    data.append("\(value)\(EncodingCharacters.crlf)")
     return data
   }
 
   public func appendFormData(formData: FormData) -> Data {
     var data = Data()
     data.append(boundaryGenerator.boundaryData(forBoundaryType: .encapsulated))
-    data.append("Content-Disposition: form-data; name=\"\(formData.fieldName)\"; filename=\"\(formData.fileName)\"\(EncodingCharacters.crlf)".data(using: .utf8)!)
-    data.append("Content-Type: \(formData.mimeType)\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)".data(using: .utf8)!)
+    data.append("Content-Disposition: form-data; name=\"\(formData.fieldName)[]\"; filename=\"\(formData.fileName)\"\(EncodingCharacters.crlf)")
+    data.append("Content-Type: \(formData.mimeType)\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)")
     data.append(formData.fileData)
-    data.append(EncodingCharacters.crlf.data(using: .utf8)!)
+    debugPrint(formData.fileData)
+    data.append(EncodingCharacters.crlf)
     return data
   }
 }
@@ -115,7 +121,14 @@ public struct MultipartFormData {
 extension Data {
   mutating func append(_ string: String) {
     if let data = string.data(using: .utf8) {
+      debugPrint(string)
       self.append(data)
     }
   }
+  
+  mutating func appendLineBreak(times: Int = 1) {
+      for _ in 0..<times {
+        self.append(EncodingCharacters.crlf)
+      }
+    }
 }

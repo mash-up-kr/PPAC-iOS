@@ -11,7 +11,7 @@ class NetworkLogger {
   static func logRequest(_ request: URLRequest) {
     print("➡️ [REQUEST]: \(request.httpMethod ?? "N/A") \(request.url?.absoluteString ?? "")")
     if let headers = request.allHTTPHeaderFields {
-      print("📝 [HEADERS]: \(headers)")
+      print("📝 [REQUEST HEADERS]: \(headers)")
     }
     if let body = request.httpBody {
       print("📦 [BODY]: \(String(data: body, encoding: .utf8) ?? "N/A")")
