@@ -39,7 +39,6 @@ enum MemeEditEndPoint: MultipartRequestable {
     case .registerMeme(let formData, let title, let source, let keywordIds):
       let formFields: [String : String] = ["title" : title,
                                            "source": source]
-      
       print("=============== MultipartFormData ===============\n")
       var multipartFormData = MultipartFormData(formFields: formFields, formData: formData)
       

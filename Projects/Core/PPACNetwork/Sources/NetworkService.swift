@@ -20,11 +20,11 @@ final public class NetworkService: NetworkServiceable {
     var urlRequest = request.buildURLRequest(with: url)
     
     if let multipartRequest = request as? MultipartRequestable {
-      urlRequest.setValue("gzip, deflate, br", forHTTPHeaderField: "accept-encoding")
+      let multipartFormData = multipartRequest.formData
+//      urlRequest.setValue("gzip, deflate, br", forHTTPHeaderField: "accept-encoding")
       urlRequest.setValue("*/*", forHTTPHeaderField: "Accept")
-      urlRequest.setValue(multipartRequest.formData.contentType, forHTTPHeaderField: "Content-Type")
-      let multipartData = multipartRequest.formData.finalize()
-      return await executeUploadRequest(urlRequest, multipartData, dataType: dataType)
+      urlRequest.setValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
+      return await executeUploadRequest(urlRequest, multipartFormData.finalize(), dataType: dataType)
     } else {
       return await executeRequest(urlRequest, dataType: dataType)
     }

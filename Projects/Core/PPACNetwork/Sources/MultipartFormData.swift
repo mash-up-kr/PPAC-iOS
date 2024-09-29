@@ -76,7 +76,7 @@ public struct MultipartFormData {
     formFields: FormField = [:],
     formData: FormData
   ) {
-    self.boundary = boundary.replacingOccurrences(of: "-", with: "")
+    self.boundary = boundary
     self.boundaryGenerator = BoundaryGenerator(boundary: boundary)
     
     formFields.forEach {
@@ -125,10 +125,4 @@ extension Data {
       self.append(data)
     }
   }
-  
-  mutating func appendLineBreak(times: Int = 1) {
-      for _ in 0..<times {
-        self.append(EncodingCharacters.crlf)
-      }
-    }
 }
