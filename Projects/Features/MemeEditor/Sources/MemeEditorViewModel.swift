@@ -88,7 +88,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
       case .naviBackButtonTapped:
         router?.popView()
       case .memeKeywordTapped(let keyword):
-        self.updateSelectedMemeKeyword(keyword)
+        await self.updateSelectedMemeKeyword(keyword)
       case .registerButtonTapped:
         print("===============================")
         print("selectedImage = \(state.selectedImage)")
@@ -112,7 +112,8 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     }
   }
   
-  private func updateSelectedMemeKeyword(_ keyword: String) {
+  @MainActor
+  private func updateSelectedMemeKeyword(_ keyword: String) async {
     guard var selectedKeyword = self.allKeywords
       .first(where: { $0.name == keyword }) else { return }
     
@@ -137,9 +138,11 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     }
   }
   
+  @MainActor
   private func registMeme() async {
     do {
       let imageFormData = try self.getImageFormData()
+      self.state.needLoadingIndicator = true
       try await self.registerMemeUserCase
         .execute(
           formData: imageFormData,
@@ -147,12 +150,16 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
           source: self.state.memeSource,
           keywordIds: self.state.selectedMemeKeywords.map { $0.id }
         )
+      
       self.state.isMemeRegistrationSuccess = true
+      self.state.needLoadingIndicator = false
     } catch MemeError.imageNotAvailable {
       self.showToast(text: "지원하지 않는 이미지 형식입니다. 다른 이미지를 사용해주세요")
+      self.state.needLoadingIndicator = false
     } catch(let error) {
       print("error = \(error)")
       self.showToast(text: "밈 등록에 실패했어요")
+      self.state.needLoadingIndicator = false
     }
   }
   
@@ -169,6 +176,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     return formData
   }
   
+  @MainActor
   private func showToast(text: String) {
     self.state.contentOfPopup = text
     self.state.isActivePopup = true

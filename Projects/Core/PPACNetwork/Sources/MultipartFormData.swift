@@ -109,7 +109,7 @@ public struct MultipartFormData {
   public func appendFormData(formData: FormData) -> Data {
     var data = Data()
     data.append(boundaryGenerator.boundaryData(forBoundaryType: .encapsulated))
-    data.append("Content-Disposition: form-data; name=\"\(formData.fieldName)[]\"; filename=\"\(formData.fileName)\"\(EncodingCharacters.crlf)")
+    data.append("Content-Disposition: form-data; name=\"\(formData.fieldName)\"; filename=\"\(formData.fileName)\"\(EncodingCharacters.crlf)")
     data.append("Content-Type: \(formData.mimeType)\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)")
     data.append(formData.fileData)
     debugPrint(formData.fileData)

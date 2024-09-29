@@ -43,7 +43,10 @@ struct MemeEditorView: View {
         bottomButton
       }
       
-      //if viewModel.state.
+      if viewModel.state.needLoadingIndicator {
+        ProgressView()
+          .scaleEffect(2)
+      }
     }
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)
