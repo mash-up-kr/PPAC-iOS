@@ -32,6 +32,7 @@ struct MemeImageView: View {
             isLoadingImage = true
           }
           .resizable()
+          .animation(nil, value: UUID())
           .aspectRatio(contentMode: .fit)
         
         if isDimmed && isLoadingImage {
