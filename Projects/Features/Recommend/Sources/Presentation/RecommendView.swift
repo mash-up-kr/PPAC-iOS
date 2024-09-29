@@ -80,11 +80,9 @@ public struct RecommendView: View {
         VStack(spacing: 0) {
           Spacer()
           
-          if let currentMeme {
+          if currentMeme != nil {
             RecommendMemeButtonView(
-              isReaction: currentMeme.isReaction,
-              reactionCnt: currentMeme.reaction,
-              isFarmemed: currentMeme.isFarmemed,
+              meme: $currentMeme,
               isOverlapView: isOverlapView,
               reactionButtonTapped: reactionButtonTap,
               copyButtonTapped: copyButtonTap,
@@ -134,7 +132,7 @@ public struct RecommendView: View {
         currentOffsetY = viewModel.state.isSuccessFetch ? .zero : 20
       }
     }
-    .onChange(of: currentMeme) {
+    .onChange(of: currentMeme?.id) {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(meme: currentMeme))
         viewModel.logRecommend(interaction: .swipe, event: .meme, meme: nil)
@@ -178,9 +176,12 @@ public struct RecommendView: View {
     )
   }
   
-  private func reactionButtonTap() {
+  private func reactionButtonTap(
+    memeId: String?,
+    tabCount: Int
+  ) {
     viewModel.dispatch(
-      type: .likeButtonTapped(meme: currentMeme)
+      type: .likeButtonTapped(memeId: memeId, tapCount: tabCount)
     )
   }
   

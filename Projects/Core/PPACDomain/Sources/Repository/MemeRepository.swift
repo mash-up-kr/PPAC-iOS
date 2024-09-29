@@ -18,5 +18,5 @@ public protocol MemeRepository {
   func deleteBookmarkMeme(memeId: String) async throws
   func shareMeme(memeId: String) async throws
   func watchMeme(memeId: String, type: String) async throws
-  func reactToMeme(memeId: String) async throws
+  func reactToMeme(memeId: String, count: Int) async throws -> Int
 }

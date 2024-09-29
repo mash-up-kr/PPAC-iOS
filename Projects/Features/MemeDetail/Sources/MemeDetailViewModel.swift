@@ -114,8 +114,12 @@ private extension MemeDetailViewModel {
   @MainActor
   func postReaction() async {
     do {
-      try await reactToMemeUseCase.execute(memeId: state.meme.id)
-      self.state.meme.reaction += 1
+      let memeReactionCount = try await reactToMemeUseCase.execute(
+        memeId: state.meme.id,
+        count: 1
+      )
+      
+      self.state.meme.reaction = memeReactionCount
       self.state.meme.isReaction = true
       self.logMemeDetail(event: .reaction)
       print("reaction success")

@@ -24,7 +24,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   public enum Action {
     case viewInitialized
     case showRecommendMeme(meme: MemeDetail?)
-    case likeButtonTapped(meme: MemeDetail?)
+    case likeButtonTapped(memeId: String?, tapCount: Int)
     case copyButtonTapped(meme: MemeDetail?)
     case shareButtonTapped(meme: MemeDetail?)
     case farmemeButtonTapped(meme: MemeDetail?)
@@ -85,8 +85,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
         await getRecommendAndUser()
       case .showRecommendMeme(let meme):
         await postShownMeme(meme: meme)
-      case .likeButtonTapped(let meme):
-        await postReaction(meme: meme)
+      case .likeButtonTapped(let memeId, let tapCount):
+        await postReaction(memeId: memeId, tapCount: tapCount)
       case .copyButtonTapped(let meme):
         await copyImage(meme: meme)
       case .shareButtonTapped(let meme):
@@ -139,7 +139,7 @@ private extension RecommendViewModel {
       let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
       let user = try await getUserInfoUseCase.execute()
       print("👍memeids: \(recommendMemes.map { $0.id })")
-      DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+      DispatchQueue.main.asyncAfter(deadline: .now()) {
         self.state.recommendMemes = recommendMemes
         self.state.recommendMemeSize = recommendMemes.count
         self.state.userLevel = user.level
@@ -165,16 +165,20 @@ private extension RecommendViewModel {
     }
   }
   
-  func postReaction(meme: MemeDetail?) async {
-    guard let meme else { return }
+  @MainActor
+  func postReaction(memeId: String?, tapCount: Int) async {
+    guard let memeId else { return }
     do {
-      try await reactToMemeUseCase.execute(memeId: meme.id)
+      let memeReactionCount = try await reactToMemeUseCase.execute(
+        memeId: memeId,
+        count: tapCount
+      )
       
-      if let index = self.state.recommendMemes.firstIndex(where: { $0.id == meme.id }) {
+      if let index = self.state.recommendMemes.firstIndex(where: { $0.id == memeId }) {
         self.state.recommendMemes[index].isReaction = true
-        self.state.recommendMemes[index].reaction += 1
+        self.state.recommendMemes[index].reaction = memeReactionCount
+        self.logRecommend(event: .reaction, meme: self.state.recommendMemes[index])
       }
-      self.logRecommend(event: .reaction, meme: meme)
     } catch {
       debugPrint("Failed post recation : \(error)")
     }

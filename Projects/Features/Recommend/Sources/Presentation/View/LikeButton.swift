@@ -48,7 +48,6 @@ public struct LikeButton: View {
       playbackMode = .playing(
         .fromProgress(0, toProgress: 1, loopMode: .playOnce)
       )
-      
       self.didTapped()
     }
   }
@@ -84,12 +83,10 @@ public struct LikeButton: View {
 }
 
 #Preview {
-  var count: Int = 3
-  
   return VStack {
     LikeButton(
       isReaction: false,
-      reactionCount: count,
+      reactionCount: 0,
       didTapped: {
         print("AA")
       }
@@ -97,7 +94,7 @@ public struct LikeButton: View {
     
     LikeButton(
       isReaction: true,
-      reactionCount: count,
+      reactionCount: 1,
       didTapped: {
         print("AA")
       }
