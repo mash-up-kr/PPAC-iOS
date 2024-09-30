@@ -16,6 +16,31 @@ public extension View {
   ) -> some View {
     clipShape(RoundedCorners(radius: radius, corners: corners))
   }
+  
+  // MARK: - Keyboard
+  func endTextEditing() {
+    UIApplication.shared.sendAction(
+      #selector(UIResponder.resignFirstResponder),
+      to: nil,
+      from: nil,
+      for: nil
+    )
+  }
+  
+  func onKeyboardChange(_ action: @escaping (Bool) -> Void) -> some View {
+    self.onAppear {
+      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: .main) { _ in
+        action(true)
+      }
+      NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: .main) { _ in
+        action(false)
+      }
+    }
+    .onDisappear {
+      NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+      NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+  }
 }
 
 public extension View {
@@ -29,3 +54,5 @@ public extension View {
     )
   }
 }
+
+

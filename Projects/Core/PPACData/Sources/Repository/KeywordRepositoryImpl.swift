@@ -43,7 +43,12 @@ public final class KeywordRepositoryImpl: KeywordRepository {
     case .success(let data):
       guard let memeCategoryData = data.data else { throw NetworkError.dataDecodingError }
       let memeCategorys = memeCategoryData
-        .compactMap { MemeCategory(category: $0.category, keywords: $0.keywords.map { $0.name }) }
+        .compactMap {
+          MemeCategory(
+            category: $0.category,
+            keywords: $0.keywords.map { MemeKeyword(id: $0._id, name: $0.name) }
+          )
+        }
       return memeCategorys
     case .failure(let error):
       throw error

@@ -175,8 +175,14 @@ private extension MemeDetailViewModel {
   
   @MainActor
   func showShareSheet() async {
-    let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(self.state.meme.id)"
-    self.router?.showShareView(items: [deeplinkUrl])
-    self.logMemeDetail(event: .share)
+    do {
+      let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(self.state.meme.id)"
+      self.router?.showShareView(items: [deeplinkUrl])
+      try await self.shareMemeUseCase.execute(memeId: state.meme.id)
+      self.logMemeDetail(event: .share)
+    } catch {
+      // TODO: - 에러처리
+      print(error)
+    }
   }
 }

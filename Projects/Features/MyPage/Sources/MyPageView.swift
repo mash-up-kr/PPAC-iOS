@@ -22,7 +22,6 @@ public struct MyPageView: View {
   
   public var body: some View {
     ZStack(alignment: .top) {
-//      blurView
       ScrollView {
         levelView
         divider
@@ -32,8 +31,14 @@ public struct MyPageView: View {
             viewModel.dispatch(type: .onTappedRecentMeme(meme: meme))
           }
         )
+        SegmentedTitleView(
+          titleItems: viewModel.state.segmentedTitleItems,
+          titleItemClickHandler: { title in
+            viewModel.dispatch(type: .onTappedSegmentedTitleItem(title: title))
+          }
+        )
         SavedMemeListView(
-          memeDetailList: $viewModel.state.savedMemeList,
+          memeDetailList: $viewModel.state.currentMyMemeList,
           memeClickHandler: { meme in
             viewModel.dispatch(type: .onTappedSavedMeme(meme: meme))
           },
@@ -59,15 +64,6 @@ public struct MyPageView: View {
       image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
       text: "이미지를 클립보드에 복사했어요"
     )
-  }
-
-  var blurView: some View {
-    Rectangle()
-      .frame(height: 0)
-      .foregroundStyle(Color.clear)
-      .background(.ultraThinMaterial)
-      .blur(radius: 0)
-      .zIndex(1)
   }
   
   var levelView: some View {
@@ -120,6 +116,9 @@ public struct MyPageView: View {
       .foregroundStyle(Color.Skeleton.primary)
       .padding(.bottom, 20)
   }
+  
+  
+  
 }
 
 
