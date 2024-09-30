@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Alamofire
 
 final public class NetworkService: NetworkServiceable {
   
@@ -22,8 +21,6 @@ final public class NetworkService: NetworkServiceable {
 
     
     if let multipartRequest = request as? MultipartRequestable {
-      let result = await self.excuteAFUploadRequest(multipartRequest, dataType: dataType)
-      print("result = \(result)")
       let multipartFormData = multipartRequest.formData
       urlRequest.setValue("*/*", forHTTPHeaderField: "Accept")
       urlRequest.setValue(multipartFormData.contentType, forHTTPHeaderField: "Content-Type")
@@ -54,44 +51,7 @@ final public class NetworkService: NetworkServiceable {
       return .failure(.invalidResponse)
     }
   }
-  
-  private func excuteAFUploadRequest<T: Decodable>(_ request: MultipartRequestable, dataType: T.Type) async -> Result<T, NetworkError> {
-    guard let url = request.makeURL() else {
-      NetworkLogger.logError(.urlEncodingError)
-      return .failure(.urlEncodingError)
-    }
-    
-    var urlRequest = request.buildURLRequest(with: url)
-    urlRequest.setValue("*/*", forHTTPHeaderField: "Accept")
-    urlRequest.setValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
-    let headers = urlRequest.allHTTPHeaderFields ?? [:]
-    do {
-      return try await withCheckedThrowingContinuation { continuation in
-        AF.upload(
-          multipartFormData: request.multipartFormData,
-          to: url,
-          method: .post,
-          headers: HTTPHeaders(headers))
-        .responseJSON { response in
-          switch response.result {
-          case .success(let data):
-            do {
-              guard let responseData = response.data else { return }
-              let decodedData = try JSONDecoder().decode(T.self, from: responseData)
-              continuation.resume(returning: .success(decodedData))
-            } catch {
-              continuation.resume(returning: .failure(.dataDecodingError))
-            }
-          case .failure(let error):
-            continuation.resume(returning: .failure(NetworkError.serverError(statusCode: error.responseCode ?? -1 , message: error.errorDescription)))
-          }
-        }
-      }
-    } catch {
-      return .failure(.invalidResponse)
-    }
-  }
-  
+
   private func handleResponse<T: Decodable>(_ response: URLResponse, data: Data, dataType: T.Type) -> Result<T, NetworkError> {
     guard let httpResponse = response as? HTTPURLResponse else {
       NetworkLogger.logError(.invalidResponse)

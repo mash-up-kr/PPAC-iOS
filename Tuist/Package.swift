@@ -10,8 +10,7 @@ import PackageDescription
             "Lottie": .framework,
             "Kingfisher": .framework,
             "PopupView": .framework,
-            "SkeletonUI": .framework,
-            "Alamofire": .framework
+            "SkeletonUI": .framework
         ]
     )
 #endif
@@ -25,7 +24,6 @@ let package = Package(
         .package(url: "https://github.com/exyte/PopupView.git", from: "3.0.4"),
         .package(url: "https://github.com/CSolanaM/SkeletonUI.git", from: "2.0.2"),
         .package(url: "https://github.com/AppsFlyerSDK/AppsFlyerFramework-Dynamic", from: "6.15.1"),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0"),
-        .package(url: "https://github.com/Alamofire/Alamofire.git", from: "5.9.1")
+        .package(url: "https://github.com/firebase/firebase-ios-sdk", from: "10.27.0")
     ]
 )

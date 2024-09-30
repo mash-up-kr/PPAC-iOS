@@ -18,7 +18,6 @@ import DesignSystem
 
 import MemeDetail
 import Setting
-import MemeEditor
 
 
 public final class MyPageRouter: Router, MyPageRouting {
