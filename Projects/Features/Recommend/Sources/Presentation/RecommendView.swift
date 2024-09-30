@@ -61,6 +61,9 @@ public struct RecommendView: View {
         recommendMemeSize: $viewModel.state.recommendMemeSize
       )
       
+      // TODO: 종윤쓰 여기 수정 부탁함다
+      registerButton
+      
       ZStack {
         VStack(spacing: 0) {
           

@@ -10,16 +10,16 @@ import ResourceKit
 
 public struct MemeCategoryView: View {
   public let category: String
-  public let keywords: [String]
+  public let keywordTags: [KeywordTag]
   public let onTapHandler: ((String) -> ())?
   
   public init(
     category: String,
-    keywords: [String],
+    keywordTags: [KeywordTag],
     onTapHandler: ((String) -> ())?
   ) {
     self.category = category
-    self.keywords = keywords
+    self.keywordTags = keywordTags
     self.onTapHandler = onTapHandler
   }
   
@@ -36,7 +36,7 @@ public struct MemeCategoryView: View {
       .padding(.bottom, 16)
       .padding(.horizontal, 20)
       
-      KeywordsTagView(keywords: keywords, onTapHandler: onTapHandler)
+      KeywordsTagView(keywordTags: keywordTags, onTapHandler: onTapHandler)
         .padding(.horizontal, 20)
         .padding(.bottom, 20)
     }

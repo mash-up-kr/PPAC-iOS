@@ -25,6 +25,7 @@ let project = Project.configure(
               "CFBundleVersion": "1",
               "UILaunchStoryboardName": "launch",
               "NSUserTrackingUsageDescription": "이 앱은 사용자 맞춤형 광고 제공 및 분석을 위해 사용자 추적 정보를 수집합니다.",
+              "NSPhotoLibraryUsageDescription": "밈 이미지 등록을 위해 앨범 접근 권한이 필요합니다.",
               "UIUserInterfaceStyle": "Light",  // 다크모드 방지
               "NSAllowArbitraryLoads": true,
               "NSAppTransportSecurity": [
@@ -75,6 +76,7 @@ let project = Project.configure(
               "UILaunchStoryboardName": "launch",
               "NSUserTrackingUsageDescription": "이 앱은 사용자 맞춤형 광고 제공 및 분석을 위해 사용자 추적 정보를 수집합니다.",
               "UIUserInterfaceStyle": "Light",  // 다크모드 방지
+              "NSPhotoLibraryUsageDescription": "밈 이미지 등록을 위해 앨범 접근 권한이 필요합니다.",
               "NSAppTransportSecurity": [
                 "NSAllowsArbitraryLoads": true 
               ]

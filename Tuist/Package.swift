@@ -10,7 +10,7 @@ import PackageDescription
             "Lottie": .framework,
             "Kingfisher": .framework,
             "PopupView": .framework,
-            "SkeletonUI": .framework,
+            "SkeletonUI": .framework
         ]
     )
 #endif

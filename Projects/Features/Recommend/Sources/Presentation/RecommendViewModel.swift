@@ -17,6 +17,7 @@ import PPACAnalytics
 public protocol RecommendRouting: AnyObject {
   func showShareView(items: [Any])
   func showMemeDetailView(meme: MemeDetail)
+  func showMemeEditorView()
 }
 
 public final class RecommendViewModel: ViewModelType, ObservableObject {
@@ -28,6 +29,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     case copyButtonTapped(meme: MemeDetail?)
     case shareButtonTapped(meme: MemeDetail?)
     case farmemeButtonTapped(meme: MemeDetail?)
+    case memeRegisterButtonTapped
   }
   
   public struct State {
@@ -36,6 +38,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     var userLevel: Int
     var memeRecommendWatchCount: Int
     var isSuccessFetch: Bool
+    var isSuccessMemeRegister: Bool = false
   }
   
   weak var router: RecommendRouting?
@@ -93,6 +96,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
         await showShareSheet(meme: meme)
       case .farmemeButtonTapped(let meme):
         await saveMeme(meme: meme)
+      case .memeRegisterButtonTapped:
+        router?.showMemeEditorView()
       }
     }
   }
