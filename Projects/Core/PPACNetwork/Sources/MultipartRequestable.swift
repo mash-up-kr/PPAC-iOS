@@ -6,7 +6,9 @@
 //
 
 import Foundation
+import Alamofire
 
 public protocol MultipartRequestable: Requestable {
   var formData: MultipartFormData { get }
+  var multipartFormData: Alamofire.MultipartFormData { get }
 }

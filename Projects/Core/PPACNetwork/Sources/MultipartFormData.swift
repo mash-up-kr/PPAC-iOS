@@ -74,16 +74,10 @@ public struct MultipartFormData {
   public init(
     boundary: String = UUID().uuidString,
     formFields: FormField = [:],
-    formData: FormData
+    formData: FormData? = nil
   ) {
     self.boundary = boundary
     self.boundaryGenerator = BoundaryGenerator(boundary: boundary)
-    
-    formFields.forEach {
-      self.body.append(appendTextField(named: $0.key, value: $0.value))
-    }
-    
-    self.body.append(appendFormData(formData: formData))
   }
   
   public var contentType: String {
@@ -98,30 +92,30 @@ public struct MultipartFormData {
     return body
   }
   
-  public func appendTextField(named name: String, value: String) -> Data {
+  public mutating func appendTextField(named name: String, value: String) {
     var data = Data()
     data.append(boundaryGenerator.boundaryData(forBoundaryType: .encapsulated))
-    data.append("Content-Disposition: form-data; name=\"\(name)\"\(EncodingCharacters.crlf)")
+    data.append("Content-Disposition: form-data; name=\"\(name)\"\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)")
     data.append("\(value)\(EncodingCharacters.crlf)")
-    return data
+    self.body.append(data)
   }
 
-  public func appendFormData(formData: FormData) -> Data {
+  public mutating func appendFormData(formData: FormData) {
     var data = Data()
     data.append(boundaryGenerator.boundaryData(forBoundaryType: .encapsulated))
     data.append("Content-Disposition: form-data; name=\"\(formData.fieldName)\"; filename=\"\(formData.fileName)\"\(EncodingCharacters.crlf)")
     data.append("Content-Type: \(formData.mimeType)\(EncodingCharacters.crlf)\(EncodingCharacters.crlf)")
     data.append(formData.fileData)
-    debugPrint(formData.fileData)
+    print(formData.fileData)
     data.append(EncodingCharacters.crlf)
-    return data
+    self.body.append(data)
   }
 }
 
 extension Data {
   mutating func append(_ string: String) {
     if let data = string.data(using: .utf8) {
-      debugPrint(string)
+      print(string)
       self.append(data)
     }
   }

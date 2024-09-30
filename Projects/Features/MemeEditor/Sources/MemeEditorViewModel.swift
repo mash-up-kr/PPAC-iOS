@@ -28,17 +28,18 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   }
   
   public struct State {
-    var memeImageUrl: String // 나중에 수정하기에 쓸 수 있도록 남겨둠
+    var memeImageUrl: String = ""// 나중에 수정하기에 쓸 수 있도록 남겨둠
     var selectedImage: UIImage?
-    var memeTitle: String
-    var memeSource: String
-    var memeCategories: [MemeCategory]
+    var memeTitle: String = ""
+    var memeSource: String = ""
+    var memeCategories: [MemeCategory] = []
     var selectedMemeKeywords: [MemeKeyword] = []
     
     var isActivePopup: Bool = false
     var contentOfPopup: String = ""
     var isMemeRegistrationSuccess: Bool = false
     var needLoadingIndicator: Bool = false
+    var isVisibleKeyboard: Bool = false
     
     var isMemeFormValid: Bool {
       return selectedImage != nil
@@ -47,8 +48,6 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
       && !selectedMemeKeywords.isEmpty
       && selectedMemeKeywords.count <= 6
     }
-    
-    static let none = State(memeImageUrl: "empty", selectedImage: nil, memeTitle: "", memeSource: "", memeCategories: [])
   }
   
   enum MemeError: Error {
@@ -75,7 +74,7 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
     registerMemeUserCase: RegisterMemeUseCase
   ) {
     self.router = router
-    self.state = .none
+    self.state = State()
     self.memeCategorysUseCase = memeCategorysUseCase
     self.registerMemeUserCase = registerMemeUserCase
   }
@@ -106,7 +105,8 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   @MainActor
   private func fetchMemeCategories() async {
     do {
-      self.state.memeCategories = try await memeCategorysUseCase.execute()
+      let categories = try await memeCategorysUseCase.execute()
+      self.state.memeCategories = categories
     } catch(let error) {
       debugPrint("error = \(error)")
     }

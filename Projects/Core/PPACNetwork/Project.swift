@@ -20,7 +20,8 @@ let project = Project(
             sources: "Sources/**",
             resources: "Resources/**",
             dependencies: [
-              .Core.PPACUtil
+              .Core.PPACUtil,
+              .ThirdParty.Alamofire
             ]
         )
     ]
