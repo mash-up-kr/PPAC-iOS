@@ -36,11 +36,14 @@ struct MemeEditorView: View {
             memeSourceInputView
             divider
             memeCategoriesTitleView
-            memeCategoriesViews
+            memeCategoriesView
           }
           .padding(.bottom, 48)
         }
-        bottomButton
+        
+        if !viewModel.state.isVisibleKeyboard {
+          bottomButton
+        }
       }
       
       if viewModel.state.needLoadingIndicator {
@@ -50,6 +53,9 @@ struct MemeEditorView: View {
     }
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)
+    }
+    .onTapGesture {
+      endTextEditing()
     }
     .plainNavigationBar(
       backHandler: {
@@ -77,6 +83,9 @@ struct MemeEditorView: View {
         )
       }
     )
+    .onKeyboardChange { isVisible in
+      viewModel.state.isVisibleKeyboard = isVisible
+    }
   }
   
   private var memeTitleInputView: some View {
@@ -128,9 +137,10 @@ struct MemeEditorView: View {
     .padding(.horizontal, 20)
   }
   
-  private var memeCategoriesViews: some View {
-    ForEach(viewModel.state.memeCategories, id: \.id) { memeCategory in
-      let keywordTags = memeCategory.keywords.map { KeywordTag(id: $0.id, name: $0.name, isSelected: $0.isSelected) }
+  private var memeCategoriesView: some View {
+    ForEach($viewModel.state.memeCategories, id: \.id) { $memeCategory in
+      let keywordTags = memeCategory.keywords
+        .map { KeywordTag(id: $0.id, name: $0.name, isSelected: $0.isSelected) }
       MemeCategoryView(
         category: memeCategory.category,
         keywordTags: keywordTags
@@ -138,6 +148,7 @@ struct MemeEditorView: View {
         viewModel.dispatch(type: .memeKeywordTapped(keyword: keyword))
       }
     }
+    .id(viewModel.state.memeCategories.count)
   }
   
   private var bottomButton: some View {
