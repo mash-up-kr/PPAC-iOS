@@ -12,99 +12,82 @@ import ResourceKit
 
 struct RecommendHeaderView: View {
   
-  @Binding var userLevel: Int
-  @Binding var seenMemeCount: Int
-  @Binding var recommendMemeSize: Int
+  let isLoad: Bool
+  let uploadButtonTap: () -> Void
   
   public var body: some View {
-    let isNotLoading = userLevel == 0 || seenMemeCount == 0
     
     VStack(spacing: 0) {
       ResourceKitAsset.Icon.homeLogo.swiftUIImage
         .resizable()
-        .frame(width: 212, height: 45, alignment: .center)
-        .padding(.bottom, 10)
+        .frame(width: 106, height: 32, alignment: .center)
+        .padding(.bottom, 12)
       
       recommendTitle
       
-      if !isNotLoading {
-        recommendProgressBar(
-          seenMemeCount: self.seenMemeCount,
-          total: recommendMemeSize
-        )
-        
-        recommendText(getRecommendText())
+      if isLoad {
+        memeUploadButton(uploadButtonTap)
+          .padding(.top, 20)
+          .padding(.bottom, 28)
       } else {
         EmptyView()
-          .recommendSkeleton(isShow: isNotLoading, radius: 4, width: 200, height: 16)
+          .recommendSkeleton(isShow: !isLoad, radius: 4, width: 130, height: 36)
           .padding(.top, 20)
-          .padding(.bottom, 37)
+          .padding(.bottom, 28)
       }
-    }
-  }
-  
-  private func getRecommendText() -> String {
-    return if userLevel == 0 || seenMemeCount == 0 {
-      "확인한 밈을 불러오지 못 했어요. 새로고침 해주세요"
-    } else if userLevel == 1 &&
-                (1...(recommendMemeSize - 1)).contains(seenMemeCount)
-    {
-      "밈 보고 레벨 포인트 받아요!"
-    } else if userLevel == 2 &&
-                (1...(recommendMemeSize - 1)).contains(seenMemeCount)
-    {
-      "추천 밈 둘러보세요!"
-    } else {
-      "완밈! 다음 주 밈도 기대해 주세요"
     }
   }
 }
 
 private var recommendTitle : some View {
-  Text("이번 주 이 밈 어때!")
-    .font(Font.Heading.Large.semiBold)
-    .padding(.bottom, 16)
-}
-
-private func recommendProgressBar(
-  seenMemeCount: Int,
-  total: Int
-) -> some View {
-  HStack(spacing: 0) {
-    ResourceKitAsset.Icon.squareCheck.swiftUIImage
+  VStack(spacing: 0) {
+    Text("NEW! 따끈따끈한 밈")
+      .font(Font.Heading.Large.semiBold)
+      .padding(.bottom, 4)
     
-    ProgressView(
-      value: Double(seenMemeCount),
-      total: Double(total)
-    )
-    .frame(width: 125, height: 8)
-    .tint(Color.Icon.brand)
-    .padding(.vertical, 4)
-    .padding(.horizontal, 8)
-    
-    Text("\(seenMemeCount == 0 ? "?" : "\(seenMemeCount)")개 봤어요")
-      .font(Font.Body.Small.semiBold)
-      .foregroundColor(Color.Text.brand)
+    Text("최근에 사람들이 올린 밈 구경하세요.")
+      .font(Font.Body.Medium.medium)
+      .foregroundStyle(Color.Text.secondary)
   }
 }
 
-private func recommendText(_ text: String) -> some View {
-  Text(text)
-    .font(Font.Body.Medium.medium)
-    .foregroundStyle(Color.Text.secondary)
-    .padding(.top, 8)
-    .padding(.bottom, 32)
+private func memeUploadButton(
+  _ uploadButtonTap: @escaping () -> Void
+) -> some View {
+  Button(
+    action: {
+      uploadButtonTap()
+    },
+    label: {
+      ZStack {
+        RoundedRectangle(cornerRadius: 10)
+          .foregroundStyle(Color.Background.primary)
+        
+        HStack(spacing: 0) {
+          ResourceKitAsset.Icon.upload.swiftUIImage
+            .renderingMode(.template)
+            .foregroundStyle(Color.Text.inverse)
+            .padding(.trailing, 4)
+          
+          Text("나도 밈 올리기")
+            .font(Font.Body.Medium.semiBold)
+            .foregroundStyle(Color.Text.inverse)
+        }
+      }
+    }
+  )
+  .buttonStyle(PlainButtonStyle())
+  .frame(width: 130, height: 36)
+  .contentShape(RoundedRectangle(cornerRadius: 10))
 }
 
+
 #Preview {
-  @State var userLevel: Int = 0
-  @State var seenMemeCount: Int = 5
-  @State var recommendMemeSize: Int = 5
-  
   return RecommendHeaderView(
-    userLevel: $userLevel,
-    seenMemeCount: $seenMemeCount,
-    recommendMemeSize: $recommendMemeSize
+    isLoad: true,
+    uploadButtonTap: {
+      print("Upload Button Tap!")
+    }
   )
   .frame(maxWidth: .infinity, maxHeight: .infinity)
   .background(

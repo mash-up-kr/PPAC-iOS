@@ -22,7 +22,7 @@ struct RecommendMemeImagesView: View {
   @State var imageStatusList: [String : Bool] = [:]
   
   var memes: [MemeDetail]
-  var isTagHidden: Bool = false
+  var isMemeInfoHidden: Bool
   
   public var body: some View {
     VStack(spacing: 0) {
@@ -62,9 +62,14 @@ struct RecommendMemeImagesView: View {
       .scrollTargetBehavior(.viewAligned)
       .scrollPosition(id: $currentMeme)
       .contentMargins(.horizontal, 60.0)
-      .padding(.bottom, 20)
+      .padding(.bottom, 16)
       
-      if let currentMeme, isTagHidden == false {
+      if let currentMeme, isMemeInfoHidden == false {
+        Text(currentMeme.title)
+          .font(Font.Heading.Small.medium)
+          .foregroundColor(Color.Text.primary)
+          .padding(.bottom, 4)
+        
         HashTagView(keywords: currentMeme.keywords)
           .onTapGesture {
             PPACAnalytics.shared
@@ -179,7 +184,7 @@ struct RecommendMemeImagesView: View {
         isReaction: false
       )
     ],
-    isTagHidden: false
+    isMemeInfoHidden: false
   )
   .frame(maxWidth: .infinity, maxHeight: .infinity)
   .background(

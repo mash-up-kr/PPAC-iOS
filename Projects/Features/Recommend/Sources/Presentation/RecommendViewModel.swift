@@ -17,7 +17,7 @@ import PPACAnalytics
 public protocol RecommendRouting: AnyObject {
   func showShareView(items: [Any])
   func showMemeDetailView(meme: MemeDetail)
-  func showMemeEditorView()
+  func showMemeUploadView()
 }
 
 public final class RecommendViewModel: ViewModelType, ObservableObject {
@@ -29,7 +29,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     case copyButtonTapped(meme: MemeDetail?)
     case shareButtonTapped(meme: MemeDetail?)
     case farmemeButtonTapped(meme: MemeDetail?)
-    case memeRegisterButtonTapped
+    case memeUploadButtonTapped
   }
   
   public struct State {
@@ -38,7 +38,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     var userLevel: Int
     var memeRecommendWatchCount: Int
     var isSuccessFetch: Bool
-    var isSuccessMemeRegister: Bool = false
+    var isSuccessMemeUpload: Bool = false
   }
   
   weak var router: RecommendRouting?
@@ -48,6 +48,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   private let getUserInfoUseCase: GetUserInfoUseCase
   private let watchMemeUseCase: WatchMemeUseCase
   private let reactToMemeUseCase: ReactToMemeUseCase
+  private let sharedMemeUseCase: ShareMemeUseCase
   private let bookmarkMemeUseCase: BookmarkMemeUseCase
   private let getMemeDetailUseCase: GetMemeDetailUseCase
   private let deepLinkMemeId: PassthroughSubject<String, Never>
@@ -59,6 +60,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     getUserInfoUseCase: GetUserInfoUseCase,
     watchMemeUseCase: WatchMemeUseCase,
     reactToMemeUseCase: ReactToMemeUseCase,
+    sharedMemeUseCase: ShareMemeUseCase,
     bookmarkMemeUseCase: BookmarkMemeUseCase,
     getMemeDetailUseCase: GetMemeDetailUseCase,
     deepLinkMemeId: PassthroughSubject<String, Never>
@@ -68,6 +70,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     self.getUserInfoUseCase = getUserInfoUseCase
     self.watchMemeUseCase = watchMemeUseCase
     self.reactToMemeUseCase = reactToMemeUseCase
+    self.sharedMemeUseCase = sharedMemeUseCase
     self.bookmarkMemeUseCase = bookmarkMemeUseCase
     self.getMemeDetailUseCase = getMemeDetailUseCase
     self.deepLinkMemeId = deepLinkMemeId
@@ -79,6 +82,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
       isSuccessFetch: false
     )
     bind()
+    
+    UserInfo.shared.deviceId = "uni-test4"
   }
   
   public func dispatch(type: Action) {
@@ -96,8 +101,8 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
         await showShareSheet(meme: meme)
       case .farmemeButtonTapped(let meme):
         await saveMeme(meme: meme)
-      case .memeRegisterButtonTapped:
-        router?.showMemeEditorView()
+      case .memeUploadButtonTapped:
+        router?.showMemeUploadView()
       }
     }
   }
@@ -199,7 +204,7 @@ private extension RecommendViewModel {
       guard let image = UIImage(data: data) else {
         return
       }
-
+      
       UIPasteboard.general.image = image
       self.logRecommend(event: .copy, meme: meme)
     } catch {
@@ -209,13 +214,19 @@ private extension RecommendViewModel {
   
   @MainActor
   func showShareSheet(meme: MemeDetail?)  async {
-     guard let meme else { return }
-    guard let memeId = self.state.recommendMemes.filter({ $0.imageUrlString == meme.imageUrlString }).first?.id else {
-      return
-    }
+    guard let meme else { return }
+    guard let memeId = self.state.recommendMemes
+      .filter({ $0.imageUrlString == meme.imageUrlString })
+      .first?.id else { return}
+    
     let deeplinkUrl = "https://farmeme.onelink.me/RtpU/y09dosru?deep_link_value=\(memeId)"
     router?.showShareView(items: [deeplinkUrl])
-    self.logRecommend(event: .share, meme: meme)
+    do {
+      try await sharedMemeUseCase.execute(memeId: memeId)
+      self.logRecommend(event: .share, meme: meme)
+    } catch {
+      debugPrint("Failed to load image data: \(error)")
+    }
   }
   
   func saveMeme(meme: MemeDetail?) async {
@@ -246,5 +257,5 @@ private extension RecommendViewModel {
       }
     }
   }
- 
+  
 }
