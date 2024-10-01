@@ -150,7 +150,10 @@ private extension MemeDetailViewModel {
       }
       reactionCount = 0
       do {
-          try await reactToMemeUseCase.execute(memeId: state.meme.id, count: count)
+          let count = try await reactToMemeUseCase.execute(memeId: state.meme.id, count: count)
+        print("currentMeme count: \(self.state.meme.reaction)")
+        print("new count: \(count)")
+        self.state.meme.reaction = count
           print("Reactions sent successfully with count: \(count)")
       } catch {
           print("Failed to send reactions: \(error)")

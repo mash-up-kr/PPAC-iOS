@@ -10,7 +10,7 @@ import Foundation
 import PPACModels
 
 public protocol ReactToMemeUseCase {
-  func execute(memeId: String, count: Int) async throws
+  func execute(memeId: String, count: Int) async throws -> Int
 }
 
 public class ReactToMemeUseCaseImpl: ReactToMemeUseCase {
@@ -20,7 +20,7 @@ public class ReactToMemeUseCaseImpl: ReactToMemeUseCase {
         self.repository = repository
     }
 
-    public func execute(memeId: String, count: Int) async throws {
+    public func execute(memeId: String, count: Int) async throws -> Int {
         try await repository.reactToMeme(memeId: memeId, count: count)
     }
 }

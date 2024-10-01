@@ -114,12 +114,12 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
-  public func reactToMeme(memeId: String, count: Int) async throws {
+  public func reactToMeme(memeId: String, count: Int) async throws -> Int {
     let endpoint = MemeEndpoint.reaction(memeId: memeId, count: count)
-    let result = await networkservice.request(endpoint, dataType: BaseDTO<VoidResponse>.self)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeReactionResponseDTO>.self)
     switch result {
-    case .success:
-      return
+    case .success(let count):
+      return count.data?.count ?? 0
     case .failure(let failure):
       throw failure
     }
