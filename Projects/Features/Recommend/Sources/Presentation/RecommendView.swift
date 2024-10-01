@@ -96,7 +96,7 @@ public struct RecommendView: View {
         }
         .zIndex(2)
       }
-      .frame(maxHeight: 480)
+      .frame(maxHeight: 450)
       .onReadSize { size in
         memeContentsHeight = size.height
       }
