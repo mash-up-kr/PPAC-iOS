@@ -14,3 +14,11 @@ public struct MemeReactionRequestDTO: Codable {
     self.count = count
   }
 }
+
+public struct MemeReactionResponseDTO: Codable {
+  public let count: Int
+  
+  public init(count: Int) {
+    self.count = count
+  }
+}
