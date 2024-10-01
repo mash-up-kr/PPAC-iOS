@@ -10,6 +10,8 @@ import SkeletonUI
 
 import ResourceKit
 
+import Lottie
+
 struct RecommendHeaderView: View {
   
   let isLoad: Bool
@@ -54,26 +56,17 @@ private var recommendTitle : some View {
 private func memeUploadButton(
   _ uploadButtonTap: @escaping () -> Void
 ) -> some View {
-  Button(
+  @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
+  
+  return Button(
     action: {
       uploadButtonTap()
     },
     label: {
-      ZStack {
-        RoundedRectangle(cornerRadius: 10)
-          .foregroundStyle(Color.Background.primary)
-        
-        HStack(spacing: 0) {
-          ResourceKitAsset.Icon.upload.swiftUIImage
-            .renderingMode(.template)
-            .foregroundStyle(Color.Text.inverse)
-            .padding(.trailing, 4)
-          
-          Text("나도 밈 올리기")
-            .font(Font.Body.Medium.semiBold)
-            .foregroundStyle(Color.Text.inverse)
-        }
-      }
+      LottieView(
+        animation: AnimationAsset.uploadLottie.animation
+      )
+      .looping()
     }
   )
   .buttonStyle(PlainButtonStyle())
