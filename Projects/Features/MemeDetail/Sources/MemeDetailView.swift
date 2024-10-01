@@ -40,15 +40,17 @@ public struct MemeDetailView: View {
       tabBarTap(tab)
     }
     .background(
-      KFImage(URL(string: viewModel.state.meme.imageUrlString))
-        .resizable()
-        .loadDiskFileSynchronously()
-        .cacheMemoryOnly()
-        .aspectRatio(contentMode: .fill)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-        .clipped()
-        .opacity(0.4)
-        .edgesIgnoringSafeArea(.top)
+        KFImage(URL(string: viewModel.state.meme.imageUrlString))
+            .resizable()
+            .loadDiskFileSynchronously()
+            .cacheMemoryOnly()
+            .aspectRatio(contentMode: .fill)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .clipped()
+            .opacity(0.4) // Image Opacity: 40%
+            .blur(radius: 50) // Layer Blur: 50
+            .overlay(Color.white.opacity(0.3)) // White Dim: #fff, Opacity: 30%
+            .edgesIgnoringSafeArea(.top)
     )
     .onAppear {
       viewModel.logMemeDetail(interaction: .view, event: .meme)
