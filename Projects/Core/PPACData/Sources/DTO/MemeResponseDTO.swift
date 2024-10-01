@@ -55,7 +55,7 @@ struct MemeResponseDTO: Decodable {
   let updatedAt: String
   let isSaved: Bool
   let isReaction: Bool
-  let watch: Int
+  let watch: Int?
   
   public init(
     _id: String,
