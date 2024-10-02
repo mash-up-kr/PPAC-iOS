@@ -13,18 +13,19 @@ public enum UserEndpoint: Requestable {
   
   case create(deviceId: String)
   case userDetail
-  case savedMeme(page: Int, size: Int)
   case lastSeenMeme
+  case savedMeme(page: Int, size: Int)
+  case registeredMemes(page: Int, size: Int)
+  
   
   public var httpMethod: PPACNetwork.HTTPMethod {
     switch self {
     case .create:
       return .post
-    case .userDetail:
-      return .get
-    case .savedMeme:
-      return .get
-    case .lastSeenMeme:
+    case .userDetail,
+        .lastSeenMeme,
+        .savedMeme,
+        .registeredMemes:
       return .get
     }
   }
@@ -39,10 +40,12 @@ public enum UserEndpoint: Requestable {
       return "/user"
     case .userDetail:
       return "/user"
-    case .savedMeme:
-      return "/user/saved-memes"
     case .lastSeenMeme:
       return "/user/recent-memes"
+    case .savedMeme:
+      return "/user/saved-memes"
+    case .registeredMemes:
+      return "/user/registered-memes"
     }
   }
   
@@ -52,6 +55,12 @@ public enum UserEndpoint: Requestable {
       let createDeviceRequest = CreateUserRequestDTO(deviceId: deviceId)
       return .body(createDeviceRequest)
     case .savedMeme(let page, let size):
+      let parameters: [String: String] = [
+        "page" : "\(page)",
+        "size" : "\(size)"
+      ]
+      return .query(parameters)
+    case .registeredMemes(let page, let size):
       let parameters: [String: String] = [
         "page" : "\(page)",
         "size" : "\(size)"

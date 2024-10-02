@@ -70,7 +70,7 @@ struct MemeResponseDTO: Decodable {
     updatedAt: String,
     isSaved: Bool,
     isReaction: Bool,
-    watch: Int
+    watch: Int?
   )
   {
     self._id = _id
