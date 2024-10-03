@@ -110,7 +110,9 @@ struct MemeDetailCardView: View {
           .animationDidFinish { _ in
             playbackMode = .paused(at: .progress(100))
           }
-          .offset(y: -50)
+          .frame(width: 200, height: 200, alignment: .center)
+          .offset(y: -115)
+          .allowsHitTesting(false)
       })
       .padding(.bottom, 10)
       .padding(.horizontal, 10)
