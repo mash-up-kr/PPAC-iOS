@@ -62,7 +62,7 @@ public enum MemeEndpoint: Requestable {
     case .watch(let memeId, let type):
       return "/meme/\(memeId)/watch/\(type)"
     case .reaction(let memeId, _):
-      return "meme/\(memeId)/reaction"
+      return "/meme/\(memeId)/reaction"
     }
   }
   
@@ -85,7 +85,7 @@ public enum MemeEndpoint: Requestable {
       return nil
     case .watch:
       return nil
-    case let .reaction(memeId, count):
+    case .reaction(_, let count):
       return .body(MemeReactionRequestDTO(count: count))
     case .meme(memeId: _):
       return nil

@@ -52,17 +52,13 @@ public struct RecommendView: View {
       if viewModel.state.recommendMemeSize > 0 && !viewModel.state.isSuccessFetch {
         ProgressView()
           .frame(width: 30, height: 30, alignment: .center)
-          .padding(.bottom, 20)
+          .padding(.bottom, 30)
       }
       
       RecommendHeaderView(
-        userLevel: $viewModel.state.userLevel,
-        seenMemeCount: $viewModel.state.memeRecommendWatchCount,
-        recommendMemeSize: $viewModel.state.recommendMemeSize
+        isLoad: viewModel.state.recommendMemeSize > 0,
+        uploadButtonTap: { viewModel.dispatch(type: .memeUploadButtonTapped) }
       )
-      
-      // TODO: 종윤쓰 여기 수정 부탁함다
-      registerButton
       
       ZStack {
         VStack(spacing: 0) {
@@ -70,10 +66,11 @@ public struct RecommendView: View {
           RecommendMemeImagesView(
             currentMeme: $currentMeme,
             memes: viewModel.state.recommendMemes,
-            isTagHidden: isOverlapView
+            isMemeInfoHidden: isOverlapView
           )
           .onReadSize { size in
             memeImageHeight = size.height
+            print("memeImageHeight: \(memeImageHeight)")
           }
           
           Spacer()
@@ -83,11 +80,9 @@ public struct RecommendView: View {
         VStack(spacing: 0) {
           Spacer()
           
-          if let currentMeme {
+          if currentMeme != nil {
             RecommendMemeButtonView(
-              isReaction: currentMeme.isReaction,
-              reactionCnt: currentMeme.reaction,
-              isFarmemed: currentMeme.isFarmemed,
+              meme: $currentMeme,
               isOverlapView: isOverlapView,
               reactionButtonTapped: reactionButtonTap,
               copyButtonTapped: copyButtonTap,
@@ -101,7 +96,7 @@ public struct RecommendView: View {
         }
         .zIndex(2)
       }
-      .frame(maxHeight: 457)
+      .frame(maxHeight: 450)
       .onReadSize { size in
         memeContentsHeight = size.height
       }
@@ -137,7 +132,7 @@ public struct RecommendView: View {
         currentOffsetY = viewModel.state.isSuccessFetch ? .zero : 20
       }
     }
-    .onChange(of: currentMeme) {
+    .onChange(of: currentMeme?.id) {
       if let currentMeme {
         viewModel.dispatch(type: .showRecommendMeme(meme: currentMeme))
         viewModel.logRecommend(interaction: .swipe, event: .meme, meme: nil)
@@ -181,28 +176,12 @@ public struct RecommendView: View {
     )
   }
   
-  // FIXME: 등록하기 버튼 수정
-  private var registerButton: some View {
-    Button(
-      action: {
-        viewModel.dispatch(type: .memeRegisterButtonTapped)
-      },
-      label: {
-        ZStack {
-          RoundedRectangle(cornerRadius: 10)
-            .foregroundStyle(Color.Background.primary)
-          Text("나도 밈 올리기")
-            .foregroundStyle(Color.Text.inverse)
-        }
-        .frame(width: 130, height: 36)
-        .padding()
-      }
-    )
-  }
-  
-  private func reactionButtonTap() {
+  private func reactionButtonTap(
+    memeId: String?,
+    tabCount: Int
+  ) {
     viewModel.dispatch(
-      type: .likeButtonTapped(meme: currentMeme)
+      type: .likeButtonTapped(memeId: memeId, tapCount: tabCount)
     )
   }
   
@@ -253,6 +232,7 @@ public struct RecommendView: View {
   let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
   let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
   let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
+  let sharedMemeUseCase = ShareMemeUseCaseImpl(repository: memeRepository)
   let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
   let getMemeDetailUseCase = GetMemeDetailUseCaseImpl(repository: memeRepository)
   
@@ -263,6 +243,7 @@ public struct RecommendView: View {
       getUserInfoUseCase: getUserInfoUseCase,
       watchMemeUseCase: watchMemeUseCase,
       reactToMemeUseCase: reactToMemeUseCase,
+      sharedMemeUseCase: sharedMemeUseCase,
       bookmarkMemeUseCase: bookmarkMemeUseCase,
       getMemeDetailUseCase: getMemeDetailUseCase,
       deepLinkMemeId: PassthroughSubject<String, Never>()

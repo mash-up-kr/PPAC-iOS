@@ -22,7 +22,7 @@ struct RecommendMemeImagesView: View {
   @State var imageStatusList: [String : Bool] = [:]
   
   var memes: [MemeDetail]
-  var isTagHidden: Bool = false
+  var isMemeInfoHidden: Bool
   
   public var body: some View {
     VStack(spacing: 0) {
@@ -54,26 +54,34 @@ struct RecommendMemeImagesView: View {
         .recommendSkeleton(
           isShow: memes.isEmpty,
           radius: 20,
-          width: memes.isEmpty ? 270 : .infinity,
-          height: 310
+          width: memes.isEmpty ? 280 : .infinity,
+          height: 280
         )
       }
+      .frame(height: 280)
       .scrollIndicators(.never)
       .scrollTargetBehavior(.viewAligned)
       .scrollPosition(id: $currentMeme)
       .contentMargins(.horizontal, 60.0)
-      .padding(.bottom, 20)
+      .padding(.bottom, 16)
       
-      if let currentMeme, isTagHidden == false {
-        HashTagView(keywords: currentMeme.keywords)
-          .onTapGesture {
-            PPACAnalytics.shared
-              .log(
-                interaction: .click,
-                event: .tag,
-                page: .recommend
-              )
-          }
+      if let currentMeme {
+        if(isMemeInfoHidden == false) {
+          Text(currentMeme.title)
+            .font(Font.Heading.Small.medium)
+            .foregroundColor(Color.Text.primary)
+            .padding(.bottom, 4)
+          
+          HashTagView(keywords: currentMeme.keywords)
+            .onTapGesture {
+              PPACAnalytics.shared
+                .log(
+                  interaction: .click,
+                  event: .tag,
+                  page: .recommend
+                )
+            }
+        }
       } else {
         EmptyView()
           .recommendSkeleton(isShow: true, radius: 4, width: 200, height: 16)
@@ -179,7 +187,7 @@ struct RecommendMemeImagesView: View {
         isReaction: false
       )
     ],
-    isTagHidden: false
+    isMemeInfoHidden: false
   )
   .frame(maxWidth: .infinity, maxHeight: .infinity)
   .background(

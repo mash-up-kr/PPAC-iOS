@@ -14,13 +14,13 @@ public protocol ReactToMemeUseCase {
 }
 
 public class ReactToMemeUseCaseImpl: ReactToMemeUseCase {
-    private let repository: MemeRepository
-
-    public init(repository: MemeRepository) {
-        self.repository = repository
-    }
-
-    public func execute(memeId: String, count: Int) async throws -> Int {
-        try await repository.reactToMeme(memeId: memeId, count: count)
-    }
+  private let repository: MemeRepository
+  
+  public init(repository: MemeRepository) {
+    self.repository = repository
+  }
+  
+  public func execute(memeId: String, count: Int) async throws -> Int {
+    return try await repository.reactToMeme(memeId: memeId, count: count)
+  }
 }

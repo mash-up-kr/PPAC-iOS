@@ -71,7 +71,11 @@ private extension DemoApp.Views {
 				router: nil,
 				searchKeywordUseCase: SearchKeywordUseCaseImpl(
 					repository: MemeRepositoryImpl(networkservice: NetworkService())
-				), copyImageUseCase: CopyImageUseCaseImpl()
+				), 
+				copyImageUseCase: CopyImageUseCaseImpl(),
+				watchMemeUseCase: WatchMemeUseCaseImpl(
+					repository: MemeRepositoryImpl(networkservice: NetworkService())
+				)
 			)
 		)
 	}

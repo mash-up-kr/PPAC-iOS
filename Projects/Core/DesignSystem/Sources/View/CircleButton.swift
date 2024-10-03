@@ -38,12 +38,14 @@ public struct CircleButton: View {
         .overlay {
           self.image
             .resizable()
+            .animation(nil)
             .scaledToFill()
             .frame(width: 20, height: 20, alignment: .center)
         }
         .frame(width: self.width, height: self.height,alignment: .center)
         .shadow(color: shadowColor, radius: 20)
     }
+    .buttonStyle(PlainButtonStyle())
   }
 }
 

@@ -11,18 +11,20 @@ import ResourceKit
 import DesignSystem
 
 import PPACModels
+import PPACUtil
 
 import Lottie
 
 struct RecommendMemeButtonView : View {
   @State var playbackMode: LottiePlaybackMode = .paused
-  @State var isTapLikeButton: Bool = false
+  @State var likeTapCnt: Int = 0
+  @State var likeTapMemeId: String? = nil
+  @State var throttler = Throttler(seconds: 3.0)
   
-  var isReaction: Bool
-  var reactionCnt: Int
-  var isFarmemed: Bool
+  @Binding var meme: MemeDetail?
+  
   let isOverlapView: Bool
-  let reactionButtonTapped: () -> Void
+  let reactionButtonTapped: (String?, Int) -> Void
   let copyButtonTapped: () -> Void
   let shareButtonTapped: () -> Void
   let saveButtonTapped: () -> Void
@@ -30,22 +32,28 @@ struct RecommendMemeButtonView : View {
   public var body: some View  {
     HStack {
       LikeButton(
-        isReaction: isReaction,
-        reactionCount: reactionCnt,
+        isReaction: meme?.isReaction,
+        reactionCount: meme?.reaction,
         didTapped: {
-          self.isTapLikeButton = true
           playbackMode = .playing(
             .fromProgress(0, toProgress: 0.7, loopMode: .playOnce)
           )
-          self.reactionButtonTapped()
+          likeTapMemeId = meme?.id
+          likeTapCnt += 1
+          meme?.reaction += 1
+          meme?.isReaction = true
+          
+          throttler.throttle {
+            self.reactionButtonTapped(likeTapMemeId, likeTapCnt)
+            likeTapMemeId = nil
+            likeTapCnt = 0
+          }
         }
       )
-      .disabled(self.isTapLikeButton)
       .overlay {
         LottieView(animation: AnimationAsset.kkEffect.animation)
           .playbackMode(playbackMode)
           .animationDidFinish { _ in
-            self.isTapLikeButton = false
             playbackMode = .paused
           }
           .frame(width: 200, height: 200, alignment: .center)
@@ -57,7 +65,7 @@ struct RecommendMemeButtonView : View {
       
       shareButton(shareButtonTapped)
       
-      saveButton(isFarmemed: isFarmemed) {
+      saveButton(isFarmemed: meme?.isFarmemed ?? false) {
         saveButtonTapped()
       }
     }
@@ -67,12 +75,21 @@ struct RecommendMemeButtonView : View {
       LinearGradient(
         colors: [
           Color.Background.brandsubassistive.opacity(0),
-          isOverlapView ? Color.Background.brandsubassistive : Color.Background.brandsubassistive.opacity(0)
+          isOverlapView
+          ? Color.Background.brandsubassistive
+          : Color.Background.brandsubassistive.opacity(0)
         ],
         startPoint: .top,
         endPoint: .bottom
       )
     )
+    .onChange(of: meme?.id) {
+      // 쓰로틀링 중에 밈이 변경되면 기다리는 것을 중단하고 바로 서버로 요청
+      throttler.cancel()
+      self.reactionButtonTapped(likeTapMemeId, likeTapCnt)
+      likeTapMemeId = nil
+      likeTapCnt = 0
+    }
   }
 }
 
@@ -110,23 +127,12 @@ func saveButton(
 }
 
 #Preview {
-  var isReaction: Bool = true
-  var reactionCnt: Int = 1
-  var isFarmemed: Bool = false
-  
   return RecommendMemeButtonView(
-    isReaction: isReaction,
-    reactionCnt: reactionCnt,
-    isFarmemed: isFarmemed,
+    meme: .constant(MemeDetail.mock),
     isOverlapView: true,
-    reactionButtonTapped: {
-      isReaction = true
-      reactionCnt = +1
-    },
+    reactionButtonTapped: {_, _ in },
     copyButtonTapped: { print("copy~~") },
     shareButtonTapped: { print("share~~") },
-    saveButtonTapped: {
-      isFarmemed.toggle()
-    }
+    saveButtonTapped: { print("save~~~") }
   )
 }

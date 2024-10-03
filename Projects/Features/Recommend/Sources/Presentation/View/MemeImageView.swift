@@ -14,24 +14,24 @@ struct MemeImageView: View {
   let isDimmed: Bool
   
   @State var image: URL? = nil
-  
   @Binding var isLoadingImage: Bool
   
   public var body: some View {
     Rectangle()
-      .frame(width: 270, height: 310)
+      .frame(width: 280, height: 280)
       .cornerRadius(20)
       .foregroundColor(.black.opacity(isLoadingImage ? 1 : 0))
       .overlay {
         KFImage(URL(string: imageUrl))
           .placeholder {
             EmptyView()
-              .recommendSkeleton(isShow: true, radius: 20, width: 270, height: 310)
+              .recommendSkeleton(isShow: true, radius: 20, width: 280, height: 280)
           }
           .onSuccess { _ in
             isLoadingImage = true
           }
           .resizable()
+          .animation(nil, value: UUID())
           .aspectRatio(contentMode: .fit)
         
         if isDimmed && isLoadingImage {
@@ -39,6 +39,7 @@ struct MemeImageView: View {
             .foregroundStyle(Color.Background.dimmer)
         }
       }
+      .clipShape(RoundedRectangle(cornerRadius: 20))
       .scrollTransition { content, phase in
         content
           .offset(x: phase.value * -3)
@@ -61,6 +62,7 @@ struct MemeImageBorderView: View {
         Color.Border.primary.opacity(isLoadingImage ? 1 : 0),
         lineWidth: 2
       )
+      .frame(width: 280, height: 280)
       .scrollTransition { content, phase in
         content
           .offset(x: phase.value * -3)
@@ -74,6 +76,6 @@ struct MemeImageBorderView: View {
     imageUrl: "https://ppac-meme.s3.ap-northeast-2.amazonaws.com/17204513204087.jpg",
 //    imageUrl: "",
     isDimmed: false,
-    isLoadingImage: .constant(false)
+    isLoadingImage: .constant(true)
   )
 }

@@ -56,6 +56,7 @@ public final class RecommendRouter: Router, RecommendRouting {
     let getUserInfoUseCase = GetUserInfoUseCaseImpl(userRepository: userRepository)
     let watchMemeUseCase = WatchMemeUseCaseImpl(repository: memeRepository)
     let reactToMemeUseCase = ReactToMemeUseCaseImpl(repository: memeRepository)
+    let sharedMemeUseCase = ShareMemeUseCaseImpl(repository: memeRepository)
     let bookmarkMemeUseCase = BookmarkMemeUseCaseImpl(repository: memeRepository)
     let getMemeUseCase = GetMemeDetailUseCaseImpl(repository: memeRepository)
     
@@ -66,7 +67,8 @@ public final class RecommendRouter: Router, RecommendRouting {
         getUserInfoUseCase: getUserInfoUseCase,
         watchMemeUseCase: watchMemeUseCase,
         reactToMemeUseCase: reactToMemeUseCase,
-        bookmarkMemeUseCase: bookmarkMemeUseCase, 
+        sharedMemeUseCase: sharedMemeUseCase,
+        bookmarkMemeUseCase: bookmarkMemeUseCase,
         getMemeDetailUseCase: getMemeUseCase,
         deepLinkMemeId: deepLinkMemeId
       )
@@ -87,8 +89,7 @@ public final class RecommendRouter: Router, RecommendRouting {
     self.childRouters.append(router)
     router.start()
   }
-  
-  public func showMemeEditorView() {
+  public func showMemeUploadView() {
     let router = MemeEditorRouter(navigationController: self.navigationController)
     self.childRouters.append(router)
     router.start()

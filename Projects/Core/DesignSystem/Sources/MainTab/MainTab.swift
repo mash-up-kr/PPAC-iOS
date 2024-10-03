@@ -53,7 +53,7 @@ public enum MainTab: String, CaseIterable, Identifiable {
   public var title: String {
     switch self {
     case .recommend:
-      return "추천"
+      return "둘러보기"
     case .search:
       return "검색"
     case .mypage:
