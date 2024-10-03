@@ -39,6 +39,7 @@ struct RecommendMemeImagesView: View {
               .animation(.smooth, value: meme)
             }
           }
+          .scrollTargetLayout()
           
           // Border
           HStack(spacing: 0) {
@@ -50,7 +51,6 @@ struct RecommendMemeImagesView: View {
             }
           }
         }
-        .scrollTargetLayout()
         .recommendSkeleton(
           isShow: memes.isEmpty,
           radius: 20,
