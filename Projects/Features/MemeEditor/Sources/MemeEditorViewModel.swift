@@ -11,6 +11,7 @@ import PPACUtil
 import PPACModels
 import PPACDomain
 import PPACNetwork
+import PPACAnalytics
 
 @MainActor
 public protocol MemeEditorRouting: AnyObject {
@@ -86,15 +87,11 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
         await fetchMemeCategories()
       case .naviBackButtonTapped:
         router?.popView()
+        self.logUploadMeme(event: .back)
       case .memeKeywordTapped(let keyword):
         await self.updateSelectedMemeKeyword(keyword)
       case .registerButtonTapped:
-        print("===============================")
-        print("selectedImage = \(state.selectedImage)")
-        print("title = \(state.memeTitle)")
-        print("source = \(state.memeSource)")
-        print("keywords = \(state.selectedMemeKeywords)")
-        print("===============================")
+        self.logUploadMeme(event: .upload)
         await self.registMeme()
       case .alertConfirmButtonTapped:
         router?.popView()
@@ -141,6 +138,12 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   @MainActor
   private func registMeme() async {
     do {
+      print("===============================")
+      print("selectedImage = \(state.selectedImage)")
+      print("title = \(state.memeTitle)")
+      print("source = \(state.memeSource)")
+      print("keywords = \(state.selectedMemeKeywords)")
+      print("===============================")
       let imageFormData = try self.getImageFormData()
       self.state.needLoadingIndicator = true
       try await self.registerMemeUserCase
@@ -180,5 +183,14 @@ final public class MemeEditorViewModel: ViewModelType, ObservableObject {
   private func showToast(text: String) {
     self.state.contentOfPopup = text
     self.state.isActivePopup = true
+  }
+  
+  private func logUploadMeme(event: PPACAnalytics.UserEvent) {
+    PPACAnalytics.shared
+      .log(
+        interaction: .click,
+        event: event,
+        page: .uploadMeme
+      )
   }
 }

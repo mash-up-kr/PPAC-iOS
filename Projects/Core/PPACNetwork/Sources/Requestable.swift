@@ -33,8 +33,8 @@ public protocol Requestable {
 extension Requestable {
   
   private var baseUrl: String {
-    return "http://ppac-server.run.goorm.io/api" // 개발 서버
-    //return "https://ppac-server-goorm.run.goorm.site/api" // 운영 서버
+    //return "http://ppac-server.run.goorm.io/api" // 개발 서버
+    return "https://ppac-server-goorm.run.goorm.site/api" // 운영 서버
   }
   
   public func makeURL() -> URL? {
@@ -47,7 +47,7 @@ extension Requestable {
     urlRequest.httpMethod = httpMethod.rawValue.uppercased()
     
     var defaultHeaders = [
-      "x-device-id": UserInfo.shared.testDeviceId,
+      "x-device-id": UserInfo.shared.deviceId,
       "accept": "application/json",
       "Content-Type": "application/json"
     ]

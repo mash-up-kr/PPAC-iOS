@@ -25,20 +25,18 @@ struct MemeEditorView: View {
           .foregroundStyle(Color.Background.assistive)
           .padding(.top, 50)
         ScrollView {
-          VStack {
-            ImageEditView(
-              imageUrl: viewModel.state.memeImageUrl,
-              onImageSelectionCompleted: { selectedImage in
-                viewModel.state.selectedImage = selectedImage
-              }
-            )
-            memeTitleInputView
-            memeSourceInputView
-            divider
-            memeCategoriesTitleView
-            memeCategoriesView
-          }
-          .padding(.bottom, 48)
+          ImageEditView(
+            imageUrl: viewModel.state.memeImageUrl,
+            onImageSelectionCompleted: { selectedImage in
+              viewModel.state.selectedImage = selectedImage
+            }
+          )
+          memeTitleInputView
+          memeSourceInputView
+          divider
+          memeCategoriesTitleView
+          memeCategoriesView
+          Spacer(minLength: 48)
         }
         
         if !viewModel.state.isVisibleKeyboard {

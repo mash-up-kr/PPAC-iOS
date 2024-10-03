@@ -22,7 +22,7 @@ enum MemeEditEndPoint: MultipartRequestable {
   var path: String? {
     switch self {
     case .registerMeme:
-      return "meme"
+      return "/meme"
     }
   }
   

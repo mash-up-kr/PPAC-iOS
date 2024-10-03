@@ -38,7 +38,6 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
     var userLevel: Int
     var memeRecommendWatchCount: Int
     var isSuccessFetch: Bool
-    var isSuccessMemeUpload: Bool = false
   }
   
   weak var router: RecommendRouting?
@@ -103,6 +102,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
         await saveMeme(meme: meme)
       case .memeUploadButtonTapped:
         router?.showMemeUploadView()
+        self.logRecommend(event: .upload)
       }
     }
   }
@@ -110,7 +110,7 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
   public func logRecommend(
     interaction: PPACAnalytics.UserInteraction = .click,
     event: PPACAnalytics.UserEvent,
-    meme: MemeDetail?
+    meme: MemeDetail? = nil
   ) {
     PPACAnalytics.shared
       .log(

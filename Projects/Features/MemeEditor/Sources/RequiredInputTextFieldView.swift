@@ -22,6 +22,7 @@ struct RequiredTitleView: View {
         .padding(.leading, -4)
         .padding(.bottom, 10)
     }
+    .frame(height: 20)
   }
 }
 
@@ -37,9 +38,9 @@ struct RequiredInputTextFieldView: View {
   }
   
   var body: some View {
-    VStack(alignment: .leading) {
+    VStack(alignment: .leading, spacing: 0) {
       RequiredTitleView(title: title)
-        .padding(.bottom, 8)
+        .padding(.bottom, 12)
       textFieldWithTextCountView
     }
     .padding(.horizontal, 20)
@@ -60,12 +61,12 @@ struct RequiredInputTextFieldView: View {
         .foregroundStyle(content.isEmpty ? Color.Text.assistive : Color.clear)
         .font(Font.Body.Large.medium)
         .padding(.horizontal, 16)
-        .padding(.top, 12)
+        .padding(.top, 14)
       TextEditor(text: $content)
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .padding(.horizontal, 12)
-        .padding(.top, 4)
+        .padding(.top, 6)
         .font(Font.Body.Large.medium)
         .foregroundStyle(Color.Text.primary)
         .onChange(of: content) { _ , newValue in

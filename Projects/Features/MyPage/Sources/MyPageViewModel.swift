@@ -24,6 +24,7 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   enum MyMemeType: String {
     case recentMeme = "my_recent_meme"
     case savedMeme = "my_saved_meme"
+    case uploadedMeme = "my_uploaded_meme"
   }
   
   enum MyPageSegmentedTitle: String {
@@ -159,15 +160,14 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         self.logMyPage(event: .settings)
       case .onTappedRecentMeme(let meme):
         self.router?.showMemeDetail(memeDetail: meme)
-        self.logMyPage(event: .meme, type: .recentMeme)
+        self.logMyPage(event: .meme, meme: meme, type: .recentMeme)
       case .onTappedSavedMeme(let meme):
         self.router?.showMemeDetail(memeDetail: meme)
-        self.logMyPage(event: .meme, type: .savedMeme)
+        self.logMyPageClickMeme(meme: meme)
       case .onTappedCopyButton(let meme):
         await self.copyMemeImage(with: meme)
       case .onTappedSegmentedTitleItem(let title):
-        self.updateSegmentedTitleItems(selectedTitle: title)
-        self.updateCurrentMyMemeList(selectedTitle: MyPageSegmentedTitle(rawValue: title))
+        self.selectedSegmentedTitle(title: title)
       case .onAppearLastMeme:
         await self.fetchNextPageMemes()
       }
@@ -276,6 +276,19 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   }
   
   @MainActor
+  private func selectedSegmentedTitle(title: String) {
+    let segmentedTitle = MyPageSegmentedTitle(rawValue: title)
+    self.updateSegmentedTitleItems(selectedTitle: title)
+    self.updateCurrentMyMemeList(selectedTitle: segmentedTitle)
+    
+    if segmentedTitle == .myRegisteredMeme {
+      self.logMyPage(event: .tab, type: .uploadedMeme)
+    } else {
+      self.logMyPage(event: .tab, type: .savedMeme)
+    }
+  }
+  
+  @MainActor
   private func updateSegmentedTitleItems(selectedTitle: String) {
     guard let selectedItem = self.state.segmentedTitleItems
       .first(where: { $0.title == selectedTitle }) else { return }
@@ -298,6 +311,14 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     } else {
       self.state.currentMyMemeList = self.state.savedMemeList
       self.state.currentSegmentedTitle = .mySavedMeme
+    }
+  }
+  
+  private func logMyPageClickMeme(meme: MemeDetail?) {
+    if self.state.currentSegmentedTitle == .myRegisteredMeme {
+      self.logMyPage(event: .meme, meme: meme, type: .uploadedMeme)
+    } else {
+      self.logMyPage(event: .meme, meme: meme, type: .savedMeme)
     }
   }
   
