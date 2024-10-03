@@ -55,6 +55,8 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   
   private var reactionCount = 0
   private var reactionTask: Task<Void, Never>?
+  
+  private let trotller = Throttler(seconds: 3)
 
   
   
@@ -135,22 +137,9 @@ private extension MemeDetailViewModel {
       self.state.meme.reaction += 1
       self.state.meme.isReaction = true
       self.logMemeDetail(event: .reaction)
-      
-      reactionTask?.cancel()
-      
-      reactionTask = Task { [weak self] in
-          guard let self = self else { return }
-          do {
-              try await Task.sleep(nanoseconds: 3 * 1_000_000_000)
-              await self.sendReactions()
-          } catch {
-              if Task.isCancelled {
-                  // 태스크가 취소되었으므로 아무 작업도 하지 않음
-                  return
-              } else {
-                  print("Task error: \(error)")
-              }
-          }
+    
+      trotller.throttle {
+        await self.sendReactions()
       }
   }
 
