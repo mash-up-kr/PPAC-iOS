@@ -27,6 +27,7 @@ final public class PPACAnalytics {
     case searchDetail = "search_detail"
     case myPage = "my_page"
     case settings
+    case uploadMeme = "upload_meme"
   }
   
   public enum UserEvent: String {
@@ -42,6 +43,8 @@ final public class PPACAnalytics {
     case meme
     case settings
     case appUpdate = "app_update"
+    case back
+    case upload
   }
   
   private init() {
