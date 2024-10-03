@@ -39,8 +39,7 @@ public struct MemeImageView: View {
       .cacheMemoryOnly()
       .fade(duration: 0.25)
       .frame(maxWidth: .infinity)
-      .aspectRatio(0.9375, contentMode: .fit)
-      .cornerRadius(10)
+      .aspectRatio(contentMode: .fit)
   }
   
   var skeletonView: some View {

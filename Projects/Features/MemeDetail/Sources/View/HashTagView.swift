@@ -14,11 +14,16 @@ public struct HashTagView: View {
   // MARK: - Properties
   
   private let keywords: [String]
+  private let isShortCard: Bool
   
   // MARK: - Initializers
   
-  public init(keywords: [String]) {
+  public init(
+    keywords: [String],
+    isShortCard: Bool
+  ) {
     self.keywords = keywords
+    self.isShortCard = isShortCard
   }
   
   // MARK: - UI
@@ -36,7 +41,9 @@ public struct HashTagView: View {
   func hashTag(title: String) -> some View {
     Text("#\(title)")
       .font(Font.Body.Large.medium)
-      .foregroundColor(Color.Text.tertiary)
+      .foregroundColor(
+        isShortCard ? Color.Text.disabled : Color.Text.tertiary
+      )
   }
   
 }

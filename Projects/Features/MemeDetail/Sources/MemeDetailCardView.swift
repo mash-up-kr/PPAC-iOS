@@ -22,15 +22,18 @@ struct MemeDetailCardView: View {
   @State var playbackMode: LottiePlaybackMode = .paused(at: .progress(100))
   
   private let reactionButtonTapped: (() -> Void)?
+  private let isShortCard: Bool
   
   // MARK: - Initializers
   
   init(
     meme: Binding<MemeDetail>,
+    isShortCard: Bool,
     reactionButtonTapped: (() -> Void)?
   ) {
     self._meme = meme
     self.reactionButtonTapped = reactionButtonTapped
+    self.isShortCard = isShortCard
   }
   
   // MARK: - UI
@@ -38,13 +41,51 @@ struct MemeDetailCardView: View {
   var body: some View {
     VStack(alignment: .center, spacing: 0) {
       
-      MemeImageView(imageUrlString: meme.imageUrlString)
-        .padding(.bottom, 25)
+      Rectangle()
+        .frame(width: 330, height: 352)
+        .overlay {
+          ZStack {
+            MemeImageView(imageUrlString: meme.imageUrlString)
+            
+            if isShortCard {
+              shortCardGradation
+              
+              VStack(spacing: 0) {
+                Spacer()
+                
+                infoView
+              }
+            }
+          }
+        }
+        .cornerRadius(10)
+        .padding(.bottom, isShortCard ? 0 : 25)
       
+      if(!isShortCard) {
+        infoView
+      }
+    }
+    .frame(maxWidth: 330)
+    .padding(.horizontal, /*@START_MENU_TOKEN@*/10/*@END_MENU_TOKEN@*/)
+    .padding(.vertical, 12.5)
+    .background(Color.Background.white)
+    .cornerRadius(20)
+    .overlay(
+      RoundedRectangle(cornerRadius: 20)
+        .inset(by: 1)
+        .stroke(.black, lineWidth: 2)
+        .frame(maxWidth: 350)
+    )
+  }
+  
+  // MARK: - Methods
+  
+  var infoView: some View {
+    VStack(spacing: 0) {
       titleLabel
         .padding(.bottom, 5)
       
-      HashTagView(keywords: meme.keywords)
+      HashTagView(keywords: meme.keywords, isShortCard: isShortCard)
         .padding(.bottom, 11)
         .onTapGesture {
           PPACAnalytics.shared
@@ -71,25 +112,18 @@ struct MemeDetailCardView: View {
           }
           .offset(y: -50)
       })
-      .padding(.bottom, 20)
+      .padding(.bottom, 10)
+      .padding(.horizontal, 10)
     }
-    .padding(10)
-    .background(Color.Background.white)
-    .cornerRadius(20)
-    .overlay(
-      RoundedRectangle(cornerRadius: 20)
-        .inset(by: 1)
-        .stroke(.black, lineWidth: 2)
-    )
   }
-  
-  // MARK: - Methods
   
   var titleLabel: some View {
     Text(meme.title)
       .font(Font.Heading.Large.semiBold)
       .multilineTextAlignment(.center)
-      .foregroundColor(Color.Text.primary)
+      .foregroundColor(
+        isShortCard ? Color.Text.inverse : Color.Text.primary
+      )
       .frame(maxWidth: .infinity, alignment: .center)
   }
   
@@ -97,7 +131,24 @@ struct MemeDetailCardView: View {
     Text("출처: \(self.meme.source)")
       .font(Font.Body.Xsmall.medium)
       .lineLimit(1)
-      .foregroundColor(Color.Icon.assistive)
+      .foregroundColor(
+        isShortCard ? Color.Text.assistive : Color.Icon.assistive
+      )
+  }
+  
+  var shortCardGradation: some View {
+    Rectangle()
+      .opacity(0)
+      .background(
+        LinearGradient(
+          colors: [
+            ResourceKitAsset.PrimaryColor.neutral70.swiftUIColor.opacity(0),
+            ResourceKitAsset.PrimaryColor.neutral70.swiftUIColor
+          ],
+          startPoint: .top,
+          endPoint: .bottom
+        )
+      )
   }
   
   private func handleReactionTapped() {
@@ -110,7 +161,11 @@ struct MemeDetailCardView: View {
   @State var mock: MemeDetail = .mock
   
   return VStack {
-    MemeDetailCardView(meme: $mock, reactionButtonTapped: nil)
+    MemeDetailCardView(
+      meme: $mock,
+      isShortCard: false,
+      reactionButtonTapped: nil
+    )
   }
   .background(.red)
 }
