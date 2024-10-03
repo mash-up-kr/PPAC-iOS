@@ -8,31 +8,40 @@
 import Foundation
 
 public class Throttler {
-  private var workItem: DispatchWorkItem?
-  private var lastExecution: Date?
-  private let queue: DispatchQueue
   private let interval: TimeInterval
+  private var task: Task<Void, Never>?
   
-  public init(seconds: TimeInterval, queue: DispatchQueue = DispatchQueue.main) {
+  public init(seconds: TimeInterval) {
     self.interval = seconds
-    self.queue = queue
   }
   
-  public func throttle(action: @escaping () -> Void) {
+  @MainActor
+  public func throttle(action: @escaping () async -> Void) {
     // 기존의 예약된 작업이 있으면 취소
-    workItem?.cancel()
+    task?.cancel()
     
     // 새로운 작업 생성
-    workItem = DispatchWorkItem { [weak self] in
-      self?.lastExecution = Date()
-      action()
+    task = Task { [weak self] in
+      guard let self else { return }
+      
+      do {
+        // 지정된 시간만큼 대기
+        
+        try await Task.sleep(nanoseconds: UInt64(self.interval * 1_000_000_000))
+        
+        await action()
+      } catch {
+        if Task.isCancelled {
+            // 태스크가 취소되었으므로 아무 작업도 하지 않음
+            return
+        } else {
+            print("Task error: \(error)")
+        }
+      }
     }
-    
-    // 인터벌 후에 작업을 실행하도록 예약 (즉시 실행하지 않음)
-    queue.asyncAfter(deadline: .now() + interval, execute: workItem!)
   }
   
   public func cancel() {
-    workItem?.cancel()
+    task?.cancel()
   }
 }
