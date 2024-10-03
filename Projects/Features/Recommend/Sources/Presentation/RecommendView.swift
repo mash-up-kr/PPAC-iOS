@@ -70,7 +70,6 @@ public struct RecommendView: View {
           )
           .onReadSize { size in
             memeImageHeight = size.height
-            print("memeImageHeight: \(memeImageHeight)")
           }
           
           Spacer()
