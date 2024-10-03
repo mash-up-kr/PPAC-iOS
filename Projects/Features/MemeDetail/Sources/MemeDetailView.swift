@@ -42,6 +42,44 @@ public struct MemeDetailView: View {
   
   public var body: some View {
     ZStack {
+      memeDetailCardView
+      if viewModel.state.isSheetPresented {
+        Color.black.opacity(0.4)
+      }
+    }
+    .onAppear {
+      viewModel.logMemeDetail(interaction: .view, event: .meme)
+    }
+    .plainNavigationBar(
+      backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
+      rightActionHandler: { viewModel.dispatch(type: .naviMoreButtonTapped) },
+      hasConfigureButton: true,
+      title: viewModel.state.meme.title
+    )
+    .popup(
+      isActive: $viewModel.state.isCopied,
+      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
+      text: "이미지를 클립보드에 복사했어요"
+    )
+    .popup(
+      isActive: $viewModel.state.isFarmemeChanged,
+      image: viewModel.state.meme.isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
+      text: viewModel.state.meme.isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
+    )
+    .sheet(isPresented: $viewModel.state.isSheetPresented) {
+      ZStack(alignment: .bottom) {
+        bottomSheetView
+          .presentationDetents([.height(66)])
+      }
+    }
+    .sheet(isPresented: $viewModel.state.isWebViewPresented) {
+      WebView(url: viewModel.state.reportProblemUrl)
+        .presentationDetents([.large])
+    }
+  }
+  
+  private var memeDetailCardView: some View {
+    ZStack {
       VStack(spacing: 0) {
         Spacer()
         
@@ -74,7 +112,6 @@ public struct MemeDetailView: View {
       
       VStack(spacing: 0) {
         Spacer()
-
         EmptyView()
           .memeDetailTabBar(
             isFarmemed: $viewModel.state.meme.isFarmemed
@@ -107,25 +144,27 @@ public struct MemeDetailView: View {
         .clipped()
         .edgesIgnoringSafeArea(.top)
     )
-    .onAppear {
-      viewModel.logMemeDetail(interaction: .view, event: .meme)
+  }
+  
+  private var bottomSheetView: some View {
+    VStack {
+      Rectangle()
+        .cornerRadius(20, corners: [.topLeft, .topRight])
+        .frame(height: 16)
+        .foregroundStyle(Color.Background.white)
+      reportProblembutton
     }
-    .plainNavigationBar(
-      backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
-      rightActionHandler: nil,
-      hasConfigureButton: false,
-      title: "밈 자세히 보기"
-    )
-    .popup(
-      isActive: $viewModel.state.isCopied,
-      image: ResourceKitAsset.Icon.copyFilled.swiftUIImage,
-      text: "이미지를 클립보드에 복사했어요"
-    )
-    .popup(
-      isActive: $viewModel.state.isFarmemeChanged,
-      image: viewModel.state.meme.isFarmemed ? ResourceKitAsset.Icon.copyFilled.swiftUIImage : nil,
-      text: viewModel.state.meme.isFarmemed ? "파밈 완료!" : "파밈을 취소했어요"
-    )
+    .padding(.bottom, 10)
+    .onTapGesture {
+      viewModel.dispatch(type: .reportProblemButtonTapped)
+    }
+  }
+  
+  private var reportProblembutton: some View {
+    Text("신고하기")
+      .font(Font.Body.Xlarge.medium)
+      .foregroundStyle(Color.Text.primary)
+      .padding(.vertical, 16)
   }
   
   @MainActor
@@ -139,6 +178,7 @@ public struct MemeDetailView: View {
       viewModel.dispatch(type: .shreButtonTapped)
     }
   }
+
 }
 
 #Preview {

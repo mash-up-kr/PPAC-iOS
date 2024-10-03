@@ -29,12 +29,18 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
     case shreButtonTapped
     case farmemeButtonTapped
     case naviBackButtonTapped
+    case naviMoreButtonTapped
+    case reportProblemButtonTapped
   }
   
   public struct State {
     var meme: MemeDetail
     var isCopied: Bool = false
     var isFarmemeChanged: Bool = false
+    var isSheetPresented: Bool = false
+    var isWebViewPresented: Bool = false
+    
+    let reportProblemUrl: URL? = URL(string: "https://forms.gle/a5QkMnLD8AANtYCo7")
   }
   
   // MARK: - Properties
@@ -49,6 +55,8 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   
   private var reactionCount = 0
   private var reactionTask: Task<Void, Never>?
+
+  
   
   // MARK: - Initializers
   
@@ -94,6 +102,12 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
         }
       case .naviBackButtonTapped:
         router?.popView()
+      case .naviMoreButtonTapped:
+        state.isSheetPresented = true
+      case .reportProblemButtonTapped:
+        state.isSheetPresented = false
+        state.isWebViewPresented = true
+        print("reportProblemButtonTapped")
       }
     }
   }
