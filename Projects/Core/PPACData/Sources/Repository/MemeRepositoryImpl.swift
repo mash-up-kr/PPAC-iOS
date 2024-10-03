@@ -118,11 +118,8 @@ public class MemeRepositoryImpl: MemeRepository {
     let endpoint = MemeEndpoint.reaction(memeId: memeId, count: count)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeReactionResponseDTO>.self)
     switch result {
-    case .success(let data):
-      guard let data = data.data else {
-        throw NetworkError.dataDecodingError
-      }
-      return data.count
+    case .success(let count):
+      return count.data?.count ?? 0
     case .failure(let failure):
       throw failure
     }

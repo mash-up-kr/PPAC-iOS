@@ -47,6 +47,9 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   private let watchMemeUseCase: WatchMemeUseCase
   private let reactToMemeUseCase: ReactToMemeUseCase
   
+  private var reactionCount = 0
+  private var reactionTask: Task<Void, Never>?
+  
   // MARK: - Initializers
   
   public init(
@@ -67,7 +70,8 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   }
   
   deinit {
-    print("memeviewmodel deinit")
+      print("memeviewmodel deinit")
+      reactionTask?.cancel()
   }
   
   // MARK: - Methods
@@ -110,23 +114,50 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
 }
 
 private extension MemeDetailViewModel {
-  
+
   @MainActor
-  func postReaction() async {
-    do {
-      let memeReactionCount = try await reactToMemeUseCase.execute(
-        memeId: state.meme.id,
-        count: 1
-      )
-      
-      self.state.meme.reaction = memeReactionCount
+  func postReaction() {
+      reactionCount += 1
+      self.state.meme.reaction += 1
       self.state.meme.isReaction = true
       self.logMemeDetail(event: .reaction)
-      print("reaction success")
-    } catch {
-      // TODO: - 에러처리
-      print("Failed to post reaction: \(error)")
-    }
+      
+      reactionTask?.cancel()
+      
+      reactionTask = Task { [weak self] in
+          guard let self = self else { return }
+          do {
+              try await Task.sleep(nanoseconds: 3 * 1_000_000_000)
+              await self.sendReactions()
+          } catch {
+              if Task.isCancelled {
+                  // 태스크가 취소되었으므로 아무 작업도 하지 않음
+                  return
+              } else {
+                  print("Task error: \(error)")
+              }
+          }
+      }
+  }
+
+
+  @MainActor
+  func sendReactions() async {
+      let count = reactionCount
+      guard count > 0 else {
+          // 전송할 리액션이 없음
+          return
+      }
+      reactionCount = 0
+      do {
+          let count = try await reactToMemeUseCase.execute(memeId: state.meme.id, count: count)
+        print("currentMeme count: \(self.state.meme.reaction)")
+        print("new count: \(count)")
+        self.state.meme.reaction = count
+          print("Reactions sent successfully with count: \(count)")
+      } catch {
+          print("Failed to send reactions: \(error)")
+      }
   }
   
   @MainActor
