@@ -81,8 +81,6 @@ public final class RecommendViewModel: ViewModelType, ObservableObject {
       isSuccessFetch: false
     )
     bind()
-    
-    UserInfo.shared.deviceId = "uni-test4"
   }
   
   public func dispatch(type: Action) {
