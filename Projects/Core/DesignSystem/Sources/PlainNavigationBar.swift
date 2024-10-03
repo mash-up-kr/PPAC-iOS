@@ -42,7 +42,7 @@ public struct PlainNavigationBar: View {
         Spacer()
         
         if hasConfigureButton {
-          ResourceKitAsset.Icon.setting.swiftUIImage
+          ResourceKitAsset.Icon.moreItem.swiftUIImage
         }
       }
       .padding(.horizontal, 16)
@@ -84,9 +84,11 @@ public struct PlainNavigationBarModifier: ViewModifier {
           HStack {
             Spacer()
             if hasConfigureButton {
-              ResourceKitAsset.Icon.setting.swiftUIImage
-                .resizable()
-                .frame(width: 20, height: 20)
+              Button(action: { self.rightActionHandler?() }) {
+                ResourceKitAsset.Icon.moreItem.swiftUIImage
+                  .resizable()
+                  .frame(width: 20, height: 20)
+              }
             }
           }
         }
