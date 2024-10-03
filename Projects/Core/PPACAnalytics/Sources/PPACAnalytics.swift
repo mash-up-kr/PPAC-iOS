@@ -45,6 +45,7 @@ final public class PPACAnalytics {
     case appUpdate = "app_update"
     case back
     case upload
+    case tab
   }
   
   private init() {

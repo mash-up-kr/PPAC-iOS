@@ -51,19 +51,6 @@ public struct MyPageView: View {
         )
         .padding(.horizontal, 20)
         .padding(.bottom, 138)
-//        SavedMemeListView(
-//          memeDetailList: $viewModel.state.currentMyMemeList,
-//          memeClickHandler: { meme in
-//            viewModel.dispatch(type: .onTappedSavedMeme(meme: meme))
-//          },
-//          memeCopyHandler: { meme in
-//            viewModel.dispatch(type: .onTappedCopyButton(meme: meme))
-//          },
-//          onAppearLastMemeHandler: {
-//            viewModel.dispatch(type: .onAppearLastMeme)
-//          }
-//        )
-//        .padding(.bottom, 138)
       }
       .onAppear {
         viewModel.dispatch(type: .onAppearMyPageView)
