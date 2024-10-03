@@ -62,6 +62,7 @@ public class MockCheckUserInfoUseCase: CheckUserInfoUseCase {
     func create(deviceId: String) async throws -> UserDetail { return UserDetail.mock }
     func getUserDetail() async throws -> UserDetail { return UserDetail.mock }
     func getSavedMeme(page: Int, size: Int) async throws -> MemeListWithPagination { return  MemeListWithPagination.mock }
+    func getRegisteredMeme(page: Int, size: Int) async throws -> MemeListWithPagination { return  MemeListWithPagination.mock }
     func getLastSeenMeme() async throws -> [MemeDetail] { return [] }
   }
 }

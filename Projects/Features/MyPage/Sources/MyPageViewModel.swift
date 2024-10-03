@@ -21,9 +21,14 @@ public protocol MyPageRouting: AnyObject {
 final public class MyPageViewModel: ViewModelType, ObservableObject {
   
   // 트래킹을 위해 추가한 type
-  public enum MyMemeType: String {
+  enum MyMemeType: String {
     case recentMeme = "my_recent_meme"
     case savedMeme = "my_saved_meme"
+  }
+  
+  enum MyPageSegmentedTitle: String {
+    case myRegisteredMeme = "내가 올린 밈"
+    case mySavedMeme = "나의 파밈함"
   }
   
   public enum Action {
@@ -42,25 +47,33 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     var lastSeenMemeList: [MemeDetail]
     var savedMemeList: [MemeDetail]
     var savedMemePagination: MemeListWithPagination.Pagination
+    var registeredMemeList: [MemeDetail]
+    var registeredMemePagination: MemeListWithPagination.Pagination
     var isRefreshCompleted: Bool
     var isActiveCopyPopup: Bool
     
     var currentMyMemeList: [MemeDetail]
     var segmentedTitleItems: [SegmentedTitleItem] = []
+    var currentSegmentedTitle: MyPageSegmentedTitle
     
     init(
       userDetail: UserDetail,
       lastSeenMemeList: [MemeDetail],
       savedMemeList: [MemeDetail],
-      savedMemePagination: MemeListWithPagination.Pagination
+      savedMemePagination: MemeListWithPagination.Pagination,
+      registeredMemeList: [MemeDetail],
+      registeredMemePagination: MemeListWithPagination.Pagination
     ) {
       self.userDetail = userDetail
       self.lastSeenMemeList = lastSeenMemeList
       self.savedMemeList = savedMemeList
       self.savedMemePagination = savedMemePagination
+      self.registeredMemeList = registeredMemeList
+      self.registeredMemePagination = registeredMemePagination
       self.isRefreshCompleted = true
       self.isActiveCopyPopup = false
-      self.currentMyMemeList = lastSeenMemeList // TODO: 나중에 나의 밈으로 바뀌어야함
+      self.currentMyMemeList = registeredMemeList
+      self.currentSegmentedTitle = .myRegisteredMeme
       self.segmentedTitleItems = initSegmentedTitleItems()
     }
     
@@ -85,9 +98,13 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       return savedMemePagination.currentPage < savedMemePagination.totalPages
     }
     
+    var hesNextPageOfRegisteredMeme: Bool {
+      return registeredMemePagination.currentPage < registeredMemePagination.totalPages
+    }
+    
     private func initSegmentedTitleItems() -> [SegmentedTitleItem] {
-      return [SegmentedTitleItem(title: "나의 밈", isSelected: true),
-              SegmentedTitleItem(title: "나의 파밈함", isSelected: false)]
+      return [SegmentedTitleItem(title: MyPageSegmentedTitle.myRegisteredMeme.rawValue, isSelected: true),
+              SegmentedTitleItem(title: MyPageSegmentedTitle.mySavedMeme.rawValue, isSelected: false)]
     }
   }
   
@@ -98,10 +115,10 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   private let getUserDetailUseCase: GetUserDetailUseCase
   private let getLastSeenMemeUseCase: GetLastSeenMemeUseCase
   private let getSavedMemeUseCase: GetSavedMemeUseCase
+  private let getRegisteredMemeUseCase: GetRegisteredMemeUseCase
   private let copyImageUseCase: CopyImageUseCase
   
-  private var currentPage: Int = 1
-  private let savedMemeCountPerPage: Int = 10
+  private let memeCountPerPage: Int = 10
   
   // MARK: - Initializers
   
@@ -111,17 +128,21 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     getUserDetailUseCase: GetUserDetailUseCase,
     getLastSeenMemeUseCase: GetLastSeenMemeUseCase,
     getSavedMemeUseCase: GetSavedMemeUseCase,
+    getRegisteredMemeUseCase: GetRegisteredMemeUseCase,
     copyImageUseCase: CopyImageUseCase
   ) {
     self.router = router
     self.state = State(userDetail: userDetail,
                        lastSeenMemeList: [],
                        savedMemeList: [],
-                       savedMemePagination: .default)
+                       savedMemePagination: .default,
+                       registeredMemeList: [],
+                       registeredMemePagination: .default)
     self.userDetail = userDetail
     self.getUserDetailUseCase = getUserDetailUseCase
     self.getLastSeenMemeUseCase = getLastSeenMemeUseCase
     self.getSavedMemeUseCase = getSavedMemeUseCase
+    self.getRegisteredMemeUseCase = getRegisteredMemeUseCase
     self.copyImageUseCase = copyImageUseCase
   }
   
@@ -146,9 +167,9 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
         await self.copyMemeImage(with: meme)
       case .onTappedSegmentedTitleItem(let title):
         self.updateSegmentedTitleItems(selectedTitle: title)
-        self.updateCurrentMyMemeList(selectedTitle: title)
+        self.updateCurrentMyMemeList(selectedTitle: MyPageSegmentedTitle(rawValue: title))
       case .onAppearLastMeme:
-        await self.fetchNextPageSavedMeme()
+        await self.fetchNextPageMemes()
       }
     }
   }
@@ -158,12 +179,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     do {
       let userDetail = try await self.getUserDetailUseCase.execute()
       let lastSeenMemeList = try await self.getLastSeenMemeUseCase.execute()
-      let savedMemeListWithPagination = try await self.getSavedMemeUseCase.execute(page: 1,
-                                                                     size: self.savedMemeCountPerPage)
+      let savedMemeListWithPagination = try await self.getSavedMemeUseCase.execute(page: 1,size: self.memeCountPerPage)
+      let registeredMemeListWithPagination = try await self.getRegisteredMemeUseCase.execute(page: 1, size: self.memeCountPerPage)
+      
       self.state = State(userDetail: userDetail,
                          lastSeenMemeList: lastSeenMemeList,
                          savedMemeList: savedMemeListWithPagination.memeList,
-                         savedMemePagination: savedMemeListWithPagination.pagination)
+                         savedMemePagination: savedMemeListWithPagination.pagination,
+                         registeredMemeList: registeredMemeListWithPagination.memeList,
+                         registeredMemePagination: registeredMemeListWithPagination.pagination)
       
       self.logMyPage(
         interaction: .scroll,
@@ -183,6 +207,15 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
   }
   
   @MainActor
+  private func fetchNextPageMemes() async {
+    if self.state.currentSegmentedTitle == .myRegisteredMeme {
+      await self.fetchNextPageRegisteredMeme()
+    } else {
+      await self.fetchNextPageSavedMeme()
+    }
+  }
+  
+  @MainActor
   private func fetchNextPageSavedMeme() async {
     guard state.hasNextPageOfSavedMeme else { return }
     
@@ -190,15 +223,39 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
       let savedMemeListWithPagination = try await self.getSavedMemeUseCase
         .execute(
           page: state.savedMemePagination.currentPage + 1,
-          size: self.savedMemeCountPerPage
+          size: self.memeCountPerPage
         )
       self.state.savedMemeList += savedMemeListWithPagination.memeList
       self.state.savedMemePagination = savedMemeListWithPagination.pagination
-      
+      self.updateCurrentMyMemeList(selectedTitle: .mySavedMeme)
       self.logMyPage(
         interaction: .scroll,
         event: .meme,
         pageCount: state.savedMemePagination.currentPage
+      )
+      
+    } catch(let error) {
+      print("fetchNextPageSavedMeme error = \(error)")
+    }
+  }
+  
+  @MainActor
+  private func fetchNextPageRegisteredMeme() async {
+    guard state.hesNextPageOfRegisteredMeme else { return }
+    
+    do {
+      let registeredMemeListWithPagination = try await self.getRegisteredMemeUseCase
+        .execute(
+          page: self.state.registeredMemePagination.currentPage + 1,
+          size: self.memeCountPerPage
+        )
+      self.state.registeredMemeList += registeredMemeListWithPagination.memeList
+      self.state.registeredMemePagination = registeredMemeListWithPagination.pagination
+      self.updateCurrentMyMemeList(selectedTitle: .myRegisteredMeme)
+      self.logMyPage(
+        interaction: .scroll,
+        event: .meme,
+        pageCount: state.registeredMemePagination.currentPage
       )
       
     } catch(let error) {
@@ -233,11 +290,14 @@ final public class MyPageViewModel: ViewModelType, ObservableObject {
     self.state.segmentedTitleItems = newTitleItems
   }
   
-  private func updateCurrentMyMemeList(selectedTitle: String) {
-    if selectedTitle == "나의 밈" {
-      self.state.currentMyMemeList = self.state.lastSeenMemeList
+  private func updateCurrentMyMemeList(selectedTitle: MyPageSegmentedTitle?) {
+    guard let selectedTitle else { return }
+    if selectedTitle == .myRegisteredMeme {
+      self.state.currentMyMemeList = self.state.registeredMemeList
+      self.state.currentSegmentedTitle = .myRegisteredMeme
     } else {
       self.state.currentMyMemeList = self.state.savedMemeList
+      self.state.currentSegmentedTitle = .mySavedMeme
     }
   }
   
