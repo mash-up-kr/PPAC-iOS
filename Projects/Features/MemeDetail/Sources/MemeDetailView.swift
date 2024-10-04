@@ -75,7 +75,7 @@ public struct MemeDetailView: View {
       content: {
         FarmemeAlertView(
           title: "문의하기",
-          description: "jhr110326@gmail.com",
+          description: "farmemebusiness@gmail.com",
           dismiss: {
             showContactUsAlert = false
           }
