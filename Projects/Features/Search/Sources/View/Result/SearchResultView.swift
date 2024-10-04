@@ -15,18 +15,34 @@ import PopupView
 
 public struct SearchResultView: View {
   @ObservedObject var viewModel: SearchResultViewModel
+  @State var text: String
   
   public init(viewModel: SearchResultViewModel) {
     self.viewModel = viewModel
+    self.text = viewModel.state.text
   }
   
   public var body: some View {
     VStack(spacing: 0) {
+      HStack(spacing: 12) {
+        Button(action: {
+          viewModel.dispatch(type: .naviBackButtonTapped)
+        }) {
+          ResourceKitAsset.Icon.back.swiftUIImage
+        }
+
+        SearchBar(text: $text)
+          .onSubmit {
+            viewModel.dispatch(type: .search(text: text))
+          }
+      }
+      .padding(.horizontal, 20)
+      .padding(.vertical, 6)
+
       Rectangle()
         .fill(Color.Background.assistive)
         .frame(maxWidth: .infinity)
         .frame(height: 1)
-        .padding(.top, 51)
       
       ScrollView {
         VStack(alignment: .leading, spacing: 0) {
@@ -38,12 +54,6 @@ public struct SearchResultView: View {
         }
       }
     }
-    .plainNavigationBar(
-      backHandler: { viewModel.dispatch(type: .naviBackButtonTapped) },
-      rightActionHandler: nil,
-      hasConfigureButton: false,
-      title: viewModel.state.keyword
-    )
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)
     }
@@ -56,7 +66,7 @@ public struct SearchResultView: View {
   
   private var memeListView: some View {
     VStack(alignment: .leading, spacing: 0) {
-      Text("\(viewModel.state.memeList.count)개의 밈을 찾았어요")
+      Text("\(viewModel.state.memePagination.totalMemes)개의 밈을 찾았어요")
         .font(Font.Body.Medium.medium)
         .foregroundColor(Color.Text.primary)
         .padding(.all, 20)

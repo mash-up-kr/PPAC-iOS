@@ -27,7 +27,7 @@ public struct MemeListWithPagination {
     /// page 당 밈 개수
     public let perPageOfMemes: Int
     /// 현재 page
-    public let currentPage: Int
+    public var currentPage: Int
     
     public init(
       totalPages: Int,

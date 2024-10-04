@@ -19,6 +19,7 @@ import SkeletonUI
 public struct SearchView: View {
   @Environment(\.screenSize) var screenSize
   @ObservedObject var viewModel: SearchViewModel
+  @State var text: String = ""
   
   public init(viewModel: SearchViewModel) {
     self.viewModel = viewModel
@@ -27,8 +28,19 @@ public struct SearchView: View {
   public var body: some View {
     ZStack {
       VStack(spacing: 0) {
-        fakeSearchBar
+        SearchBar(text: $text)
+          .padding(.horizontal, 20)
+          .padding(.vertical, 6)
+          .onSubmit {
+            viewModel.dispatch(type: .search(text: text))
+            text = ""
+          }
         
+        Rectangle()
+          .fill(Color.Background.assistive)
+          .frame(maxWidth: .infinity)
+          .frame(height: 1)
+
         ScrollView {
           VStack(spacing: 0) {
             currentHotKeywords
@@ -43,34 +55,12 @@ public struct SearchView: View {
       .onAppear {
         viewModel.dispatch(type: .viewWillAppear)
       }
-      .basicModal(
-        isPresented: $viewModel.state.isPresenting,
-        opacity: 0.5,
-        content: {
-          FarmemeAlertView(
-            title: "조금만 기다려주세요!",
-            description: "검색은 준비 중이에요.",
-            dismiss: {
-              viewModel.dispatch(type: .dismissSearchBarAlert)
-            }
-          )
-        }
-      )
       
       if viewModel.state.isLoading {
         skeletonView
       }
     }
     .animation(.easeInOut, value: viewModel.state.isLoading)
-  }
-  
-  private var fakeSearchBar: some View {
-    Button {
-      viewModel.dispatch(type: .searchBarTapped)
-    } label: {
-      FakeSearchBar(placeHolder: "🚧 검색은 오픈 준비 중!")
-    }
-    .buttonStyle(PlainButtonStyle())
   }
   
   private var currentHotKeywords: some View {

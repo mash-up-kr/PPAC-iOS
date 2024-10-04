@@ -13,6 +13,7 @@ import PPACUtil
 public enum MemeEndpoint: Requestable {
   case recommendMeme(size: Int)
   case getSearchKeywordMemeList(page: Int, size: Int, keyword: String)
+  case getSearchByTextMemeList(page: Int, size: Int, text: String)
   case meme(memeId: String)
   case bookmark(memeId: String)
   case deleteBookmark(memeId: String)
@@ -25,6 +26,8 @@ public enum MemeEndpoint: Requestable {
     case .recommendMeme:
       return .get
     case .getSearchKeywordMemeList:
+      return .get
+    case .getSearchByTextMemeList:
       return .get
     case .meme:
       return .get
@@ -51,6 +54,8 @@ public enum MemeEndpoint: Requestable {
       return "/meme/recommend-memes"
     case .getSearchKeywordMemeList(_,_,let keyword):
       return "/meme/search/\(keyword)"
+    case .getSearchByTextMemeList(_,_,let text):
+      return "/meme/search"
     case .meme(let memeId):
       return "/meme/\(memeId)"
     case .bookmark(let memeId):
@@ -75,6 +80,13 @@ public enum MemeEndpoint: Requestable {
         "page" : "\(page)",
         "size" : "\(size)",
         "keyword" : "\(keyword)"
+      ]
+      return .query(parameters)
+    case .getSearchByTextMemeList(let page, let size, let text):
+      let parameters: [String: String] = [
+        "q": "\(text)",
+        "page" : "\(page)",
+        "size" : "\(size)",
       ]
       return .query(parameters)
     case .bookmark:
