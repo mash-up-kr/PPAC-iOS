@@ -46,7 +46,8 @@ public final class SearchResultRouter: Router, SearchResultRouting {
         text: text,
         router: self,
         searchKeywordUseCase: SearchKeywordUseCaseImpl(repository: repository),
-        searchByTextUseCase: SearchByTextUseCaseImpl(repository: repository),
+        searchByTextUseCase: SearchByTextUseCaseImpl(repository: repository), 
+        getMemeDetailUseCase: GetMemeDetailUseCaseImpl(repository: repository),
         copyImageUseCase: CopyImageUseCaseImpl(),
         watchMemeUseCase: WatchMemeUseCaseImpl(repository: repository)
       ))

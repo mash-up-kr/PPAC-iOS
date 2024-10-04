@@ -40,6 +40,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     var text: String
     var memeList: [MemeDetail]
     var memePagination: MemeListWithPagination.Pagination
+    var currentMeme: MemeDetail?
     var isActiveCopyPopup: Bool = false
     var isLoading: Bool = true
   }
@@ -51,6 +52,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   
   private let searchKeywordUseCase: SearchKeywordUseCase
   private let searchByTextUseCase: SearchByTextUseCase
+  private let getMemeDetailUseCase: GetMemeDetailUseCase
   private let copyImageUseCase: CopyImageUseCase
   private let watchMemeUseCase: WatchMemeUseCase
 
@@ -62,6 +64,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     router: SearchResultRouting?,
     searchKeywordUseCase: SearchKeywordUseCase,
     searchByTextUseCase: SearchByTextUseCase,
+    getMemeDetailUseCase: GetMemeDetailUseCase,
     copyImageUseCase: CopyImageUseCase,
     watchMemeUseCase: WatchMemeUseCase
   ) {
@@ -74,6 +77,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     )
     self.searchKeywordUseCase = searchKeywordUseCase
     self.searchByTextUseCase = searchByTextUseCase
+    self.getMemeDetailUseCase = getMemeDetailUseCase
     self.copyImageUseCase = copyImageUseCase
     self.watchMemeUseCase = watchMemeUseCase
   }
@@ -86,19 +90,20 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
       switch type {
       case .viewWillAppear:
         await fetchData()
+        await refreshCurrentMeme()
       case .refresh:
         if state.text.isEmpty == false {
           await fetchData(with: state.text)
         } else if state.keyword.isEmpty == false {
           await fetchData(with: state.keyword)
         }
-        
       case .search(text: let text):
         await fetchData(with: text)
       case .memeDetailTapped(let meme):
         router?.showMemeDetail(memeDetail: meme)
         logSearch(event: .meme, keyword: state.keyword)
         await postShownMeme(memeId: meme.id)
+        state.currentMeme = meme
       case .memeCopyTapped(let meme):
         await copyImage(meme: meme)
         break
@@ -160,6 +165,22 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
     } catch(let error) {
       debugPrint("error = \(error)")
     }
+  }
+  
+  @MainActor
+  private func refreshCurrentMeme() async {
+    guard let currentMeme = state.currentMeme else { return }
+   
+    do {
+      let meme = try await getMemeDetailUseCase.execute(memeId: currentMeme.id)
+      if let index = state.memeList.firstIndex(where: { $0.id == meme.id }) {
+        state.memeList[index] = meme
+      }
+    } catch(let error) {
+      debugPrint("error = \(error)")
+    }
+    
+    state.currentMeme = nil
   }
   
   @MainActor
