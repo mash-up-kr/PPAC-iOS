@@ -51,6 +51,9 @@ public struct SearchView: View {
             .frame(height: 64 + 50)
         }
         .scrollIndicators(.hidden)
+        .onTapGesture {
+          endTextEditing()
+        }
       }
       .onAppear {
         viewModel.dispatch(type: .viewWillAppear)

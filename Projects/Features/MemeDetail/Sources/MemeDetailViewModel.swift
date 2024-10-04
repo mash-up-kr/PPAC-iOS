@@ -29,17 +29,12 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
     case shreButtonTapped
     case farmemeButtonTapped
     case naviBackButtonTapped
-    case naviMoreButtonTapped
-    case reportProblemButtonTapped
   }
   
   public struct State {
     var meme: MemeDetail
     var isCopied: Bool = false
     var isFarmemeChanged: Bool = false
-    var isSheetPresented: Bool = false
-    var isWebViewPresented: Bool = false
-    
     let reportProblemUrl: URL? = URL(string: "https://forms.gle/a5QkMnLD8AANtYCo7")
   }
   
@@ -57,8 +52,6 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   private var reactionTask: Task<Void, Never>?
   
   private let trotller = Throttler(seconds: 3)
-
-  
   
   // MARK: - Initializers
   
@@ -70,7 +63,7 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
     watchMemeUseCase: WatchMemeUseCase,
     reactToMemeUseCase: ReactToMemeUseCase
   ) {
-    print("memeviewmodel init")
+    debugPrint("memeviewmodel init")
     self.router = router
     self.state = State(meme: meme)
     self.bookmarkMemeUseCase = bookmarkMemeUseCase
@@ -80,18 +73,18 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
   }
   
   deinit {
-      print("memeviewmodel deinit")
-      reactionTask?.cancel()
+    debugPrint("memeviewmodel deinit")
+    reactionTask?.cancel()
   }
   
   // MARK: - Methods
   
   public func dispatch(type: Action) {
     Task { @MainActor in
-      print("type: \(type)")
+      debugPrint("type: \(type)")
       switch type {
       case .likeButtonTapped:
-        await postReaction()
+        postReaction()
       case .copyButtonTapped:
         await copyImage()
       case .shreButtonTapped:
@@ -103,13 +96,8 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
           await postSavedFarmeme()
         }
       case .naviBackButtonTapped:
+        await sendReactions()
         router?.popView()
-      case .naviMoreButtonTapped:
-        state.isSheetPresented = true
-      case .reportProblemButtonTapped:
-        state.isSheetPresented = false
-        state.isWebViewPresented = true
-        print("reportProblemButtonTapped")
       }
     }
   }
@@ -130,37 +118,36 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
 }
 
 private extension MemeDetailViewModel {
-
+  
   @MainActor
   func postReaction() {
-      reactionCount += 1
-      self.state.meme.reaction += 1
-      self.state.meme.isReaction = true
-      self.logMemeDetail(event: .reaction)
+    reactionCount += 1
+    self.state.meme.reaction += 1
+    self.state.meme.isReaction = true
+    self.logMemeDetail(event: .reaction)
     
-      trotller.throttle {
-        await self.sendReactions()
-      }
+    trotller.throttle {
+      await self.sendReactions()
+    }
   }
-
-
+  
   @MainActor
   func sendReactions() async {
-      let count = reactionCount
-      guard count > 0 else {
-          // 전송할 리액션이 없음
-          return
-      }
-      reactionCount = 0
-      do {
-          let count = try await reactToMemeUseCase.execute(memeId: state.meme.id, count: count)
-        print("currentMeme count: \(self.state.meme.reaction)")
-        print("new count: \(count)")
-        self.state.meme.reaction = count
-          print("Reactions sent successfully with count: \(count)")
-      } catch {
-          print("Failed to send reactions: \(error)")
-      }
+    let count = reactionCount
+    guard count > 0 else {
+      // 전송할 리액션이 없음
+      return
+    }
+    reactionCount = 0
+    do {
+      let count = try await reactToMemeUseCase.execute(memeId: state.meme.id, count: count)
+      debugPrint("currentMeme count: \(self.state.meme.reaction)")
+      debugPrint("new count: \(count)")
+      self.state.meme.reaction = count
+      debugPrint("Reactions sent successfully with count: \(count)")
+    } catch {
+      debugPrint("Failed to send reactions: \(error)")
+    }
   }
   
   @MainActor
@@ -177,7 +164,7 @@ private extension MemeDetailViewModel {
       state.isCopied = true
       self.logMemeDetail(event: .copy)
     } catch {
-      print("Failed to load image data: \(error)")
+      debugPrint("Failed to load image data: \(error)")
     }
   }
   
@@ -192,7 +179,7 @@ private extension MemeDetailViewModel {
       self.logMemeDetail(event: .save)
     } catch {
       // TODO: - 에러처리
-      print(error)
+      debugPrint(error)
     }
   }
   
@@ -207,7 +194,7 @@ private extension MemeDetailViewModel {
       self.logMemeDetail(event: .saveCancel)
     } catch {
       // TODO: - 에러처리
-      print(error)
+      debugPrint(error)
     }
   }
   
@@ -220,7 +207,7 @@ private extension MemeDetailViewModel {
       self.logMemeDetail(event: .share)
     } catch {
       // TODO: - 에러처리
-      print(error)
+      debugPrint(error)
     }
   }
 }

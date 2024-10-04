@@ -18,8 +18,6 @@ import PPACNetwork
 
 import DesignSystem
 
-
-
 public struct RecommendView: View {
   
   @ObservedObject private var viewModel: RecommendViewModel
@@ -70,6 +68,11 @@ public struct RecommendView: View {
           )
           .onReadSize { size in
             memeImageHeight = size.height
+          }
+          .onTapGesture {
+            if let currentMeme {
+              viewModel.router?.showMemeDetailView(meme: currentMeme)
+            }
           }
           
           Spacer()
@@ -126,6 +129,9 @@ public struct RecommendView: View {
       )
     )
     .edgesIgnoringSafeArea(.bottom)
+    .onAppear {
+      viewModel.dispatch(type: .viewInitialized)
+    }
     .onChange(of: viewModel.state.isSuccessFetch) {
       withAnimation(.spring()) {
         currentOffsetY = viewModel.state.isSuccessFetch ? .zero : 20

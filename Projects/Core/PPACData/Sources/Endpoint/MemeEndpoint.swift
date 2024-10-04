@@ -54,7 +54,7 @@ public enum MemeEndpoint: Requestable {
       return "/meme/recommend-memes"
     case .getSearchKeywordMemeList(_,_,let keyword):
       return "/meme/search/\(keyword)"
-    case .getSearchByTextMemeList(_,_,let text):
+    case .getSearchByTextMemeList(_,_,_):
       return "/meme/search"
     case .meme(let memeId):
       return "/meme/\(memeId)"

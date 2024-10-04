@@ -144,6 +144,7 @@ struct MemeEditorView: View {
         keywordTags: keywordTags
       ) { keyword in
         viewModel.dispatch(type: .memeKeywordTapped(keyword: keyword))
+        endTextEditing()
       }
     }
     .id(viewModel.state.memeCategories.count)
