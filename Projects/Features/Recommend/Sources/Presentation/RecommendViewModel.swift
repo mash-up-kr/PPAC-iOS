@@ -143,7 +143,7 @@ private extension RecommendViewModel {
   @MainActor
   func getRecommendAndUser() async {
     do {
-      let recommendMemeSize = 5
+      let recommendMemeSize = 20
       let recommendMemes = try await getRecommendMemesUseCase.execute(size: recommendMemeSize)
       let user = try await getUserInfoUseCase.execute()
       print("👍memeids: \(recommendMemes.map { $0.id })")
