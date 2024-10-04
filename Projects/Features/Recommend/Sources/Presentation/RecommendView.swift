@@ -129,6 +129,9 @@ public struct RecommendView: View {
       )
     )
     .edgesIgnoringSafeArea(.bottom)
+    .onAppear {
+      viewModel.dispatch(type: .viewInitialized)
+    }
     .onChange(of: viewModel.state.isSuccessFetch) {
       withAnimation(.spring()) {
         currentOffsetY = viewModel.state.isSuccessFetch ? .zero : 20
