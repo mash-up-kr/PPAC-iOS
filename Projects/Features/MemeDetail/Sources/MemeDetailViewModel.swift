@@ -96,6 +96,7 @@ public final class MemeDetailViewModel: ViewModelType, ObservableObject {
           await postSavedFarmeme()
         }
       case .naviBackButtonTapped:
+        await sendReactions()
         router?.popView()
       }
     }
