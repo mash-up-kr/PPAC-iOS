@@ -20,14 +20,14 @@ import MemeDetail
 @MainActor
 public protocol SearchRouting: AnyObject {
   func showSearchResult(keyword: String)
+  func showSearchResultByText(text: String)
 }
 
 public final class SearchViewModel: ViewModelType, ObservableObject {
   
   public enum Action {
     case viewWillAppear
-    case searchBarTapped
-    case dismissSearchBarAlert
+    case search(text: String)
     case hotKeywordTapped(keyword: String)
     case recommendKeywordTapped(keyword: String)
   }
@@ -35,7 +35,6 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
   public struct State {
     var hotKeywords: [HotKeyword]
     var memeCategories: [MemeCategory]
-    var isPresenting: Bool = false
     var isLoading: Bool = true
   }
   
@@ -68,11 +67,8 @@ public final class SearchViewModel: ViewModelType, ObservableObject {
       switch type {
       case .viewWillAppear:
         await fetchData()
-      case .searchBarTapped:
-        state.isPresenting = true
-        logSearch(event: .searchBar)
-      case .dismissSearchBarAlert:
-        state.isPresenting = false
+      case .search(let text):
+        router?.showSearchResultByText(text: text)
       case .hotKeywordTapped(let keyword):
         router?.showSearchResult(keyword: keyword)
         logSearch(event: .hotKeyword, keyword: keyword)

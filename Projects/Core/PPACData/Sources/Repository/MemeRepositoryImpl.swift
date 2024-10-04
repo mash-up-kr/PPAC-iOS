@@ -55,6 +55,23 @@ public class MemeRepositoryImpl: MemeRepository {
     }
   }
   
+  public func getSearchByTextMemeList(
+    page: Int,
+    size: Int,
+    text: String
+  ) async throws -> MemeListWithPagination {
+    let endpoint = MemeEndpoint.getSearchByTextMemeList(page: page, size: size, text: text)
+    let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeWithPaginationResponseDTO>.self)
+    
+    switch result {
+    case .success(let data):
+      guard let memeWithPaginationResponseDTO = data.data else { throw NetworkError.dataDecodingError }
+      return memeWithPaginationResponseDTO.toModel()
+    case .failure(let error):
+      throw error
+    }
+  }
+  
   public func getMemeDetail(memeId: String) async throws -> MemeDetail {
     let endpoint = MemeEndpoint.meme(memeId: memeId)
     let result = await networkservice.request(endpoint, dataType: BaseDTO<MemeResponseDTO>.self)

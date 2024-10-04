@@ -45,7 +45,7 @@ extension MemeWithPaginationResponseDTO {
 struct MemeResponseDTO: Decodable {
   let _id: String
   let title: String
-  let keywords: [KeywordResponseDTO]
+  let keywords: [KeywordResponseDTO]?
   let image: String
   let reaction: Int
   let source: String
@@ -53,14 +53,14 @@ struct MemeResponseDTO: Decodable {
   let isDeleted: Bool?
   let createdAt: String?
   let updatedAt: String
-  let isSaved: Bool
-  let isReaction: Bool
+  let isSaved: Bool?
+  let isReaction: Bool?
   let watch: Int?
   
   public init(
     _id: String,
     title: String,
-    keywords: [KeywordResponseDTO],
+    keywords: [KeywordResponseDTO]?,
     image: String,
     reaction: Int,
     source: String,
@@ -68,8 +68,8 @@ struct MemeResponseDTO: Decodable {
     isDeleted: Bool?,
     createdAt: String?,
     updatedAt: String,
-    isSaved: Bool,
-    isReaction: Bool,
+    isSaved: Bool?,
+    isReaction: Bool?,
     watch: Int?
   )
   {
@@ -108,13 +108,13 @@ extension MemeResponseDTO {
     return MemeDetail(
       id: self._id,
       title: self.title,
-      keywords: self.keywords.map { $0.name },
+      keywords: self.keywords?.compactMap { $0.name } ?? [],
       imageUrlString: self.image,
       source: self.source,
       isTodayMeme: self.isTodayMeme,
       reaction: self.reaction,
-      isFarmemed: self.isSaved,
-      isReaction: self.isReaction
+      isFarmemed: self.isSaved ?? false,
+      isReaction: self.isReaction ?? false
     )
   }
 }

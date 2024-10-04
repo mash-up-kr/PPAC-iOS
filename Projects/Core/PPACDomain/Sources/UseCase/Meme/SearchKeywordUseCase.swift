@@ -24,3 +24,19 @@ public class SearchKeywordUseCaseImpl: SearchKeywordUseCase {
     try await repository.getSearchKeywordMemeList(page: page, size: size, keyword: keyword)
   }
 }
+
+public protocol SearchByTextUseCase {
+  func execute(page: Int, size: Int, text: String) async throws -> MemeListWithPagination
+}
+
+public class SearchByTextUseCaseImpl: SearchByTextUseCase {
+  private let repository: MemeRepository
+  
+  public init(repository: MemeRepository) {
+    self.repository = repository
+  }
+  
+  public func execute(page: Int, size: Int, text: String) async throws -> MemeListWithPagination {
+    try await repository.getSearchByTextMemeList(page: page, size: size, text: text)
+  }
+}

@@ -24,13 +24,15 @@ public final class SearchResultRouter: Router, SearchResultRouting {
   public var childRouters: [any Router] = []
   
   let keyword: String
-  
+  let text: String
+
   // MARK: - Initializers
   
-  public init(_ navigationController: UINavigationController, keyword: String) {
+  public init(_ navigationController: UINavigationController, keyword: String, text: String) {
     navigationController.isNavigationBarHidden = true
     self.navigationController = navigationController
     self.keyword = keyword
+    self.text = text
   }
   
   // MARK: - Methods
@@ -41,8 +43,10 @@ public final class SearchResultRouter: Router, SearchResultRouting {
     self.pushView(
       SearchResultView(viewModel: SearchResultViewModel(
         keyword: keyword,
-        router: self, 
+        text: text,
+        router: self,
         searchKeywordUseCase: SearchKeywordUseCaseImpl(repository: repository),
+        searchByTextUseCase: SearchByTextUseCaseImpl(repository: repository),
         copyImageUseCase: CopyImageUseCaseImpl(),
         watchMemeUseCase: WatchMemeUseCaseImpl(repository: repository)
       ))

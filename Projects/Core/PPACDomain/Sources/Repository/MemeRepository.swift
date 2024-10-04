@@ -14,6 +14,7 @@ public protocol MemeRepository {
   
   func getRecommendMemes(size: Int) async throws -> [MemeDetail]
   func getSearchKeywordMemeList(page: Int, size: Int, keyword: String) async throws -> MemeListWithPagination
+  func getSearchByTextMemeList(page: Int, size: Int, text: String) async throws -> MemeListWithPagination
   func getMemeDetail(memeId: String) async throws -> MemeDetail
   func bookmarkMeme(memeId: String) async throws
   func deleteBookmarkMeme(memeId: String) async throws

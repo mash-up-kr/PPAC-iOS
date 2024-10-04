@@ -47,7 +47,13 @@ public final class SearchRouter: Router, SearchRouting {
   }
   
   public func showSearchResult(keyword: String) {
-    let router = SearchResultRouter(self.navigationController, keyword: keyword)
+    let router = SearchResultRouter(self.navigationController, keyword: keyword, text: "")
+    self.childRouters.append(router)
+    router.start()
+  }
+  
+  public func showSearchResultByText(text: String) {
+    let router = SearchResultRouter(self.navigationController, keyword: "", text: text)
     self.childRouters.append(router)
     router.start()
   }
