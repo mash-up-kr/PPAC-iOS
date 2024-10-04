@@ -53,6 +53,9 @@ public struct SearchResultView: View {
           }
         }
       }
+      .refreshable {
+        viewModel.dispatch(type: .refresh)
+      }
     }
     .onAppear {
       viewModel.dispatch(type: .viewWillAppear)

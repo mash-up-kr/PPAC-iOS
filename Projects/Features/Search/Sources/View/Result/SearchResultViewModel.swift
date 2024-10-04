@@ -27,6 +27,7 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
   
   public enum Action {
     case viewWillAppear
+    case refresh
     case search(text: String)
     case memeDetailTapped(meme: MemeDetail)
     case memeCopyTapped(meme: MemeDetail)
@@ -85,6 +86,13 @@ public final class SearchResultViewModel: ViewModelType, ObservableObject {
       switch type {
       case .viewWillAppear:
         await fetchData()
+      case .refresh:
+        if state.text.isEmpty == false {
+          await fetchData(with: state.text)
+        } else if state.keyword.isEmpty == false {
+          await fetchData(with: state.keyword)
+        }
+        
       case .search(text: let text):
         await fetchData(with: text)
       case .memeDetailTapped(let meme):
